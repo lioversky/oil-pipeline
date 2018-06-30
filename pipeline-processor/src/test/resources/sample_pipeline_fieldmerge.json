@@ -1,0 +1,52 @@
+{
+  "processors": [
+    {
+      "processorType": "processor_fieldmerge",
+      "subType": "merge_str",
+      "targetField": "merge",
+      "overwriteIfFieldExist": true,
+      "params": {
+        "fields": "a,b,c",
+        "splitStr": ","
+      }
+    },
+    {
+      "processorType": "processor_fieldmerge",
+      "subType": "merge_list",
+      "targetField": "merge",
+      "overwriteIfFieldExist": true,
+      "params": {
+        "fields": "a,b,c",
+        "keepIfNull": false
+      }
+    },
+    {
+      "processorType": "processor_fieldmerge",
+      "subType": "merge_list",
+      "targetField": "merge",
+      "overwriteIfFieldExist": true,
+      "params": {
+        "fields": "a,b,c",
+        "keepIfNull": true
+      }
+    },
+    {
+      "processorType": "processor_fieldmerge",
+      "subType": "merge_set",
+      "targetField": "merge",
+      "overwriteIfFieldExist": true,
+      "params": {
+        "fields": "a,b,c"
+      }
+    },
+    {
+      "processorType": "processor_fieldmerge",
+      "subType": "merge_map",
+      "targetField": "merge",
+      "overwriteIfFieldExist": true,
+      "params": {
+        "fields": "a,b,c"
+      }
+    }
+  ]
+}

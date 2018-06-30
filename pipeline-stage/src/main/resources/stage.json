@@ -1,0 +1,36 @@
+{
+  "stages": [
+    {
+      "type": "casewhen",
+      "subStages": [
+        {
+          "condition": {
+          },
+          "stages": [
+            {
+              "type": "casewhen",
+              "subStages": [
+                {
+                  "condition": {
+                  },
+                  "stage": [
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "pipeline",
+              "processors": [
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "pipeline",
+      "processors": [
+      ]
+    }
+  ]
+}

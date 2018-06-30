@@ -1,0 +1,79 @@
+{
+  "processors": [
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_str_date",
+      "fieldName": "str_to_date",
+      "fieldNotExistError": false,
+      "params": {
+        "source": "yyyy-MM-dd HH:mm:ss"
+      }
+    },
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_str_timestamp",
+      "fieldName": "replace_str_timestamp",
+      "fieldNotExistError": false,
+      "params": {
+        "source": "yyyy-MM-dd HH:mm:ss"
+      }
+    },
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_str_unix",
+      "fieldName": "replace_str_unix",
+      "fieldNotExistError": false,
+      "params": {
+        "source": "yyyy-MM-dd HH:mm:ss"
+      }
+    },
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_str_str",
+      "fieldName": "replace_str_str",
+      "fieldNotExistError": false,
+      "params": {
+        "source": "yyyy-MM-dd HH:mm:ss",
+        "target": "yyyyMMdd HH:mm:ss"
+      }
+    },
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_unix_str",
+      "fieldName": "replace_unix_str",
+      "fieldNotExistError": false,
+      "params": {
+        "source": "yyyy-MM-dd HH:mm:ss"
+      }
+    },
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_timestamp_str",
+      "fieldName": "replace_timestamp_str",
+      "fieldNotExistError": false,
+      "params": {
+        "source": "yyyy-MM-dd HH:mm:ss"
+      }
+    },
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_regex",
+      "fieldName": "replace_regex",
+      "fieldNotExistError": false,
+      "params": {
+        "regex": "[a-z]+",
+        "target": ""
+      }
+    },
+    {
+      "processorType": "processor_replace",
+      "subType": "replace_replace_str",
+      "fieldName": "replace_replace_str",
+      "fieldNotExistError": false,
+      "params": {
+        "source": "123456",
+        "target": ""
+      }
+    }
+  ]
+}

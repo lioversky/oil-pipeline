@@ -1,0 +1,16 @@
+{
+  "processors": [
+    {
+      "processorType": "processor_base64",
+      "subType": "base64_encode",
+      "fieldName": "base64",
+      "fieldNotExistError": false
+    },
+    {
+      "processorType": "processor_base64",
+      "subType": "base64_decode",
+      "fieldName": "base64",
+      "fieldNotExistError": false
+    }
+  ]
+}

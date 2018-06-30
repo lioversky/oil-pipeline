@@ -1,0 +1,9 @@
+{
+  "stages": [
+    {
+      "type": "casewhen",
+      "processors": [
+      ]
+    }
+  ]
+}

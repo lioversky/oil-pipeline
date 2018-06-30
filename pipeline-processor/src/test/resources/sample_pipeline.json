@@ -1,0 +1,9 @@
+{
+  "stages": [
+    {
+      "type": "pipeline",
+      "processors": [
+      ]
+    }
+  ]
+}
