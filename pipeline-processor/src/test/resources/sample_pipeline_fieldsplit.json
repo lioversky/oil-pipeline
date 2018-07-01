@@ -1,0 +1,31 @@
+{
+  "processors": [
+    {
+      "processorType": "processor_fieldsplit",
+      "subType": "split_str",
+      "targetFields": "a,b,c",
+      "overwriteIfFieldExist": true,
+      "fieldNotExistError":false,
+      "fieldName":"split",
+      "params": {
+        "splitStr": ","
+      }
+    },
+    {
+      "processorType": "processor_fieldsplit",
+      "subType": "split_list",
+      "targetFields": "a,b,c",
+      "overwriteIfFieldExist": true,
+      "fieldNotExistError":false,
+      "fieldName":"split"
+    },
+    {
+      "processorType": "processor_fieldsplit",
+      "subType": "split_array",
+      "targetFields": "a,b,c",
+      "overwriteIfFieldExist": true,
+      "fieldNotExistError":false,
+      "fieldName":"split"
+    }
+  ]
+}
