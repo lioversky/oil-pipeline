@@ -2,6 +2,24 @@ package com.weibo.dip.pipeline.processor;
 
 import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;
+import com.weibo.dip.pipeline.processor.add.FieldAddProcessor;
+import com.weibo.dip.pipeline.processor.add.FieldAddTypeEnum;
+import com.weibo.dip.pipeline.processor.base64.Base64Processor;
+import com.weibo.dip.pipeline.processor.base64.Base64TypeEnum;
+import com.weibo.dip.pipeline.processor.converte.ConverteProcessor;
+import com.weibo.dip.pipeline.processor.converte.ConverteTypeEnum;
+import com.weibo.dip.pipeline.processor.filter.ExprFilterProcessor;
+import com.weibo.dip.pipeline.processor.md5.MD5EncodeProcessor;
+import com.weibo.dip.pipeline.processor.merge.FieldMergeProcessor;
+import com.weibo.dip.pipeline.processor.merge.FieldMergeTypeEnum;
+import com.weibo.dip.pipeline.processor.remove.FieldRemoveProcessor;
+import com.weibo.dip.pipeline.processor.remove.FieldRemoveTypeEnum;
+import com.weibo.dip.pipeline.processor.replace.ReplaceProcessor;
+import com.weibo.dip.pipeline.processor.replace.ReplaceTypeEnum;
+import com.weibo.dip.pipeline.processor.split.FieldSplitProcessor;
+import com.weibo.dip.pipeline.processor.split.FieldSplitTypeEnum;
+import com.weibo.dip.pipeline.processor.substring.SubStringProcessor;
+import com.weibo.dip.pipeline.processor.substring.SubStringTypeEnum;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 

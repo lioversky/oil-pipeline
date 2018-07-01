@@ -1,5 +1,6 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.filter;
 
+import com.weibo.dip.pipeline.processor.Processor;
 import java.util.Map;
 
 import org.nutz.el.El;

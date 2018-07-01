@@ -1,8 +1,7 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.replace;
 
 import com.google.common.base.Strings;
 import com.weibo.dip.pipeline.configuration.Configuration;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -12,35 +11,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
- * 列替换处理器.
- * Create by hongxun on 2018/6/27
+ * Create by hongxun on 2018/7/1
  */
-public class ReplaceProcessor extends FieldProcessor {
-
-
-  private Replacer replacer;
-
-
-  public ReplaceProcessor(boolean fieldNotExistError, String columnName) {
-    super(fieldNotExistError, columnName);
-  }
-
-  public ReplaceProcessor(boolean fieldNotExistError, String columnName,
-      Replacer replacer) {
-    super(fieldNotExistError, columnName);
-    this.replacer = replacer;
-  }
-
-  @Override
-  public Object columnProcess(Object data) throws Exception {
-    String oldValue = (String) data;
-    return replacer.replace(oldValue);
-
-  }
-
-}
-
-
 abstract class Replacer extends Configuration {
 
   public Replacer(Map<String, Object> parmas) {
@@ -51,7 +23,6 @@ abstract class Replacer extends Configuration {
 
   abstract Object replace(String value) throws Exception;
 }
-
 /**
  * 字符串转日期
  */
@@ -221,5 +192,3 @@ class RegexReplacer extends Replacer {
     return data;
   }
 }
-
-

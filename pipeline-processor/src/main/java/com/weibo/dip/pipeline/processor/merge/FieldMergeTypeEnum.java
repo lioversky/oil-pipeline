@@ -1,10 +1,8 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.merge;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 列合并处理生成器.

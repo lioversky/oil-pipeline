@@ -1,52 +1,17 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.merge;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.weibo.dip.pipeline.configuration.Configuration;
-import com.weibo.dip.pipeline.exception.FieldExistException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 值合并处理器.
- * Create by hongxun on 2018/6/27
+ * Create by hongxun on 2018/7/1
  */
-public class FieldMergeProcessor extends Processor {
-
-
-  private String targetField;
-  private boolean overwriteIfFieldExist;
-  private Merger merger;
-
-  public FieldMergeProcessor(String targetField, boolean overwriteIfFieldExist,
-      Merger merger) {
-    this.targetField = targetField;
-    this.overwriteIfFieldExist = overwriteIfFieldExist;
-    this.merger = merger;
-    addConfig();
-  }
-
-  @Override
-  public Map<String, Object> process(Map<String, Object> data) throws Exception {
-    if (data.containsKey(targetField) && !overwriteIfFieldExist) {
-      throw new FieldExistException(targetField);
-    }
-
-    data.put(targetField, merger.merge(data));
-    return data;
-  }
-
-  @Override
-  public void addConfig() {
-    configs.put("targetField", targetField);
-    configs.put("overwriteIfFieldExist", overwriteIfFieldExist);
-  }
-}
-
-
 abstract class Merger extends Configuration {
 
   protected String[] fields;

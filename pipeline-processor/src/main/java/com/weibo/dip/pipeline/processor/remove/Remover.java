@@ -1,34 +1,18 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.remove;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.configuration.Configuration;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
-public class FieldRemoveProcessor extends Processor {
-
-
-  private FieldRemover remover;
-
-  public FieldRemoveProcessor(FieldRemover remover) {
-    this.remover = remover;
-  }
-
-  @Override
-  public Map<String, Object> process(Map<String, Object> data) throws Exception {
-
-    //    todo: keep 时列不存在处理
-    return remover.fieldRemove(data);
-
-  }
-}
-
-abstract class FieldRemover extends Configuration {
+/**
+ * Create by hongxun on 2018/7/1
+ */
+abstract class Remover extends Configuration {
 
   String[] fields;
 
-  public FieldRemover(Map<String, Object> parmas) {
+  public Remover(Map<String, Object> parmas) {
     String fields = (String) parmas.get("fields");
     this.fields = StringUtils.split(fields, ",");
     addConfigs(parmas);
@@ -36,11 +20,10 @@ abstract class FieldRemover extends Configuration {
 
   abstract Map<String, Object> fieldRemove(Map<String, Object> data) throws Exception;
 }
-
 /**
  * 删除指定字段
  */
-class RemoveFieldRemover extends FieldRemover {
+class RemoveFieldRemover extends Remover {
 
   @Override
   Map<String, Object> fieldRemove(Map<String, Object> data) throws Exception {
@@ -59,7 +42,7 @@ class RemoveFieldRemover extends FieldRemover {
 /**
  * 保留指定字段
  */
-class KeepFieldRemover extends FieldRemover {
+class KeepFieldRemover extends Remover {
 
   @Override
   Map<String, Object> fieldRemove(Map<String, Object> data) throws Exception {
@@ -79,7 +62,7 @@ class KeepFieldRemover extends FieldRemover {
 /**
  * 删除为空的指定字段
  */
-class RemoveNullFieldRemover extends FieldRemover {
+class RemoveNullFieldRemover extends Remover {
 
   @Override
   Map<String, Object> fieldRemove(Map<String, Object> data) throws Exception {

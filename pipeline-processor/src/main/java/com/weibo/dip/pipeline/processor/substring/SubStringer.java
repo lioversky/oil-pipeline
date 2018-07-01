@@ -1,34 +1,12 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.substring;
 
 import com.google.common.base.Strings;
 import com.weibo.dip.pipeline.configuration.Configuration;
 import java.util.Map;
 
 /**
- * 列截取处理器.
- * Create by hongxun on 2018/6/27
+ * Create by hongxun on 2018/7/1
  */
-public class SubStringProcessor extends FieldProcessor {
-
-  private SubStringer subStringer;
-
-  public SubStringProcessor(boolean fieldNotExistError, String columnName,
-      SubStringer subStringer) {
-    super(fieldNotExistError, columnName);
-    this.subStringer = subStringer;
-  }
-
-  public SubStringProcessor(boolean fieldNotExistError, String columnName) {
-    super(fieldNotExistError, columnName);
-  }
-
-  @Override
-  public Object columnProcess(Object data) throws Exception {
-    return subStringer.subString((String) data);
-  }
-
-}
-
 abstract class SubStringer extends Configuration {
 
   public SubStringer(Map<String, Object> parmas) {
@@ -39,7 +17,6 @@ abstract class SubStringer extends Configuration {
 
   abstract String subString(String value) throws Exception;
 }
-
 /**
  * 去空格.
  */

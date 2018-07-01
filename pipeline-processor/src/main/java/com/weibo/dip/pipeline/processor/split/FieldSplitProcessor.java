@@ -1,13 +1,9 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.split;
 
-import com.weibo.dip.pipeline.configuration.Configuration;
 import com.weibo.dip.pipeline.exception.FieldExistException;
 import com.weibo.dip.pipeline.exception.FieldNotExistException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.weibo.dip.pipeline.processor.Processor;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 列拆分处理器.
@@ -31,6 +27,13 @@ public class FieldSplitProcessor extends Processor {
     this.spliter = spliter;
   }
 
+  /**
+   * 分割成多列.
+   *
+   * @param data 原始数据
+   * @return 分隔后结果
+   * @throws Exception 异常
+   */
   @Override
   public Map<String, Object> process(Map<String, Object> data) throws Exception {
     //不允许覆盖且目标列存在，抛异常
@@ -71,63 +74,3 @@ public class FieldSplitProcessor extends Processor {
   }
 }
 
-abstract class Spliter extends Configuration {
-
-  public Spliter(Map<String, Object> parmas) {
-    if (parmas != null) {
-      addConfigs(parmas);
-    }
-  }
-
-  public abstract Object split(Object value) throws Exception;
-}
-
-/**
- * 字符串拆分
- */
-class StrSpliter extends Spliter {
-
-  private String splitStr;
-
-  public StrSpliter(Map<String, Object> parmas) {
-    super(parmas);
-    splitStr = (String) parmas.get("splitStr");
-  }
-
-  @Override
-  public Object split(Object value) throws Exception {
-    //    return StringUtils.split((String)value,splitStr);
-    return ((String) value).split(splitStr);
-  }
-}
-
-/**
- * List拆分
- */
-class ListSpliter extends Spliter {
-
-  public ListSpliter(Map<String, Object> parmas) {
-    super(parmas);
-  }
-
-  @Override
-  public Object split(Object value) throws Exception {
-    List list = (List) value;
-    return list.toArray(new Object[list.size()]);
-  }
-}
-
-/**
- * Array拆分
- */
-class ArraySpliter extends Spliter {
-
-  public ArraySpliter(Map<String, Object> parmas) {
-    super(parmas);
-  }
-
-  @Override
-  public Object split(Object value) throws Exception {
-    return value;
-  }
-}

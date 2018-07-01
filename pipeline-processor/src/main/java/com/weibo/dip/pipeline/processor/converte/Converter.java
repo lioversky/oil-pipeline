@@ -1,38 +1,14 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.converte;
 
-import com.google.common.base.Strings;
 import com.weibo.dip.pipeline.configuration.Configuration;
 import com.weibo.dip.util.NumberUtil;
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 类型转换处理器
- * Created by hongxun on 18/6/26.
+ * Create by hongxun on 2018/7/1
  */
-
-
-public class ConverteProcessor extends FieldProcessor {
-
-  private static final long serialVersionUID = 1L;
-
-  private Converter converter;
-
-
-  public ConverteProcessor(boolean fieldNotExistError, String columnName, Converter converter) {
-    super(fieldNotExistError, columnName);
-    this.converter = converter;
-  }
-
-  @Override
-  public Object columnProcess(Object data) throws Exception {
-    return converter.converte(data);
-  }
-}
-
 abstract class Converter extends Configuration {
 
   public abstract Object converte(Object data);

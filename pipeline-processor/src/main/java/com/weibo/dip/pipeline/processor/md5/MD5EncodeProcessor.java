@@ -1,5 +1,6 @@
-package com.weibo.dip.pipeline.processor;
+package com.weibo.dip.pipeline.processor.md5;
 
+import com.weibo.dip.pipeline.processor.FieldProcessor;
 import com.weibo.dip.util.MD5Util;
 
 /**
