@@ -9,31 +9,44 @@ import java.util.Map;
  */
 public enum FieldSplitTypeEnum implements TypeEnum {
 
-  StrSpliter {
+  DelimiterSpliter {
     @Override
-    public Spliter getSpliter(Map<String, Object> parmas) {
+    public Splitter getSplitter(Map<String, Object> parmas) {
 
-      return new StrSpliter(parmas);
+      return new DelimiterSplitter(parmas);
     }
   }, ListSpliter {
     @Override
-    public Spliter getSpliter(Map<String, Object> parmas) {
-      return new ListSpliter(parmas);
+    public Splitter getSplitter(Map<String, Object> parmas) {
+      return new ListSplitter(parmas);
     }
   }, ArraySpliter {
     @Override
-    public Spliter getSpliter(Map<String, Object> parmas) {
-      return new ArraySpliter(parmas);
+    public Splitter getSplitter(Map<String, Object> parmas) {
+      return new ArraySplitter(parmas);
+    }
+  }, RegexSpliter {
+    @Override
+    public Splitter getSplitter(Map<String, Object> parmas) {
+      return new RegexSplitter(parmas);
+    }
+  }, JsonSpliter {
+    @Override
+    public Splitter getSplitter(Map<String, Object> parmas) {
+      return new JsonSplitter(parmas);
     }
   };
 
-  private static final Map<String, FieldSplitTypeEnum> types = ImmutableMap.of(
-      "split_str", StrSpliter,
-      "split_list", ListSpliter,
-      "split_array", ArraySpliter
-  );
+  private static final Map<String, FieldSplitTypeEnum> types =
+      new ImmutableMap.Builder<String, FieldSplitTypeEnum>()
+          .put("split_str", DelimiterSpliter)
+          .put("split_regex", RegexSpliter)
+          .put("split_json", JsonSpliter)
+          .put("split_list", ListSpliter)
+          .put("split_array", ArraySpliter)
+          .build();
 
-  public Spliter getSpliter(Map<String, Object> parmas) {
+  public Splitter getSplitter(Map<String, Object> parmas) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

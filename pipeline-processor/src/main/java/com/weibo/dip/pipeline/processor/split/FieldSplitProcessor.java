@@ -16,15 +16,15 @@ public class FieldSplitProcessor extends Processor {
   private String fieldName;
   protected boolean fieldNotExistError;
   private boolean overwriteIfFieldExist;
-  private Spliter spliter;
+  private Splitter splitter;
 
   public FieldSplitProcessor(String[] targetFields, String fieldName, boolean fieldNotExistError,
-      boolean overwriteIfFieldExist, Spliter spliter) {
+      boolean overwriteIfFieldExist, Splitter splitter) {
     this.targetFields = targetFields;
     this.fieldName = fieldName;
     this.fieldNotExistError = fieldNotExistError;
     this.overwriteIfFieldExist = overwriteIfFieldExist;
-    this.spliter = spliter;
+    this.splitter = splitter;
   }
 
   /**
@@ -52,7 +52,7 @@ public class FieldSplitProcessor extends Processor {
     if (data.containsKey(fieldName)) {
       Object value = data.get(fieldName);
       if (value != null) {
-        Object[] values = (Object[]) spliter.split(value);
+        Object[] values = (Object[]) splitter.split(value);
         if (values != null && values.length > 0) {
           //列数不匹配时异常
           if (targetFields.length != values.length) {

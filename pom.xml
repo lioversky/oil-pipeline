@@ -17,6 +17,8 @@
     <module>pipeline-monitor</module>
     <module>pipeline-util</module>
     <module>pipeline-stage</module>
+    <module>pipeline-extract</module>
+    <module>pipeline-job</module>
   </modules>
 
   <properties>

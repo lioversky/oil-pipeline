@@ -11,12 +11,22 @@ import org.apache.commons.lang3.StringUtils;
  */
 abstract class Converter extends Configuration {
 
+  public Converter(Map<String, Object> parmas) {
+    if (parmas != null) {
+      addConfigs(parmas);
+    }
+  }
+
   public abstract Object converte(Object data);
 
 }
 
 
 class IntegerConverter extends Converter {
+
+  public IntegerConverter(Map<String, Object> parmas) {
+    super(parmas);
+  }
 
   public Integer converte(Object data) {
     return NumberUtil.parseNumber(data);
@@ -25,12 +35,20 @@ class IntegerConverter extends Converter {
 
 class LongConverter extends Converter {
 
+  public LongConverter(Map<String, Object> parmas) {
+    super(parmas);
+  }
+
   public Long converte(Object data) {
     return NumberUtil.parseLong(data);
   }
 }
 
 class DoubleConverter extends Converter {
+
+  public DoubleConverter(Map<String, Object> parmas) {
+    super(parmas);
+  }
 
   public Double converte(Object data) {
     return NumberUtil.parseDouble(data);
@@ -39,12 +57,20 @@ class DoubleConverter extends Converter {
 
 class FloatConverter extends Converter {
 
+  public FloatConverter(Map<String, Object> parmas) {
+    super(parmas);
+  }
+
   public Float converte(Object data) {
     return NumberUtil.parseFloat(data);
   }
 }
 
 class StringConverter extends Converter {
+
+  public StringConverter(Map<String, Object> parmas) {
+    super(parmas);
+  }
 
   @Override
   public Object converte(Object data) {

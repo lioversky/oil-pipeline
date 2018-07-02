@@ -13,25 +13,25 @@ public enum ConverteTypeEnum implements TypeEnum {
   IntegerType {
     @Override
     public Converter getConverter(Map<String, Object> parmas) {
-      return new IntegerConverter();
+      return new IntegerConverter(parmas);
     }
   },
   LongType {
     @Override
     public Converter getConverter(Map<String, Object> parmas) {
-      return new LongConverter();
+      return new LongConverter(parmas);
     }
   },
   FloatType {
     @Override
     public Converter getConverter(Map<String, Object> parmas) {
-      return new FloatConverter();
+      return new FloatConverter(parmas);
     }
   },
   DoubleType {
     @Override
     public Converter getConverter(Map<String, Object> parmas) {
-      return new DoubleConverter();
+      return new DoubleConverter(parmas);
     }
   };
 
