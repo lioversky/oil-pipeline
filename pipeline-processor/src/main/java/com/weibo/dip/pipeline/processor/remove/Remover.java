@@ -1,7 +1,9 @@
 package com.weibo.dip.pipeline.processor.remove;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,12 +16,16 @@ abstract class Remover extends Configuration {
 
   public Remover(Map<String, Object> parmas) {
     String fields = (String) parmas.get("fields");
+    if (Strings.isNullOrEmpty(fields)) {
+      throw new AttrCanNotBeNullException("Remover fields can not be null!!!");
+    }
     this.fields = StringUtils.split(fields, ",");
     addConfigs(parmas);
   }
 
   abstract Map<String, Object> fieldRemove(Map<String, Object> data) throws Exception;
 }
+
 /**
  * 删除指定字段
  */

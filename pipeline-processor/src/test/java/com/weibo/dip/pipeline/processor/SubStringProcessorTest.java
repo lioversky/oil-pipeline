@@ -5,6 +5,8 @@ import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.exception.FieldNotExistException;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,6 +85,16 @@ public class SubStringProcessorTest {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  @Test
+  public void testRegex(){
+    Pattern pattern = Pattern.compile("^([1-9]\\d{2})$");
+    Matcher matcher = pattern.matcher("200");
+    if(matcher.find()){
+      System.out.println(matcher.group(1));
+    }
+
   }
 
 }

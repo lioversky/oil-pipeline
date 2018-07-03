@@ -1,9 +1,11 @@
 package com.weibo.dip.pipeline.processor.merge;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +20,9 @@ abstract class Merger extends Configuration {
 
   public Merger(Map<String, Object> parmas) {
     String fields = (String) parmas.get("fields");
+    if (Strings.isNullOrEmpty(fields)) {
+      throw new AttrCanNotBeNullException("Merger fields can not be null!!!");
+    }
     this.fields = StringUtils.split(fields, ",");
     addConfigs(parmas);
   }
@@ -35,7 +40,9 @@ class StrMerger extends Merger {
   public StrMerger(Map<String, Object> parmas) {
     super(parmas);
     splitStr = (String) parmas.get("splitStr");
-
+    if (splitStr == null) {
+      throw new AttrCanNotBeNullException("StrMerger splitStr can not be null!!!");
+    }
   }
 
   @Override

@@ -21,10 +21,12 @@ public class CaseWhenStage extends Stage {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CaseWhenStage.class);
 
+  /**
+   * Condition和对应执行StageList
+   */
   private LinkedHashMap<Condition, List<Stage>> casewhenMap;
 
   private Timer stageTimer;
-//  private Counter counter;
 
   /**
    * 构造函数，创建此stage内的条件可执行stage列表
@@ -32,13 +34,24 @@ public class CaseWhenStage extends Stage {
    * @param params 构造参数
    * @param stageId stageId唯一标识
    */
-  @SuppressWarnings({"unchecked"})
   public CaseWhenStage(MetricRegistry registry, List<Map<String, Object>> params, String stageId)
       throws Exception {
     super(registry, stageId);
-//    counter = registry.counter(String.format("%s_counter", stageId));
     stageTimer = registry.timer(String.format("%s_timer", stageId));
-    casewhenMap = Maps.newLinkedHashMap();
+    casewhenMap = create(params);
+  }
+
+  /**
+   * 根据配置创建Condition和subStageList
+   *
+   * @param params 配置
+   * @return Map
+   */
+  @SuppressWarnings({"unchecked"})
+  private LinkedHashMap<Condition, List<Stage>> create(List<Map<String, Object>> params)
+      throws Exception {
+    LinkedHashMap<Condition, List<Stage>> map = Maps.newLinkedHashMap();
+
     for (Map<String, Object> param : params) {
       Map<String, Object> conditionParam = (Map<String, Object>) param.get("condition");
       List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) param
@@ -46,14 +59,12 @@ public class CaseWhenStage extends Stage {
       LOGGER.info(String
           .format("%s condition:%s, stage size: %d", stageId, conditionParam,
               stagesConfigList.size()));
-      List<Stage> subStageList = Stage.createStage(stagesConfigList, registry);
-      casewhenMap
-          .put(Condition.createCondition(conditionParam), subStageList);
+      List<Stage> subStageList = Stage.createStage(stagesConfigList, metricRegistry);
+      map.put(Condition.createCondition(conditionParam), subStageList);
 
     }
-
+    return map;
   }
-
 
   /**
    * 执行casewhen的stage，遍历map，如果满足条件则执行，执行完跳出，否则向下判断
@@ -68,8 +79,8 @@ public class CaseWhenStage extends Stage {
       return null;
     }
     Context context = stageTimer.time();
-
     try {
+      //顺序执行condition和对应的pipelinestage，但只执行condition为true的stage，执行完跳出
       for (Map.Entry<Condition, List<Stage>> entry : casewhenMap.entrySet()) {
         Condition condition = entry.getKey();
         if (condition.conditional(data)) {
@@ -83,7 +94,6 @@ public class CaseWhenStage extends Stage {
       throw e;
     } finally {
       context.stop();
-//      counter.inc();
     }
     return data;
   }

@@ -79,9 +79,10 @@ public class FieldSplitProcessor extends Processor {
     if (data.containsKey(fieldName)) {
       Object value = data.get(fieldName);
       if (value != null) {
+        //  数据处理
         Object splitValue = splitter.split(value);
         if (splitValue != null) {
-//        数组处理
+          //数组处理
           if (splitValue instanceof Object[]) {
             Object[] values = (Object[]) splitValue;
             if (values.length > 0) {
@@ -93,13 +94,14 @@ public class FieldSplitProcessor extends Processor {
                           values.length,
                           targetFields.length));
                 } else {
+                  //写到data中
                   for (int i = 0; i < targetFields.length; i++) {
                     data.put(targetFields[i], values[i]);
                   }
                 }
               } else if (multipleTargeFields != null) {
                 boolean noMatch = true;
-//            匹配后结束，没找到抛异常
+                //匹配后结束，没找到抛异常
                 for (String[] targets : multipleTargeFields) {
                   if (targets.length == values.length) {
                     for (int i = 0; i < targets.length; i++) {
@@ -116,7 +118,7 @@ public class FieldSplitProcessor extends Processor {
 
             }
           } else if (splitValue instanceof Map) {
-//          Map处理,targetFields必须只能有一列
+            //Map处理,targetFields必须只能有一列
             if (targetFields == null || targetFields.length != 1) {
               throw new RuntimeException("targetFields must be 1 when result type is Map!!!");
             } else {

@@ -20,6 +20,11 @@ public abstract class Condition {
 
   public abstract boolean conditional(Map<String, Object> data);
 
+  /**
+   * 根据配置生成条件判断.
+   * @param params 判断配置
+   * @return Condition实例
+   */
   public static Condition createCondition(Map<String, Object> params) {
     if (params == null || !params.containsKey("expr")) {
 
@@ -31,6 +36,9 @@ public abstract class Condition {
   }
 }
 
+/**
+ * 相当于if
+ */
 class CasewhenCondition extends Condition {
 
   public CasewhenCondition(String expr) {
@@ -45,6 +53,9 @@ class CasewhenCondition extends Condition {
   }
 }
 
+/**
+ * 相当于else，配置中没有condition.
+ */
 class OtherwiseCondition extends Condition {
 
   public OtherwiseCondition(String expr) {

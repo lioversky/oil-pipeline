@@ -2,7 +2,10 @@ package com.weibo.dip.pipeline.processor.substring;
 
 import com.google.common.base.Strings;
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Create by hongxun on 2018/7/1
@@ -17,6 +20,7 @@ abstract class SubStringer extends Configuration {
 
   abstract String subString(String value) throws Exception;
 }
+
 /**
  * 去空格.
  */
@@ -94,6 +98,33 @@ class MatchSubStringer extends SubStringer {
     } else {
       return null;
     }
+  }
+}
+
+class RegexExtractSubStringer extends SubStringer {
+
+  @Override
+  String subString(String value) throws Exception {
+    Matcher m = pattern.matcher(value);
+    if (m.find()) {
+      return m.group();
+    }
+    return defaultValue;
+  }
+
+  private String regex;
+  private String defaultValue;
+  private Pattern pattern;
+
+  public RegexExtractSubStringer(Map<String, Object> parmas) {
+    super(parmas);
+    regex = (String) parmas.get("regex");
+    if (Strings.isNullOrEmpty(regex)) {
+      throw new AttrCanNotBeNullException(
+          "RegexExtract regex can not be null!!!");
+    }
+    pattern = Pattern.compile(regex);
+    defaultValue = (String) parmas.get("defaultValue");
   }
 }
 

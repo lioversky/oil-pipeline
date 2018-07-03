@@ -5,6 +5,7 @@ import com.weibo.dip.pipeline.processor.Processor;
 import java.util.Map;
 
 /**
+ * 数据展开处理器
  * Create by hongxun on 2018/7/1
  */
 public class FlattenProcessor extends Processor {
@@ -30,8 +31,8 @@ public class FlattenProcessor extends Processor {
 
   /**
    * @param data 原始数据
-   * @return 打平后的数据
-   * @throws Exception 打平后的字段已经存在异常
+   * @return 展开后的数据
+   * @throws Exception 展开后的字段已经存在异常
    */
   @Override
   public Map<String, Object> process(Map<String, Object> data) throws Exception {

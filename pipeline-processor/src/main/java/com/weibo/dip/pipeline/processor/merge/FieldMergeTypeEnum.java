@@ -19,7 +19,7 @@ public enum FieldMergeTypeEnum implements TypeEnum {
   ListMerge {
     @Override
     public Merger getMerger(Map<String, Object> parmas) {
-     return new ListMerger(parmas);
+      return new ListMerger(parmas);
     }
   },
   MapMerge {

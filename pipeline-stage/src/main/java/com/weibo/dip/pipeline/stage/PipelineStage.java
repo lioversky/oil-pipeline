@@ -23,14 +23,12 @@ public class PipelineStage extends Stage {
 
   private List<Processor> processorList;
   private Timer stageTimer;
-//  private Counter counter;
 
   public PipelineStage(MetricRegistry metricRegistry,
       List<Map<String, Object>> processorsCofnigList, String stageId) {
     super(metricRegistry, stageId);
     processorList = createProcessorList(processorsCofnigList);
     stageTimer = metricRegistry.timer(String.format("%s_timer", stageId));
-//    counter = metricRegistry.counter(String.format("%s_counter", stageId));
 
   }
 
@@ -51,14 +49,10 @@ public class PipelineStage extends Stage {
           break;
         }
       }
-      if (data != null) {
-        //todo:
-      }
     } catch (Exception e) {
       throw e;
     } finally {
       context.stop();
-//      counter.inc();
     }
     return data;
   }
@@ -75,7 +69,7 @@ public class PipelineStage extends Stage {
     for (Map<String, Object> params : processorsCofnigList) {
       String processorType = (String) params.get("processorType");
       String subType = Strings.nullToEmpty((String) params.get("subType"));
-      LOGGER.info(String.format("%s create processor: %s(%s)",stageId, processorType, subType));
+      LOGGER.info(String.format("%s create processor: %s(%s)", stageId, processorType, subType));
       Processor p = ProcessorTypeEnum.getType(processorType)
           .getProcessor(params);
       if (p == null) {

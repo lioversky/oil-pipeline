@@ -19,6 +19,7 @@ public class Configuration implements Serializable {
   public void addConfig(){
 
   }
+
   public void addConfigs(Map<String, Object> config) {
     configs.putAll(config);
   }

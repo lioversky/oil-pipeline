@@ -29,6 +29,11 @@ public enum SubStringTypeEnum implements TypeEnum {
 
       return new MatchSubStringer(parmas);
     }
+  }, RegexExtract {
+    @Override
+    public SubStringer getSubStringer(Map<String, Object> parmas) {
+      return new RegexExtractSubStringer(parmas);
+    }
   };
 
 
@@ -37,6 +42,7 @@ public enum SubStringTypeEnum implements TypeEnum {
           .put("substring_trim", Trim)
           .put("substring_fixed", Fixed)
           .put("substring_match", Match)
+          .put("substring_regex", RegexExtract)
           .build();
 
   public SubStringer getSubStringer(Map<String, Object> parmas) {

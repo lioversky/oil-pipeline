@@ -65,7 +65,7 @@ class RegexSplitter extends Splitter {
   public RegexSplitter(Map<String, Object> parmas) {
     super(parmas);
     this.regex = (String) parmas.get("regex");
-    if(Strings.isNullOrEmpty(regex)){
+    if (Strings.isNullOrEmpty(regex)) {
       throw new AttrCanNotBeNullException("RegexSplitter regex can not be null!!!");
     }
     this.pattern = Pattern.compile(regex);

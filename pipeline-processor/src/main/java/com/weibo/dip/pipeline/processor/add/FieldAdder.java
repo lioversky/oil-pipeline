@@ -1,10 +1,10 @@
 package com.weibo.dip.pipeline.processor.add;
 
+import com.google.common.base.Strings;
 import com.weibo.dip.pipeline.configuration.Configuration;
 import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.Map;
 import org.joda.time.DateTime;
-import org.nutz.lang.Strings;
 
 /**
  * Create by hongxun on 2018/7/1
@@ -33,7 +33,7 @@ class CopyFieldAdder extends FieldAdder {
   public CopyFieldAdder(Map<String, Object> parmas) {
     super(parmas);
     sourceField = (String) parmas.get("sourceField");
-    if(Strings.isBlank(sourceField)){
+    if (Strings.isNullOrEmpty(sourceField)) {
       throw new AttrCanNotBeNullException("Fieldcopy sourceField can not be null!!!");
     }
   }

@@ -2,6 +2,7 @@ package com.weibo.dip.pipeline.processor.converte;
 
 import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import com.weibo.dip.util.NumberUtil;
 import java.util.Arrays;
 import java.util.Collection;
@@ -167,5 +168,35 @@ class UrlArgsConverter extends Converter {
       }
     }
     return argsMap;
+  }
+}
+
+class MappingConverter extends Converter {
+
+  private Map<String, Object> mapping;
+
+  @Override
+  public Object converte(Object data) {
+    return mapping.get(data);
+  }
+
+  public MappingConverter(Map<String, Object> parmas) {
+    super(parmas);
+    mapping = (Map<String, Object>) parmas.get("mapping");
+    if (mapping == null) {
+      throw new AttrCanNotBeNullException("Mapping can not be null !!!");
+    }
+  }
+}
+
+class IntervalConverter extends Converter {
+
+  public IntervalConverter(Map<String, Object> parmas) {
+    super(parmas);
+  }
+
+  @Override
+  public Object converte(Object data) {
+    return null;
   }
 }

@@ -1,7 +1,9 @@
 package com.weibo.dip.pipeline.processor.flatten;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.Map;
 
 /**
@@ -20,11 +22,17 @@ public abstract class Flattener extends Configuration {
   /**
    * 保留父字段名称时的分隔符
    */
-  private String joinStrIfKeepParen;
+  private String joinStrIfKeepParen = ".";
 
   public Flattener(Map<String, Object> parmas) {
-    keepParentName = (boolean) parmas.get("keepParentName");
-    joinStrIfKeepParen = (String) parmas.get("joinStrIfKeepParen");
+    keepParentName =
+        !parmas.containsKey("keepParentName") || (boolean) parmas.get("keepParentName");
+    if (keepParentName && parmas.containsKey("joinStrIfKeepParen")) {
+      joinStrIfKeepParen = (String) parmas.get("joinStrIfKeepParen");
+
+
+    }
+
     addConfigs(parmas);
 
   }
@@ -90,6 +98,9 @@ class FieldFlattener extends Flattener {
   public FieldFlattener(Map<String, Object> parmas) {
     super(parmas);
     fieldName = (String) parmas.get("fieldName");
+    if (Strings.isNullOrEmpty(fieldName)) {
+      throw new AttrCanNotBeNullException("FieldFlattener fieldName can not be null!!!");
+    }
   }
 
   @Override

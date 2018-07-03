@@ -41,14 +41,11 @@ public abstract class Stage implements Serializable {
     this.metricRegistry = metricRegistry;
   }
 
-  public void sendErrorMessage() {
-
-  }
-
   /**
    * 递归创建stage.
    *
    * @param stagesConfigList stage配置列表
+   * @param parentRegistry 父metricRegistry，根使用MetricSystem
    * @return stage列表
    * @throws Exception stage类型不存在异常
    */
@@ -62,16 +59,17 @@ public abstract class Stage implements Serializable {
       String stageType = (String) stageConfigMap.get("type");
       MetricRegistry metricRegistry = new MetricRegistry();
       String stageId = createStageId(stageType);
-      //创建casewhenStage
+      //按类型创建stage
       if ("casewhen".equals(stageType)) {
         List<Map<String, Object>> subStagesList = (List<Map<String, Object>>) stageConfigMap
             .get("subStages");
-        result.add(new CaseWhenStage(metricRegistry,subStagesList ,stageId));
+        result.add(new CaseWhenStage(metricRegistry, subStagesList, stageId));
       } else if ("pipeline".equals(stageType)) {
         List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
             .get("processors");
-        result.add(new PipelineStage(metricRegistry,processorConfigList, stageId));
+        result.add(new PipelineStage(metricRegistry, processorConfigList, stageId));
       }
+      //注册metrics
       parentRegistry.register(stageId, metricRegistry);
     }
     return result;
@@ -79,8 +77,14 @@ public abstract class Stage implements Serializable {
 
   private static AtomicInteger index = new AtomicInteger();
 
+  /**
+   * 生成stageId
+   *
+   * @param stageType stage类型
+   * @return stageId
+   */
   private static String createStageId(String stageType) {
-    return String.format("%s-%d", stageType , index.incrementAndGet());
+    return String.format("%s-%d", stageType, index.incrementAndGet());
   }
 
 }
