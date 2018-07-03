@@ -5,11 +5,22 @@ import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class FieldRemoveProcessorTest {
 
   private String test_type = "processor_fieldremove";
+  private List<Processor> processorList;
+
+  @Before
+  public void before() {
+    try {
+      processorList = JsonTestUtil.getProcessors(jsonFile);
+    } catch (Exception e) {
+      Assert.fail("create processorList error!!!");
+    }
+  }
 
   @Test
   public void testRemove() {
@@ -83,7 +94,6 @@ public class FieldRemoveProcessorTest {
   public void testJsonRemove() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
       Processor p = processorList.get(0);
       data = p.process(data);
@@ -100,7 +110,6 @@ public class FieldRemoveProcessorTest {
   public void testJsonKeep() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
       Processor p = processorList.get(1);
       data = p.process(data);
@@ -116,7 +125,6 @@ public class FieldRemoveProcessorTest {
   public void testJsonRemoveNull() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("b", "bb", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
       Processor p = processorList.get(1);
       data = p.process(data);

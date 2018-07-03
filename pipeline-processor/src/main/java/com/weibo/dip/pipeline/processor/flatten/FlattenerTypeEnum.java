@@ -2,7 +2,6 @@ package com.weibo.dip.pipeline.processor.flatten;
 
 import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;
-import com.weibo.dip.pipeline.processor.converte.ConverteTypeEnum;
 import java.util.Map;
 
 /**

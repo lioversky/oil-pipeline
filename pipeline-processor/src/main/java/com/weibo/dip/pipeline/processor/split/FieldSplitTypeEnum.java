@@ -39,7 +39,7 @@ public enum FieldSplitTypeEnum implements TypeEnum {
 
   private static final Map<String, FieldSplitTypeEnum> types =
       new ImmutableMap.Builder<String, FieldSplitTypeEnum>()
-          .put("split_str", DelimiterSpliter)
+          .put("split_delimiter", DelimiterSpliter)
           .put("split_regex", RegexSpliter)
           .put("split_json", JsonSpliter)
           .put("split_list", ListSpliter)

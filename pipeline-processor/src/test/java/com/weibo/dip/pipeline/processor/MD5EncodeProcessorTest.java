@@ -12,7 +12,6 @@ public class MD5EncodeProcessorTest {
 
   Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("md5", "1111"));
 
-  @Test
   public void testMD5() {
     Map<String, Object> params = ImmutableMap.of("fieldName", "md5");
     Processor md5 = ProcessorTypeEnum.getType("processor_md5")

@@ -21,10 +21,11 @@ public abstract class Condition {
   public abstract boolean conditional(Map<String, Object> data);
 
   public static Condition createCondition(Map<String, Object> params) {
-    String expr = (String) params.get("expr");
-    if (Strings.isNullOrEmpty(expr)) {
-      return new OtherwiseCondition(expr);
+    if (params == null || !params.containsKey("expr")) {
+
+      return new OtherwiseCondition(null);
     } else {
+      String expr = (String) params.get("expr");
       return new CasewhenCondition(expr);
     }
   }

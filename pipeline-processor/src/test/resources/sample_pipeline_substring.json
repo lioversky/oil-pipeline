@@ -3,15 +3,17 @@
     {
       "processorType": "processor_substring",
       "subType": "substring_trim",
-      "fieldName": "substring_trim",
-      "fieldNotExistError": false
+      "params": {
+        "fieldName": "substring_trim",
+        "fieldNotExistError": false
+      }
     },
     {
       "processorType": "processor_substring",
       "subType": "substring_fixed",
-      "fieldName": "substring_fixed",
-      "fieldNotExistError": false,
       "params": {
+        "fieldName": "substring_fixed",
+        "fieldNotExistError": false,
         "begin": 4,
         "end": 4
       }
@@ -19,9 +21,9 @@
     {
       "processorType": "processor_substring",
       "subType": "substring_match",
-      "fieldName": "substring_match",
-      "fieldNotExistError": false,
       "params": {
+        "fieldName": "substring_match",
+        "fieldNotExistError": false,
         "beginStr": "111_",
         "endStr": "_111"
       }

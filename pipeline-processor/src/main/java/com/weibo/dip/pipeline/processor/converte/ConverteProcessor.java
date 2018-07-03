@@ -1,6 +1,7 @@
 package com.weibo.dip.pipeline.processor.converte;
 
 import com.weibo.dip.pipeline.processor.FieldProcessor;
+import java.util.Map;
 
 /**
  * 类型转换处理器
@@ -14,6 +15,10 @@ public class ConverteProcessor extends FieldProcessor {
 
   private Converter converter;
 
+  public ConverteProcessor(Map<String, Object> params, Converter converter) {
+    super(params);
+    this.converter = converter;
+  }
 
   public ConverteProcessor(boolean fieldNotExistError, String columnName, Converter converter) {
     super(fieldNotExistError, columnName);

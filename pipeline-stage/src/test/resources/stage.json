@@ -1,26 +1,247 @@
 {
   "stages": [
     {
+      "type": "pipeline",
+      "processors": [
+        {
+          "processorType": "processor_fieldsplit",
+          "subType": "split_str",
+          "params": {
+            "targetFields": "timestamp,http_x_up_calling_line_id,request,http_user_agent,status,clientip,uid,referer,request_time,bytes_sent,hv,http_x_forwarded_for,request_uid,http_host,http_cookie,upstream_response_time,request_length,body_bytes_sent,http_slb_ip,idc,host,tag",
+            "overwriteIfFieldExist": true,
+            "fieldNotExistError": false,
+            "fieldName": "_message_",
+            "splitStr": "`"
+          }
+        },
+        {
+          "processorType": "processor_fieldsplit",
+          "subType": "split_str",
+          "params": {
+            "targetFields": "method,urls,version",
+            "overwriteIfFieldExist": true,
+            "fieldNotExistError": false,
+            "fieldName": "request",
+            "splitStr": " "
+          }
+        },
+        {
+          "processorType": "processor_substring",
+          "subType": "substring_fixed",
+          "params": {
+            "fieldName": "method",
+            "fieldNotExistError": false,
+            "begin": 1
+          }
+        },
+        {
+          "processorType": "processor_fieldsplit",
+          "subType": "split_str",
+          "params": {
+            "fieldName": "urls",
+            "targetFields": "urlpath,urlargs",
+            "overwriteIfFieldExist": true,
+            "fieldNotExistError": false,
+            "splitStr": "[?]"
+          }
+        },
+        {
+          "processorType": "processor_filter",
+          "expr": "(urlpath!='/2/remind/unread_count'&&urlpath!='/2/remind/group_unread'&&urlpath!='/2/photo/info'&&urlpath!='/2/httpdns/logs/add')"
+        },
+        {
+          "processorType": "processor_substring",
+          "subType": "substring_fixed",
+          "params": {
+            "fieldName": "timestamp",
+            "fieldNotExistError": false,
+            "begin": 1,
+            "end": 1
+          }
+        },
+        {
+          "processorType": "processor_substring",
+          "subType": "substring_fixed",
+          "params": {
+            "fieldName": "clientip",
+            "fieldNotExistError": false,
+            "begin": 1,
+            "end": 1
+          }
+        },
+        {
+          "processorType": "processor_replace",
+          "subType": "replace_replace_str",
+          "params": {
+            "fieldName": "tag",
+            "fieldNotExistError": false,
+            "source": "\\n",
+            "target": ""
+          }
+        }
+      ]
+    },
+    {
       "type": "casewhen",
       "subStages": [
         {
           "condition": {
+            "expr": "urlargs!=null"
           },
           "stages": [
+            {
+              "type": "pipeline",
+              "processors": [
+                {
+                  "processorType": "processor_fieldadd",
+                  "subType": "fieldadd_copy",
+                  "params": {
+                    "targetField": "args",
+                    "overwriteIfFieldExist": true,
+                    "sourceField": "urlargs"
+                  }
+                },
+                {
+                  "processorType": "processor_converte",
+                  "subType": "converte_urlargs",
+                  "params": {
+                    "fieldName": "args",
+                    "fieldNotExistError": false,
+                    "keepFields": "from,c,containerid,wm,cip,aid"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "casewhen",
+      "subStages": [
+        {
+          "condition": {
+            "expr": "tag==www_weibomobile03x4ts1kl_mweibo"
+          },
+          "stages": [
+            {
+              "type": "pipeline",
+              "processors": [
+                {
+                  "processorType": "processor_fieldadd",
+                  "subType": "fieldadd_fixedvalue",
+                  "params": {
+                    "targetField": "platform",
+                    "overwriteIfFieldExist": true,
+                    "fixedValue": "v4"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "condition": {
+            "expr": "tag=='wb-www-access-api.v8.weibo.cn'"
+          },
+          "stages": [
+            {
+              "type": "pipeline",
+              "processors": [
+                {
+                  "processorType": "processor_fieldadd",
+                  "subType": "fieldadd_fixedvalue",
+                  "params": {
+                    "targetField": "platform",
+                    "overwriteIfFieldExist": true,
+                    "fixedValue": "v8"
+                  }
+                },
+                {
+                  "processorType": "processor_fieldadd",
+                  "subType": "fieldadd_copy",
+                  "params": {
+                    "targetField": "v8_urlargs",
+                    "overwriteIfFieldExist": true,
+                    "sourceField": "urlargs"
+                  }
+                }
+              ]
+            },
             {
               "type": "casewhen",
               "subStages": [
                 {
                   "condition": {
+                    "expr": "http_user_agent!=null"
                   },
-                  "stage": [
+                  "stages": [
+                    {
+                      "type": "casewhen",
+                      "subStages": [
+                        {
+                          "condition": {
+                            "expr": "http_user_agent.length>=200"
+                          },
+                          "stages": [
+                            {
+                              "type": "pipeline",
+                              "processors": [
+                                {
+                                  "processorType": "processor_substring",
+                                  "subType": "substring_fixed",
+                                  "params": {
+                                    "fieldName": "http_user_agent",
+                                    "fieldNotExistError": false,
+                                    "end": 200
+                                  }
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "pipeline",
+                      "processors": [
+                        {
+                          "processorType": "processor_converte",
+                          "subType": "converte_tolowercase",
+                          "fieldName": "http_user_agent",
+                          "fieldNotExistError": false
+                        },
+                        {
+                          "processorType": "processor_fieldadd",
+                          "subType": "fieldadd_copy",
+                          "params": {
+                            "targetField": "v8_ua",
+                            "overwriteIfFieldExist": true,
+                            "sourceField": "http_user_agent"
+                          }
+                        }
+                      ]
+                    }
                   ]
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "stages": [
             {
               "type": "pipeline",
               "processors": [
+                {
+                  "processorType": "processor_fieldadd",
+                  "subType": "fieldadd_fixedvalue",
+                  "params": {
+                    "targetField": "platform",
+                    "overwriteIfFieldExist": true,
+                    "fixedValue": "v5"
+                  }
+                }
               ]
             }
           ]
@@ -30,6 +251,13 @@
     {
       "type": "pipeline",
       "processors": [
+        {
+          "processorType": "processor_fieldremove",
+          "subType": "remove_keep",
+          "params": {
+            "fields": "host,timestamp,platform,method,urlpath,urlargs,status,clientip,uid,referer,request_time,body_bytes_sent,request_length,request_uid,http_host,upstream_response_time,idc,hv,geoip,args,v8_urlargs,http_slb_ip,v8_ua"
+          }
+        }
       ]
     }
   ]

@@ -9,9 +9,24 @@ import java.util.Map;
  */
 public class FlattenProcessor extends Processor {
 
-  private Flattener flattener;
 
   private boolean overwriteIfFieldExist;
+  private Flattener flattener;
+
+  public FlattenProcessor(Map<String, Object> params,
+      Flattener flattener) {
+    super(params);
+    overwriteIfFieldExist =
+        !params.containsKey("overwriteIfFieldExist") || (boolean) params
+            .get("overwriteIfFieldExist");
+    this.flattener = flattener;
+  }
+
+  public FlattenProcessor(boolean overwriteIfFieldExist,
+      Flattener flattener) {
+    this.overwriteIfFieldExist = overwriteIfFieldExist;
+    this.flattener = flattener;
+  }
 
   /**
    * @param data 原始数据

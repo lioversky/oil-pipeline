@@ -29,6 +29,7 @@
     <commons.codec.version>1.10</commons.codec.version>
     <joda.time.version>2.9.5</joda.time.version>
     <metrics.version>3.2.3</metrics.version>
+    <log4j.version>1.2.17</log4j.version>
 
     <scala.version>2.11.5</scala.version>
     <scala.binary.version>2.11</scala.binary.version>
@@ -95,6 +96,18 @@
         <version>${metrics.version}</version>
       </dependency>
       <!-- end metrics-->
+      <!-- start log4j-->
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.7.22</version>
+      </dependency>
+      <!-- end log4j-->
     </dependencies>
   </dependencyManagement>
 

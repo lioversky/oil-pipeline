@@ -2,6 +2,7 @@ package com.weibo.dip.pipeline.processor.replace;
 
 import com.google.common.base.Strings;
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.Date;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,6 +24,7 @@ abstract class Replacer extends Configuration {
 
   abstract Object replace(String value) throws Exception;
 }
+
 /**
  * 字符串转日期
  */
@@ -37,6 +39,10 @@ class StrToDateReplacer extends Replacer {
   public StrToDateReplacer(Map<String, Object> parmas) {
     super(parmas);
     String source = (String) parmas.get("source");
+    if (Strings.isNullOrEmpty(source)) {
+      throw new AttrCanNotBeNullException(
+          "datestr replace to date sourceFormat can not be null!!!");
+    }
     dateTimeFormat = DateTimeFormat.forPattern(source);
   }
 
@@ -59,6 +65,10 @@ class StrToTimestampReplacer extends Replacer {
   public StrToTimestampReplacer(Map<String, Object> parmas) {
     super(parmas);
     String source = (String) parmas.get("source");
+    if (Strings.isNullOrEmpty(source)) {
+      throw new AttrCanNotBeNullException(
+          "datestr replace to timestamp sourceFormat can not be null!!!");
+    }
     dateTimeFormat = DateTimeFormat.forPattern(source);
   }
 
@@ -77,6 +87,10 @@ class StrToUnixTimestampReplacer extends Replacer {
   public StrToUnixTimestampReplacer(Map<String, Object> parmas) {
     super(parmas);
     String source = (String) parmas.get("source");
+    if (Strings.isNullOrEmpty(source)) {
+      throw new AttrCanNotBeNullException(
+          "datestr replace to unix timestamp sourceFormat can not be null!!!");
+    }
     dateTimeFormat = DateTimeFormat.forPattern(source);
   }
 
@@ -104,6 +118,14 @@ class StrToDateStrReplacer extends Replacer {
     super(parmas);
     String source = (String) parmas.get("source");
     String target = (String) parmas.get("target");
+    if (Strings.isNullOrEmpty(source)) {
+      throw new AttrCanNotBeNullException(
+          "datestr replace to datestr sourceFormat can not be null!!!");
+    }
+    if (Strings.isNullOrEmpty(target)) {
+      throw new AttrCanNotBeNullException(
+          "datestr replace to datestr targetFormat can not be null!!!");
+    }
     sourceFormat = DateTimeFormat.forPattern(source);
     targetFormat = DateTimeFormat.forPattern(target);
   }
@@ -123,8 +145,12 @@ class UnixToDateStrReplacer extends Replacer {
 
   public UnixToDateStrReplacer(Map<String, Object> parmas) {
     super(parmas);
-    String source = (String) parmas.get("source");
-    dateTimeFormat = DateTimeFormat.forPattern(source);
+    String target = (String) parmas.get("target");
+    if (Strings.isNullOrEmpty(target)) {
+      throw new AttrCanNotBeNullException(
+          "unix timestamp replace to datestr targetFormat can not be null!!!");
+    }
+    dateTimeFormat = DateTimeFormat.forPattern(target);
   }
 
   public String replace(String data) throws Exception {
@@ -139,8 +165,12 @@ class TimestampToDateStrReplacer extends Replacer {
 
   public TimestampToDateStrReplacer(Map<String, Object> parmas) {
     super(parmas);
-    String source = (String) parmas.get("source");
-    dateTimeFormat = DateTimeFormat.forPattern(source);
+    String target = (String) parmas.get("target");
+    if (Strings.isNullOrEmpty(target)) {
+      throw new AttrCanNotBeNullException(
+          "timestamp replace to datestr targetFormat can not be null!!!");
+    }
+    dateTimeFormat = DateTimeFormat.forPattern(target);
   }
 
   @Override
@@ -161,7 +191,13 @@ class ReplaceStrReplacer extends Replacer {
   public ReplaceStrReplacer(Map<String, Object> parmas) {
     super(parmas);
     this.source = (String) parmas.get("source");
+    if (Strings.isNullOrEmpty(source)) {
+      throw new AttrCanNotBeNullException("str replace source can not be null!!!");
+    }
     this.target = Strings.nullToEmpty((String) parmas.get("target"));
+    if (target == null) {
+      throw new AttrCanNotBeNullException("str replace target can not be null!!!");
+    }
   }
 
   public Object replace(String data) throws Exception {
@@ -180,6 +216,9 @@ class RegexReplacer extends Replacer {
   public RegexReplacer(Map<String, Object> parmas) {
     super(parmas);
     String regex = (String) parmas.get("regex");
+    if (Strings.isNullOrEmpty(regex)) {
+      throw new AttrCanNotBeNullException("regex replace regex can not be null!!!");
+    }
     this.target = Strings.nullToEmpty((String) parmas.get("target"));
     p = Pattern.compile(regex);
   }

@@ -28,6 +28,16 @@ public class FieldAddProcessor extends Processor {
    */
   private FieldAdder fieldAdder;
 
+  public FieldAddProcessor(Map<String, Object> params,
+      FieldAdder fieldAdder) {
+    super(params);
+    this.fieldAdder = fieldAdder;
+    overwriteIfFieldExist =
+        params.containsKey("overwriteIfFieldExist") && (boolean) params
+            .get("overwriteIfFieldExist");
+    targetField = (String) params.get("targetField");
+  }
+
   /**
    * 构造函数
    *

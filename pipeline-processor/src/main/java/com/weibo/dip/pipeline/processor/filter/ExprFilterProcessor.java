@@ -15,6 +15,10 @@ public class ExprFilterProcessor extends Processor {
    */
   private String expr;
 
+  public ExprFilterProcessor(Map<String, Object> params) {
+    expr = (String) params.get("expr");
+  }
+
   public ExprFilterProcessor(String expr) {
     this.addConfig("expr", expr);
     this.expr = expr;
@@ -30,8 +34,6 @@ public class ExprFilterProcessor extends Processor {
     }
     return data;
   }
-
-
 
 
 }

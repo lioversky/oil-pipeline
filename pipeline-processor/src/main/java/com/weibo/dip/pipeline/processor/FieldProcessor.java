@@ -2,6 +2,7 @@ package com.weibo.dip.pipeline.processor;
 
 import com.weibo.dip.pipeline.exception.FieldNotExistException;
 import java.util.Map;
+
 /**
  * 单列处理处理器抽象类
  * Create by hongxun on 2018/6/27
@@ -11,6 +12,12 @@ public abstract class FieldProcessor extends Processor {
 
   protected String fieldName;
   protected boolean fieldNotExistError;
+
+  public FieldProcessor(Map<String, Object> params) {
+    fieldName = (String) params.get("fieldName");
+    fieldNotExistError = params.containsKey("fieldNotExistError") && (boolean) params
+        .get("fieldNotExistError");
+  }
 
   public FieldProcessor(boolean fieldNotExistError, String columnName) {
     this.fieldName = columnName;

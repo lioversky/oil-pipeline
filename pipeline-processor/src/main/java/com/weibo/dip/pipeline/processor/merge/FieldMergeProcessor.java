@@ -15,6 +15,16 @@ public class FieldMergeProcessor extends Processor {
   private boolean overwriteIfFieldExist;
   private Merger merger;
 
+  public FieldMergeProcessor(Map<String, Object> params,
+      Merger merger) {
+    super(params);
+    this.merger = merger;
+    targetField = (String) params.get("targetField");
+    overwriteIfFieldExist =
+        !params.containsKey("overwriteIfFieldExist") || (boolean) params
+            .get("overwriteIfFieldExist");
+  }
+
   public FieldMergeProcessor(String targetField, boolean overwriteIfFieldExist,
       Merger merger) {
     this.targetField = targetField;

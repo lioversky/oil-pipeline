@@ -2,30 +2,66 @@
   "processors": [
     {
       "processorType": "processor_fieldsplit",
-      "subType": "split_str",
-      "targetFields": "a,b,c",
-      "overwriteIfFieldExist": true,
-      "fieldNotExistError":false,
-      "fieldName":"split",
+      "subType": "split_delimiter",
       "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split",
         "splitStr": ","
       }
     },
     {
       "processorType": "processor_fieldsplit",
       "subType": "split_list",
-      "targetFields": "a,b,c",
-      "overwriteIfFieldExist": true,
-      "fieldNotExistError":false,
-      "fieldName":"split"
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split"
+      }
     },
     {
       "processorType": "processor_fieldsplit",
       "subType": "split_array",
-      "targetFields": "a,b,c",
-      "overwriteIfFieldExist": true,
-      "fieldNotExistError":false,
-      "fieldName":"split"
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split"
+      }
+    },
+    {
+      "processorType": "processor_fieldsplit",
+      "subType": "split_regex",
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "regex": "//d",
+        "fieldName": "split"
+      }
+    },
+    {
+      "processorType": "processor_fieldsplit",
+      "subType": "split_json",
+      "params": {
+        "targetFields": "map",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split"
+      }
+    },
+    {
+      "processorType": "processor_fieldsplit",
+      "subType": "split_delimiter",
+      "params": {
+        "targetFields": "a,b,c|a,b,c,d",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split",
+        "splitStr": ","
+      }
     }
   ]
 }

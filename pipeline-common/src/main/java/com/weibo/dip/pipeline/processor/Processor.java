@@ -9,6 +9,15 @@ import java.util.Map;
  */
 public abstract class Processor extends Configuration {
 
+  public Processor() {
+  }
+
+  public Processor(Map<String, Object> params) {
+    if (params != null) {
+      addConfigs(params);
+    }
+  }
+
   public abstract Map<String, Object> process(Map<String, Object> data) throws Exception;
 
 

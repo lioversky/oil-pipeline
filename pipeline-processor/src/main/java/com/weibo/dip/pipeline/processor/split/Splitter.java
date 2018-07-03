@@ -1,6 +1,9 @@
 package com.weibo.dip.pipeline.processor.split;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import com.weibo.dip.util.GsonUtil;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +42,9 @@ class DelimiterSplitter extends Splitter {
   public DelimiterSplitter(Map<String, Object> parmas) {
     super(parmas);
     splitStr = (String) parmas.get("splitStr");
+    if (splitStr == null) {
+      throw new AttrCanNotBeNullException("DelimiterSplitter splitStr can not be null!!!");
+    }
   }
 
   @Override
@@ -59,6 +65,9 @@ class RegexSplitter extends Splitter {
   public RegexSplitter(Map<String, Object> parmas) {
     super(parmas);
     this.regex = (String) parmas.get("regex");
+    if(Strings.isNullOrEmpty(regex)){
+      throw new AttrCanNotBeNullException("RegexSplitter regex can not be null!!!");
+    }
     this.pattern = Pattern.compile(regex);
   }
 

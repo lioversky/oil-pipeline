@@ -9,6 +9,8 @@ import com.weibo.dip.pipeline.processor.base64.Base64TypeEnum;
 import com.weibo.dip.pipeline.processor.converte.ConverteProcessor;
 import com.weibo.dip.pipeline.processor.converte.ConverteTypeEnum;
 import com.weibo.dip.pipeline.processor.filter.ExprFilterProcessor;
+import com.weibo.dip.pipeline.processor.flatten.FlattenProcessor;
+import com.weibo.dip.pipeline.processor.flatten.FlattenerTypeEnum;
 import com.weibo.dip.pipeline.processor.md5.MD5EncodeProcessor;
 import com.weibo.dip.pipeline.processor.merge.FieldMergeProcessor;
 import com.weibo.dip.pipeline.processor.merge.FieldMergeTypeEnum;
@@ -34,50 +36,37 @@ public enum ProcessorTypeEnum implements TypeEnum {
    * 字符替换.
    */
   Replace {
+    @SuppressWarnings({"unchecked"})
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
       String subType = (String) params.get("subType");
-      String fieldName = (String) params.get("fieldName");
-
-      boolean fieldNotExistError = params.containsKey("fieldNotExistError") && (boolean) params
-          .get("fieldNotExistError");
-      ReplaceTypeEnum replaceTypeEnum = ReplaceTypeEnum.getType(subType);
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new ReplaceProcessor(fieldNotExistError, fieldName,
-          replaceTypeEnum.getReplacer(subParams));
+      ReplaceTypeEnum replaceTypeEnum = ReplaceTypeEnum.getType(subType);
+      return new ReplaceProcessor(subParams, replaceTypeEnum.getReplacer(subParams));
     }
   },
   /**
    * 截断
    */
   SubString {
+    @SuppressWarnings({"unchecked"})
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
       String subType = (String) params.get("subType");
-      String fieldName = (String) params.get("fieldName");
-
-      boolean fieldNotExistError = params.containsKey("fieldNotExistError") && (boolean) params
-          .get("fieldNotExistError");
-      SubStringTypeEnum subStringTypeEnum = SubStringTypeEnum.getType(subType);
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new SubStringProcessor(fieldNotExistError, fieldName,
-          subStringTypeEnum.getSubStringer(subParams));
+      SubStringTypeEnum subStringTypeEnum = SubStringTypeEnum.getType(subType);
+      return new SubStringProcessor(subParams, subStringTypeEnum.getSubStringer(subParams));
     }
   },
   /**
    * 类型转换
    */
   TypeConverte {
+    @SuppressWarnings({"unchecked"})
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-
       String subType = (String) params.get("subType");
-      String fieldName = (String) params.get("fieldName");
-
-      boolean fieldNotExistError = params.containsKey("fieldNotExistError") && (boolean) params
-          .get("fieldNotExistError");
-      ConverteTypeEnum converteTypeEnum = ConverteTypeEnum.getType(subType);
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new ConverteProcessor(fieldNotExistError, fieldName,
-          converteTypeEnum.getConverter(subParams));
+      ConverteTypeEnum converteTypeEnum = ConverteTypeEnum.getType(subType);
+      return new ConverteProcessor(subParams, converteTypeEnum.getConverter(subParams));
     }
   },
   /**
@@ -86,28 +75,34 @@ public enum ProcessorTypeEnum implements TypeEnum {
   Filter {
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-      String expr = (String) params.get("expr");
-      return new ExprFilterProcessor(expr);
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      return new ExprFilterProcessor(subParams);
     }
   },
   /**
    * 嵌套打平
    */
-  NestingFlat,
+  Flatten {
+    @SuppressWarnings({"unchecked"})
+    @Override
+    public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
+      String subType = (String) params.get("subType");
+      FlattenerTypeEnum flattenerTypeEnum = FlattenerTypeEnum.getType(subType);
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      return new FlattenProcessor(subParams, flattenerTypeEnum.getFlattener(subParams));
+    }
+  },
   /**
    * base64转码
    */
   Base64 {
+    @SuppressWarnings({"unchecked"})
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-      String fieldName = (String) params.get("fieldName");
       String subType = (String) params.get("subType");
-      boolean fieldNotExistError = params.containsKey("fieldNotExistError") && (boolean) params
-          .get("fieldNotExistError");
       Base64TypeEnum base64TypeEnum = Base64TypeEnum.getType(subType);
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new Base64Processor(fieldNotExistError, fieldName,
-          base64TypeEnum.getBase64er(subParams));
+      return new Base64Processor(subParams, base64TypeEnum.getBase64er(subParams));
     }
   },
 
@@ -115,81 +110,64 @@ public enum ProcessorTypeEnum implements TypeEnum {
    * md5转码
    */
   MD5 {
+    @SuppressWarnings({"unchecked"})
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-      String fieldName = (String) params.get("fieldName");
-
-      boolean fieldNotExistError = params.containsKey("fieldNotExistError") && (boolean) params
-          .get("fieldNotExistError");
-      return new MD5EncodeProcessor(fieldNotExistError, fieldName);
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      return new MD5EncodeProcessor(subParams);
     }
   },
   /**
    * 列拆分
    */
   FieldSplit {
+    @SuppressWarnings({"unchecked"})
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-      String targetField = (String) params.get("targetFields");
-      boolean overwriteIfFieldExist =
-          !params.containsKey("overwriteIfFieldExist") || (boolean) params
-              .get("overwriteIfFieldExist");
-      boolean fieldNotExistError = params.containsKey("fieldNotExistError") && (boolean) params
-          .get("fieldNotExistError");
+
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
       String subType = (String) params.get("subType");
-      String fieldName = (String) params.get("fieldName");
       FieldSplitTypeEnum fieldSplitTypeEnum = FieldSplitTypeEnum.getType(subType);
-
-      return new FieldSplitProcessor(StringUtils.split(targetField, ","), fieldName,
-          fieldNotExistError, overwriteIfFieldExist, fieldSplitTypeEnum.getSpliter(subParams));
+      return new FieldSplitProcessor(subParams, fieldSplitTypeEnum.getSplitter(subParams));
     }
   },
   /**
    * 列合并
    */
   FieldMerge {
+    @SuppressWarnings({"unchecked"})
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-      String targetField = (String) params.get("targetField");
-      boolean overwriteIfFieldExist =
-          !params.containsKey("overwriteIfFieldExist") || (boolean) params
-              .get("overwriteIfFieldExist");
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
       String subType = (String) params.get("subType");
       FieldMergeTypeEnum fieldMergeTypeEnum = FieldMergeTypeEnum.getType(subType);
-      return new FieldMergeProcessor(targetField,
-          overwriteIfFieldExist, fieldMergeTypeEnum.getMerger(subParams));
+      return new FieldMergeProcessor(subParams, fieldMergeTypeEnum.getMerger(subParams));
     }
   },
   /**
    * 列删除
    */
   FieldRemove {
+    @SuppressWarnings({"unchecked"})
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
       String subType = (String) params.get("subType");
       FieldRemoveTypeEnum removeTypeEnum = FieldRemoveTypeEnum.getType(subType);
-      String fields = (String) params.get("fields");
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new FieldRemoveProcessor(removeTypeEnum.getFieldRemover(subParams));
+      return new FieldRemoveProcessor(subParams, removeTypeEnum.getFieldRemover(subParams));
     }
   },
   /**
    * 列增加
    */
   FieldAdd {
+    @SuppressWarnings({"unchecked"})
     @Override
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
       String subType = (String) params.get("subType");
       FieldAddTypeEnum fieldAddTypeEnum = FieldAddTypeEnum.getType(subType);
-      boolean overwriteIfFieldExist =
-          params.containsKey("overwriteIfFieldExist") && (boolean) params
-              .get("overwriteIfFieldExist");
-      String targetField = (String) params.get("targetField");
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new FieldAddProcessor(overwriteIfFieldExist, targetField,
-          fieldAddTypeEnum.getFieldAdder(subParams));
+      return new FieldAddProcessor(subParams, fieldAddTypeEnum.getFieldAdder(subParams));
 
     }
   },
@@ -222,7 +200,7 @@ public enum ProcessorTypeEnum implements TypeEnum {
           .put("processor_substring", SubString)
           .put("processor_converte", TypeConverte)
           .put("processor_filter", Filter)
-          .put("processor_nestingflat", NestingFlat)
+          .put("processor_nestingflat", Flatten)
           .put("processor_base64", Base64)
           .put("processor_md5", MD5)
           .put("processor_fieldsplit", FieldSplit)

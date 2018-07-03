@@ -2,8 +2,10 @@
   "processors": [
     {
       "processorType": "processor_md5",
-      "fieldName": "md5",
-      "fieldNotExistError": false
+      "params": {
+        "fieldName": "md5",
+        "fieldNotExistError": false
+      }
     }
   ]
 }

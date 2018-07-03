@@ -1,6 +1,7 @@
 package com.weibo.dip.pipeline.processor.replace;
 
 import com.weibo.dip.pipeline.processor.FieldProcessor;
+import java.util.Map;
 
 /**
  * 列替换处理器.
@@ -12,8 +13,9 @@ public class ReplaceProcessor extends FieldProcessor {
   private Replacer replacer;
 
 
-  public ReplaceProcessor(boolean fieldNotExistError, String columnName) {
-    super(fieldNotExistError, columnName);
+  public ReplaceProcessor(Map<String,Object> params,Replacer replacer) {
+    super(params);
+    this.replacer = replacer;
   }
 
   public ReplaceProcessor(boolean fieldNotExistError, String columnName,
@@ -24,8 +26,7 @@ public class ReplaceProcessor extends FieldProcessor {
 
   @Override
   public Object columnProcess(Object data) throws Exception {
-    String oldValue = (String) data;
-    return replacer.replace(oldValue);
+    return replacer.replace((String) data);
 
   }
 

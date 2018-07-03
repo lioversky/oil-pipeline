@@ -8,6 +8,12 @@ public class FieldRemoveProcessor extends Processor {
 
   private Remover remover;
 
+  public FieldRemoveProcessor(Map<String, Object> params,
+      Remover remover) {
+    super(params);
+    this.remover = remover;
+  }
+
   public FieldRemoveProcessor(Remover remover) {
     this.remover = remover;
   }

@@ -1,8 +1,10 @@
 package com.weibo.dip.pipeline.processor.add;
 
 import com.weibo.dip.pipeline.configuration.Configuration;
+import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.Map;
 import org.joda.time.DateTime;
+import org.nutz.lang.Strings;
 
 /**
  * Create by hongxun on 2018/7/1
@@ -31,6 +33,9 @@ class CopyFieldAdder extends FieldAdder {
   public CopyFieldAdder(Map<String, Object> parmas) {
     super(parmas);
     sourceField = (String) parmas.get("sourceField");
+    if(Strings.isBlank(sourceField)){
+      throw new AttrCanNotBeNullException("Fieldcopy sourceField can not be null!!!");
+    }
   }
 
   @Override
@@ -93,11 +98,11 @@ class CurrentUnixTimestampFieldAdder extends FieldAdder {
  */
 class FixedValueFieldAdder extends FieldAdder {
 
-  private String fixedValue;
+  private Object fixedValue;
 
   public FixedValueFieldAdder(Map<String, Object> parmas) {
     super(parmas);
-    fixedValue = (String) parmas.get("fixedValue");
+    fixedValue = parmas.get("fixedValue");
   }
 
   @Override
