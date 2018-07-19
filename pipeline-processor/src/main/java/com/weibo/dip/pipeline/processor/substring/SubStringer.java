@@ -6,19 +6,20 @@ import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Create by hongxun on 2018/7/1
  */
 abstract class SubStringer extends Configuration {
 
-  public SubStringer(Map<String, Object> parmas) {
-    if (parmas != null) {
-      addConfigs(parmas);
+  public SubStringer(Map<String, Object> params) {
+    if (params != null) {
+      addConfigs(params);
     }
   }
 
-  abstract String subString(String value) throws Exception;
+  abstract String substring(String value) throws Exception;
 }
 
 /**
@@ -26,12 +27,12 @@ abstract class SubStringer extends Configuration {
  */
 class TrimSubStringer extends SubStringer {
 
-  public TrimSubStringer(Map<String, Object> parmas) {
-    super(parmas);
+  public TrimSubStringer(Map<String, Object> params) {
+    super(params);
   }
 
   @Override
-  String subString(String value) throws Exception {
+  String substring(String value) throws Exception {
     return value.trim();
   }
 }
@@ -39,29 +40,39 @@ class TrimSubStringer extends SubStringer {
 /**
  * 定长截取.
  */
-class FixedSubStringer extends SubStringer {
+class FixedLRSubStringer extends SubStringer {
 
-  private int begin;
-  private int end;
+  private int left;
+  private int right;
 
-  public FixedSubStringer(Map<String, Object> parmas) {
-    super(parmas);
-    this.begin = parmas.containsKey("begin") ? ((Number) parmas.get("begin")).intValue() : 0;
-    this.end = parmas.containsKey("end") ? ((Number) parmas.get("end")).intValue() : -1;
+  public FixedLRSubStringer(Map<String, Object> params) {
+    super(params);
+    this.left = params.containsKey("left") ? ((Number) params.get("left")).intValue() : 0;
+    this.right = params.containsKey("right") ? ((Number) params.get("right")).intValue() : -1;
   }
 
   @Override
-  String subString(String value) throws Exception {
-    int endIndex = end < 0 ? value.length() : value.length() - end;
-    if (endIndex < 0) {
-      throw new IllegalArgumentException(
-          String.format("end value: %d is bigger than value length: %d", end, value.length()));
-    }
-    if (endIndex > begin) {
-      return value.substring(begin, endIndex);
-    } else {
-      return value.substring(begin);
-    }
+  String substring(String value) throws Exception {
+    int endIndex = right < 0 ? value.length() : value.length() - right;
+    return StringUtils.substring(value,left,endIndex);
+  }
+}
+
+class FixedLenSubStringer extends SubStringer {
+
+  private int start;
+  private int length;
+
+  @Override
+  String substring(String value) throws Exception {
+    int end = value.length() > start + length ? start + length : value.length();
+    return value.substring(start, end);
+  }
+
+  public FixedLenSubStringer(Map<String, Object> params) {
+    super(params);
+    this.start = params.containsKey("start") ? ((Number) params.get("start")).intValue() : 0;
+    this.length = params.containsKey("length") ? ((Number) params.get("length")).intValue() : -1;
   }
 }
 
@@ -73,14 +84,14 @@ class MatchSubStringer extends SubStringer {
   private String beginStr;
   private String endStr;
 
-  public MatchSubStringer(Map<String, Object> parmas) {
-    super(parmas);
-    this.beginStr = (String) parmas.get("beginStr");
-    this.endStr = (String) parmas.get("endStr");
+  public MatchSubStringer(Map<String, Object> params) {
+    super(params);
+    this.beginStr = (String) params.get("beginStr");
+    this.endStr = (String) params.get("endStr");
   }
 
   @Override
-  String subString(String value) throws Exception {
+  String substring(String value) throws Exception {
     //    todo: 复杂条件
     int beginIndex = Strings.isNullOrEmpty(beginStr) ? 0 : value.indexOf(beginStr);
 
@@ -104,7 +115,7 @@ class MatchSubStringer extends SubStringer {
 class RegexExtractSubStringer extends SubStringer {
 
   @Override
-  String subString(String value) throws Exception {
+  String substring(String value) throws Exception {
     Matcher m = pattern.matcher(value);
     if (m.find()) {
       return m.group();
@@ -116,15 +127,14 @@ class RegexExtractSubStringer extends SubStringer {
   private String defaultValue;
   private Pattern pattern;
 
-  public RegexExtractSubStringer(Map<String, Object> parmas) {
-    super(parmas);
-    regex = (String) parmas.get("regex");
+  public RegexExtractSubStringer(Map<String, Object> params) {
+    super(params);
+    regex = (String) params.get("regex");
     if (Strings.isNullOrEmpty(regex)) {
       throw new AttrCanNotBeNullException(
           "RegexExtract regex can not be null!!!");
     }
     pattern = Pattern.compile(regex);
-    defaultValue = (String) parmas.get("defaultValue");
+    defaultValue = (String) params.get("defaultValue");
   }
 }
-

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Create by hongxun on 2018/6/26
  */
-public abstract class Processor extends Configuration {
+public abstract class Processor<T> extends Configuration {
 
   public Processor() {
   }
@@ -18,7 +18,7 @@ public abstract class Processor extends Configuration {
     }
   }
 
-  public abstract Map<String, Object> process(Map<String, Object> data) throws Exception;
+  public abstract  T process(T data) throws Exception;
 
 
 }

@@ -11,9 +11,9 @@ import org.joda.time.DateTime;
  */
 abstract class FieldAdder extends Configuration {
 
-  public FieldAdder(Map<String, Object> parmas) {
-    if (parmas != null) {
-      addConfigs(parmas);
+  public FieldAdder(Map<String, Object> params) {
+    if (params != null) {
+      addConfigs(params);
     }
   }
 
@@ -30,9 +30,9 @@ class CopyFieldAdder extends FieldAdder {
    */
   private String sourceField;
 
-  public CopyFieldAdder(Map<String, Object> parmas) {
-    super(parmas);
-    sourceField = (String) parmas.get("sourceField");
+  public CopyFieldAdder(Map<String, Object> params) {
+    super(params);
+    sourceField = (String) params.get("sourceField");
     if (Strings.isNullOrEmpty(sourceField)) {
       throw new AttrCanNotBeNullException("Fieldcopy sourceField can not be null!!!");
     }
@@ -51,9 +51,9 @@ class CurrentDateStrFieldAdder extends FieldAdder {
 
   private String dateFormat;
 
-  public CurrentDateStrFieldAdder(Map<String, Object> parmas) {
-    super(parmas);
-    dateFormat = (String) parmas.get("dateFormat");
+  public CurrentDateStrFieldAdder(Map<String, Object> params) {
+    super(params);
+    dateFormat = (String) params.get("dateFormat");
   }
 
 
@@ -68,8 +68,8 @@ class CurrentDateStrFieldAdder extends FieldAdder {
  */
 class CurrentTimestampFieldAdder extends FieldAdder {
 
-  public CurrentTimestampFieldAdder(Map<String, Object> parmas) {
-    super(parmas);
+  public CurrentTimestampFieldAdder(Map<String, Object> params) {
+    super(params);
   }
 
   @Override
@@ -83,8 +83,8 @@ class CurrentTimestampFieldAdder extends FieldAdder {
  */
 class CurrentUnixTimestampFieldAdder extends FieldAdder {
 
-  public CurrentUnixTimestampFieldAdder(Map<String, Object> parmas) {
-    super(parmas);
+  public CurrentUnixTimestampFieldAdder(Map<String, Object> params) {
+    super(params);
   }
 
   @Override
@@ -100,9 +100,9 @@ class FixedValueFieldAdder extends FieldAdder {
 
   private Object fixedValue;
 
-  public FixedValueFieldAdder(Map<String, Object> parmas) {
-    super(parmas);
-    fixedValue = parmas.get("fixedValue");
+  public FixedValueFieldAdder(Map<String, Object> params) {
+    super(params);
+    fixedValue = params.get("fixedValue");
   }
 
   @Override

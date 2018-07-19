@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * 异常数据处理
  * Create by hongxun on 2018/06/28
  */
-public abstract class Stage implements Serializable {
+public abstract class Stage<T> implements Serializable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Stage.class);
 
@@ -31,7 +31,7 @@ public abstract class Stage implements Serializable {
     this.stageId = stageId;
   }
 
-  public abstract Map<String, Object> processStage(Map<String, Object> data) throws Exception;
+  public abstract T processStage(T data) throws Exception;
 
   public MetricRegistry getMetricRegistry() {
     return metricRegistry;
@@ -83,7 +83,7 @@ public abstract class Stage implements Serializable {
    * @param stageType stage类型
    * @return stageId
    */
-  private static String createStageId(String stageType) {
+  public static String createStageId(String stageType) {
     return String.format("%s-%d", stageType, index.incrementAndGet());
   }
 

@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * <p>CaseWhenStage</p> 的执行段为stage列表，可以包含pipeline，也可包含其它casewhen
  * Create by hongxun on 2018/6/29
  */
-public class CaseWhenStage extends Stage {
+public class CaseWhenStage extends Stage<Map<String,Object>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CaseWhenStage.class);
 
@@ -85,7 +85,7 @@ public class CaseWhenStage extends Stage {
         Condition condition = entry.getKey();
         if (condition.conditional(data)) {
           for (Stage stage : entry.getValue()) {
-            data = stage.processStage(data);
+            data = (Map<String,Object>)stage.processStage(data);
           }
           break;
         }

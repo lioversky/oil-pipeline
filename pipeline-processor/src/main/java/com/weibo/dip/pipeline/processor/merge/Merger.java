@@ -18,13 +18,13 @@ abstract class Merger extends Configuration {
 
   protected String[] fields;
 
-  public Merger(Map<String, Object> parmas) {
-    String fields = (String) parmas.get("fields");
+  public Merger(Map<String, Object> params) {
+    String fields = (String) params.get("fields");
     if (Strings.isNullOrEmpty(fields)) {
       throw new AttrCanNotBeNullException("Merger fields can not be null!!!");
     }
     this.fields = StringUtils.split(fields, ",");
-    addConfigs(parmas);
+    addConfigs(params);
   }
 
   abstract Object merge(Map<String, Object> data) throws Exception;
@@ -37,9 +37,9 @@ class StrMerger extends Merger {
 
   private String splitStr;
 
-  public StrMerger(Map<String, Object> parmas) {
-    super(parmas);
-    splitStr = (String) parmas.get("splitStr");
+  public StrMerger(Map<String, Object> params) {
+    super(params);
+    splitStr = (String) params.get("splitStr");
     if (splitStr == null) {
       throw new AttrCanNotBeNullException("StrMerger splitStr can not be null!!!");
     }
@@ -70,9 +70,9 @@ class ListMerger extends Merger {
   //  默认值false
   private boolean keepIfNull;
 
-  public ListMerger(Map<String, Object> parmas) {
-    super(parmas);
-    keepIfNull = parmas.containsKey("keepIfNull") && (boolean) parmas.get("keepIfNull");
+  public ListMerger(Map<String, Object> params) {
+    super(params);
+    keepIfNull = params.containsKey("keepIfNull") && (boolean) params.get("keepIfNull");
   }
 
   @Override
@@ -93,8 +93,8 @@ class ListMerger extends Merger {
  */
 class SetMerger extends Merger {
 
-  public SetMerger(Map<String, Object> parmas) {
-    super(parmas);
+  public SetMerger(Map<String, Object> params) {
+    super(params);
   }
 
   @Override
@@ -116,8 +116,8 @@ class SetMerger extends Merger {
 
 class MapMerger extends Merger {
 
-  public MapMerger(Map<String, Object> parmas) {
-    super(parmas);
+  public MapMerger(Map<String, Object> params) {
+    super(params);
   }
 
   @Override

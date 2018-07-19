@@ -12,26 +12,26 @@ public enum FieldMergeTypeEnum implements TypeEnum {
 
   StrMerge {
     @Override
-    public Merger getMerger(Map<String, Object> parmas) {
-      return new StrMerger(parmas);
+    public Merger getMerger(Map<String, Object> params) {
+      return new StrMerger(params);
     }
   },
   ListMerge {
     @Override
-    public Merger getMerger(Map<String, Object> parmas) {
-      return new ListMerger(parmas);
+    public Merger getMerger(Map<String, Object> params) {
+      return new ListMerger(params);
     }
   },
   MapMerge {
     @Override
-    public Merger getMerger(Map<String, Object> parmas) {
-      return new MapMerger(parmas);
+    public Merger getMerger(Map<String, Object> params) {
+      return new MapMerger(params);
     }
   },
   SetMerge {
     @Override
-    public Merger getMerger(Map<String, Object> parmas) {
-      return new SetMerger(parmas);
+    public Merger getMerger(Map<String, Object> params) {
+      return new SetMerger(params);
     }
   };
 
@@ -44,7 +44,7 @@ public enum FieldMergeTypeEnum implements TypeEnum {
           .put("merge_set", SetMerge)
           .build();
 
-  public Merger getMerger(Map<String, Object> parmas) {
+  public Merger getMerger(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

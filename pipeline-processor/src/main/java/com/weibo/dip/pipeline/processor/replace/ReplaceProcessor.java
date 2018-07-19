@@ -18,14 +18,8 @@ public class ReplaceProcessor extends FieldProcessor {
     this.replacer = replacer;
   }
 
-  public ReplaceProcessor(boolean fieldNotExistError, String columnName,
-      Replacer replacer) {
-    super(fieldNotExistError, columnName);
-    this.replacer = replacer;
-  }
-
   @Override
-  public Object columnProcess(Object data) throws Exception {
+  public Object fieldProcess(Object data) throws Exception {
     return replacer.replace((String) data);
 
   }

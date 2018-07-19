@@ -2,13 +2,14 @@ package com.weibo.dip.pipeline.processor.flatten;
 
 import com.weibo.dip.pipeline.exception.FieldExistException;
 import com.weibo.dip.pipeline.processor.Processor;
+import com.weibo.dip.pipeline.processor.StructMapProcessor;
 import java.util.Map;
 
 /**
  * 数据展开处理器
  * Create by hongxun on 2018/7/1
  */
-public class FlattenProcessor extends Processor {
+public class FlattenProcessor extends StructMapProcessor {
 
 
   private boolean overwriteIfFieldExist;
@@ -23,11 +24,6 @@ public class FlattenProcessor extends Processor {
     this.flattener = flattener;
   }
 
-  public FlattenProcessor(boolean overwriteIfFieldExist,
-      Flattener flattener) {
-    this.overwriteIfFieldExist = overwriteIfFieldExist;
-    this.flattener = flattener;
-  }
 
   /**
    * @param data 原始数据

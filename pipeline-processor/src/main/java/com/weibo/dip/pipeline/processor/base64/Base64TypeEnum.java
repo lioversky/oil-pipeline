@@ -12,13 +12,13 @@ public enum Base64TypeEnum implements TypeEnum {
 
   Encode {
     @Override
-    public Base64er getBase64er(Map<String, Object> parmas) {
+    public Base64er getBase64er(Map<String, Object> params) {
       return new EncodeBase64er();
     }
   },
   Decode {
     @Override
-    public Base64er getBase64er(Map<String, Object> parmas) {
+    public Base64er getBase64er(Map<String, Object> params) {
       return new DecodeBase64er();
     }
   };
@@ -29,7 +29,7 @@ public enum Base64TypeEnum implements TypeEnum {
           .put("base64_decode", Decode)
           .build();
 
-  public Base64er getBase64er(Map<String, Object> parmas) {
+  public Base64er getBase64er(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

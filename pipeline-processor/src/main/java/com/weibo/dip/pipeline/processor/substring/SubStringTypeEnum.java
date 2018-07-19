@@ -13,26 +13,32 @@ public enum SubStringTypeEnum implements TypeEnum {
 
   Trim {
     @Override
-    public SubStringer getSubStringer(Map<String, Object> parmas) {
-      return new TrimSubStringer(parmas);
+    public SubStringer getSubStringer(Map<String, Object> params) {
+      return new TrimSubStringer(params);
     }
   },
-  Fixed {
+  FixedLR {
     @Override
-    public SubStringer getSubStringer(Map<String, Object> parmas) {
-      return new FixedSubStringer(parmas);
+    public SubStringer getSubStringer(Map<String, Object> params) {
+      return new FixedLRSubStringer(params);
+    }
+  },
+  FixedLen {
+    @Override
+    public SubStringer getSubStringer(Map<String, Object> params) {
+      return new FixedLenSubStringer(params);
     }
   },
   Match {
     @Override
-    public SubStringer getSubStringer(Map<String, Object> parmas) {
+    public SubStringer getSubStringer(Map<String, Object> params) {
 
-      return new MatchSubStringer(parmas);
+      return new MatchSubStringer(params);
     }
   }, RegexExtract {
     @Override
-    public SubStringer getSubStringer(Map<String, Object> parmas) {
-      return new RegexExtractSubStringer(parmas);
+    public SubStringer getSubStringer(Map<String, Object> params) {
+      return new RegexExtractSubStringer(params);
     }
   };
 
@@ -40,12 +46,13 @@ public enum SubStringTypeEnum implements TypeEnum {
   private static final Map<String, SubStringTypeEnum> types =
       new ImmutableMap.Builder<String, SubStringTypeEnum>()
           .put("substring_trim", Trim)
-          .put("substring_fixed", Fixed)
+          .put("substring_fixedlr", FixedLR)
+          .put("substring_fixedlen", FixedLen)
           .put("substring_match", Match)
           .put("substring_regex", RegexExtract)
           .build();
 
-  public SubStringer getSubStringer(Map<String, Object> parmas) {
+  public SubStringer getSubStringer(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

@@ -3,6 +3,7 @@ package com.weibo.dip.pipeline.processor.add;
 import com.weibo.dip.pipeline.configuration.Configuration;
 import com.weibo.dip.pipeline.exception.FieldExistException;
 import com.weibo.dip.pipeline.processor.Processor;
+import com.weibo.dip.pipeline.processor.StructMapProcessor;
 import java.util.Map;
 import org.joda.time.DateTime;
 
@@ -12,7 +13,7 @@ import org.joda.time.DateTime;
  * 增加固定值
  * 增加各类型时间
  */
-public class FieldAddProcessor extends Processor {
+public class FieldAddProcessor extends StructMapProcessor {
 
   /**
    * 当目标列存在时是否覆盖
@@ -38,20 +39,6 @@ public class FieldAddProcessor extends Processor {
     targetField = (String) params.get("targetField");
   }
 
-  /**
-   * 构造函数
-   *
-   * @param overwriteIfFieldExist 字段存在是否覆盖
-   * @param targetField 目标字段名称
-   * @param fieldAdder 增加处理类
-   */
-  public FieldAddProcessor(boolean overwriteIfFieldExist, String targetField,
-      FieldAdder fieldAdder) {
-    this.overwriteIfFieldExist = overwriteIfFieldExist;
-    this.targetField = targetField;
-    this.fieldAdder = fieldAdder;
-    addConfig();
-  }
 
   @Override
   public Map<String, Object> process(Map<String, Object> data) throws Exception {

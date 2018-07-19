@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  * stage pipeline实现，将各procesoor串行执行.
  * Create by hongxun on 2018/06/28
  */
-public class PipelineStage extends Stage {
+public class PipelineStage extends Stage<Map<String, Object>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PipelineStage.class);
 
@@ -44,7 +44,7 @@ public class PipelineStage extends Stage {
     Context context = stageTimer.time();
     try {
       for (Processor processor : processorList) {
-        data = processor.process(data);
+        data = (Map<String, Object>) processor.process(data);
         if (data == null) {
           break;
         }

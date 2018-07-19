@@ -13,46 +13,46 @@ public enum ConverteTypeEnum implements TypeEnum {
 
   IntegerType {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new IntegerConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new IntegerConverter(params);
     }
   },
   LongType {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new LongConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new LongConverter(params);
     }
   },
   FloatType {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new FloatConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new FloatConverter(params);
     }
   },
   DoubleType {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new DoubleConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new DoubleConverter(params);
     }
   }, ToLowerCase {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new ToLowerCaseConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new ToLowerCaseConverter(params);
     }
   }, ToUpperCase {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new ToUpperCaseConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new ToUpperCaseConverter(params);
     }
   }, StrToArray {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new StrToArrayConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new StrToArrayConverter(params);
     }
   }, UrlArgsConverter {
     @Override
-    public Converter getConverter(Map<String, Object> parmas) {
-      return new UrlArgsConverter(parmas);
+    public Converter getConverter(Map<String, Object> params) {
+      return new UrlArgsConverter(params);
     }
   };
 
@@ -68,7 +68,7 @@ public enum ConverteTypeEnum implements TypeEnum {
           .put("converte_urlargs", UrlArgsConverter)
           .build();
 
-  public Converter getConverter(Map<String, Object> parmas) {
+  public Converter getConverter(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

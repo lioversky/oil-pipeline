@@ -16,9 +16,9 @@ import java.util.regex.Pattern;
  */
 abstract class Splitter extends Configuration {
 
-  public Splitter(Map<String, Object> parmas) {
-    if (parmas != null) {
-      addConfigs(parmas);
+  public Splitter(Map<String, Object> params) {
+    if (params != null) {
+      addConfigs(params);
     }
   }
 
@@ -39,9 +39,9 @@ class DelimiterSplitter extends Splitter {
 
   private String splitStr;
 
-  public DelimiterSplitter(Map<String, Object> parmas) {
-    super(parmas);
-    splitStr = (String) parmas.get("splitStr");
+  public DelimiterSplitter(Map<String, Object> params) {
+    super(params);
+    splitStr = (String) params.get("splitStr");
     if (splitStr == null) {
       throw new AttrCanNotBeNullException("DelimiterSplitter splitStr can not be null!!!");
     }
@@ -62,9 +62,9 @@ class RegexSplitter extends Splitter {
   private Pattern pattern;
   private String regex;
 
-  public RegexSplitter(Map<String, Object> parmas) {
-    super(parmas);
-    this.regex = (String) parmas.get("regex");
+  public RegexSplitter(Map<String, Object> params) {
+    super(params);
+    this.regex = (String) params.get("regex");
     if (Strings.isNullOrEmpty(regex)) {
       throw new AttrCanNotBeNullException("RegexSplitter regex can not be null!!!");
     }
@@ -124,8 +124,8 @@ class JsonSplitter extends Splitter {
     }
   }
 
-  public JsonSplitter(Map<String, Object> parmas) {
-    super(parmas);
+  public JsonSplitter(Map<String, Object> params) {
+    super(params);
   }
 }
 
@@ -134,8 +134,8 @@ class JsonSplitter extends Splitter {
  */
 class ListSplitter extends Splitter {
 
-  public ListSplitter(Map<String, Object> parmas) {
-    super(parmas);
+  public ListSplitter(Map<String, Object> params) {
+    super(params);
   }
 
   @Override
@@ -150,8 +150,8 @@ class ListSplitter extends Splitter {
  */
 class ArraySplitter extends Splitter {
 
-  public ArraySplitter(Map<String, Object> parmas) {
-    super(parmas);
+  public ArraySplitter(Map<String, Object> params) {
+    super(params);
   }
 
   @Override

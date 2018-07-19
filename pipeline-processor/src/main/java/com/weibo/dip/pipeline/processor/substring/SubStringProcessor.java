@@ -16,19 +16,9 @@ public class SubStringProcessor extends FieldProcessor {
     this.subStringer = subStringer;
   }
 
-  public SubStringProcessor(boolean fieldNotExistError, String columnName,
-      SubStringer subStringer) {
-    super(fieldNotExistError, columnName);
-    this.subStringer = subStringer;
-  }
-
-  public SubStringProcessor(boolean fieldNotExistError, String columnName) {
-    super(fieldNotExistError, columnName);
-  }
-
   @Override
-  public Object columnProcess(Object data) throws Exception {
-    return subStringer.subString((String) data);
+  public Object fieldProcess(Object data) throws Exception {
+    return subStringer.substring((String) data);
   }
 
 }

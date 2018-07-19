@@ -14,12 +14,8 @@ public class MD5EncodeProcessor extends FieldProcessor {
     super(params);
   }
 
-  public MD5EncodeProcessor(boolean fieldNotExistError, String columnName) {
-    super(fieldNotExistError, columnName);
-  }
-
   @Override
-  protected Object columnProcess(Object value) throws Exception {
+  protected Object fieldProcess(Object value) throws Exception {
     return MD5Util.md5((String) value);
   }
 }

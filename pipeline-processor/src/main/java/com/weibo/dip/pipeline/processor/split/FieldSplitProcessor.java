@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.weibo.dip.pipeline.exception.FieldExistException;
 import com.weibo.dip.pipeline.exception.FieldNotExistException;
 import com.weibo.dip.pipeline.processor.Processor;
+import com.weibo.dip.pipeline.processor.StructMapProcessor;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  * 列拆分处理器.
  * Create by hongxun on 2018/6/29
  */
-public class FieldSplitProcessor extends Processor {
+public class FieldSplitProcessor extends StructMapProcessor {
 
 
   /**

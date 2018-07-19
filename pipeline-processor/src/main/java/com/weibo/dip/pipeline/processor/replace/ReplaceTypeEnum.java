@@ -12,54 +12,54 @@ import java.util.Map;
 public enum ReplaceTypeEnum implements TypeEnum {
   StrToDate {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
+    public Replacer getReplacer(Map<String, Object> params) {
 
-      return new StrToDateReplacer(parmas);
+      return new StrToDateReplacer(params);
     }
   },
   StrToTimestamp {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
-      return new StrToTimestampReplacer(parmas);
+    public Replacer getReplacer(Map<String, Object> params) {
+      return new StrToTimestampReplacer(params);
     }
   },
   StrToUnixTimestamp {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
-      return new StrToUnixTimestampReplacer(parmas);
+    public Replacer getReplacer(Map<String, Object> params) {
+      return new StrToUnixTimestampReplacer(params);
     }
   },
   UnixToDateStr {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
-      return new UnixToDateStrReplacer(parmas);
+    public Replacer getReplacer(Map<String, Object> params) {
+      return new UnixToDateStrReplacer(params);
     }
   },
   StrToDateStr {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
+    public Replacer getReplacer(Map<String, Object> params) {
 
-      return new StrToDateStrReplacer(parmas);
+      return new StrToDateStrReplacer(params);
     }
   },
   TimestampToDateStr {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
-      return new TimestampToDateStrReplacer(parmas);
+    public Replacer getReplacer(Map<String, Object> params) {
+      return new TimestampToDateStrReplacer(params);
     }
   },
   Regex {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
+    public Replacer getReplacer(Map<String, Object> params) {
 
-      return new RegexReplacer(parmas);
+      return new RegexReplacer(params);
 
     }
   },
   ReplaceStr {
     @Override
-    public Replacer getReplacer(Map<String, Object> parmas) {
-      return new ReplaceStrReplacer(parmas);
+    public Replacer getReplacer(Map<String, Object> params) {
+      return new ReplaceStrReplacer(params);
     }
 
 
@@ -77,7 +77,7 @@ public enum ReplaceTypeEnum implements TypeEnum {
           .put("replace_regex", Regex)
           .put("replace_replace_str", ReplaceStr).build();
 
-  public Replacer getReplacer(Map<String, Object> parmas) {
+  public Replacer getReplacer(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

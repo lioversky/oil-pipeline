@@ -11,13 +11,13 @@ public enum FlattenerTypeEnum implements TypeEnum {
 
   ALL {
     @Override
-    public Flattener getFlattener(Map<String, Object> parmas) {
-      return new AllFlattener(parmas);
+    public Flattener getFlattener(Map<String, Object> params) {
+      return new AllFlattener(params);
     }
   }, FIELD {
     @Override
-    public Flattener getFlattener(Map<String, Object> parmas) {
-      return new FieldFlattener(parmas);
+    public Flattener getFlattener(Map<String, Object> params) {
+      return new FieldFlattener(params);
     }
   };
 
@@ -28,7 +28,7 @@ public enum FlattenerTypeEnum implements TypeEnum {
           .put("flatten_field", FIELD)
           .build();
 
-  public Flattener getFlattener(Map<String, Object> parmas) {
+  public Flattener getFlattener(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

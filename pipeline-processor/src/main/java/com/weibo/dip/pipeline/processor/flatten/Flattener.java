@@ -24,16 +24,16 @@ public abstract class Flattener extends Configuration {
    */
   private String joinStrIfKeepParen = ".";
 
-  public Flattener(Map<String, Object> parmas) {
+  public Flattener(Map<String, Object> params) {
     keepParentName =
-        !parmas.containsKey("keepParentName") || (boolean) parmas.get("keepParentName");
-    if (keepParentName && parmas.containsKey("joinStrIfKeepParen")) {
-      joinStrIfKeepParen = (String) parmas.get("joinStrIfKeepParen");
+        !params.containsKey("keepParentName") || (boolean) params.get("keepParentName");
+    if (keepParentName && params.containsKey("joinStrIfKeepParen")) {
+      joinStrIfKeepParen = (String) params.get("joinStrIfKeepParen");
 
 
     }
 
-    addConfigs(parmas);
+    addConfigs(params);
 
   }
 
@@ -74,8 +74,8 @@ public abstract class Flattener extends Configuration {
  */
 class AllFlattener extends Flattener {
 
-  public AllFlattener(Map<String, Object> parmas) {
-    super(parmas);
+  public AllFlattener(Map<String, Object> params) {
+    super(params);
   }
 
   @Override
@@ -95,9 +95,9 @@ class FieldFlattener extends Flattener {
 
   private String fieldName;
 
-  public FieldFlattener(Map<String, Object> parmas) {
-    super(parmas);
-    fieldName = (String) parmas.get("fieldName");
+  public FieldFlattener(Map<String, Object> params) {
+    super(params);
+    fieldName = (String) params.get("fieldName");
     if (Strings.isNullOrEmpty(fieldName)) {
       throw new AttrCanNotBeNullException("FieldFlattener fieldName can not be null!!!");
     }

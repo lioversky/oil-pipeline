@@ -13,34 +13,34 @@ public enum FieldAddTypeEnum implements TypeEnum {
 
   Copy {
     @Override
-    public FieldAdder getFieldAdder(Map<String, Object> parmas) {
+    public FieldAdder getFieldAdder(Map<String, Object> params) {
 
-      return new CopyFieldAdder(parmas);
+      return new CopyFieldAdder(params);
     }
   },
   CurrentDateStr {
     @Override
-    public FieldAdder getFieldAdder(Map<String, Object> parmas) {
+    public FieldAdder getFieldAdder(Map<String, Object> params) {
 
-      return new CurrentDateStrFieldAdder(parmas);
+      return new CurrentDateStrFieldAdder(params);
     }
   },
   CurrentTimestamp {
     @Override
-    public FieldAdder getFieldAdder(Map<String, Object> parmas) {
-      return new CurrentTimestampFieldAdder(parmas);
+    public FieldAdder getFieldAdder(Map<String, Object> params) {
+      return new CurrentTimestampFieldAdder(params);
     }
   },
   CurrentUnixTimestamp {
     @Override
-    public FieldAdder getFieldAdder(Map<String, Object> parmas) {
-      return new CurrentUnixTimestampFieldAdder(parmas);
+    public FieldAdder getFieldAdder(Map<String, Object> params) {
+      return new CurrentUnixTimestampFieldAdder(params);
     }
   },
   FixedValue {
     @Override
-    public FieldAdder getFieldAdder(Map<String, Object> parmas) {
-      return new FixedValueFieldAdder(parmas);
+    public FieldAdder getFieldAdder(Map<String, Object> params) {
+      return new FixedValueFieldAdder(params);
     }
   };
 
@@ -54,7 +54,7 @@ public enum FieldAddTypeEnum implements TypeEnum {
           .put("fieldadd_fixedvalue", FixedValue)
           .build();
 
-  public FieldAdder getFieldAdder(Map<String, Object> parmas) {
+  public FieldAdder getFieldAdder(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

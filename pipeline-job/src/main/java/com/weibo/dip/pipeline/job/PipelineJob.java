@@ -1,6 +1,7 @@
 package com.weibo.dip.pipeline.job;
 
 import com.codahale.metrics.Counter;
+import com.codahale.metrics.MetricRegistry;
 import com.weibo.dip.pipeline.metrics.MetricSystem;
 import com.weibo.dip.pipeline.stage.Stage;
 import java.util.List;
@@ -15,6 +16,8 @@ public class PipelineJob extends Job {
    * 处理stage列表，可以嵌套结构
    */
   private List<Stage> stageList;
+
+  private MetricRegistry metricRegistry;
   /**
    * 记录出错数据量
    */
@@ -30,13 +33,16 @@ public class PipelineJob extends Job {
 
   public PipelineJob(Map<String, Object> configMap) {
     try {
+      @SuppressWarnings({"unchecked"})
       List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) configMap
           .get("stages");
       MetricSystem metricSystem = MetricSystem.getMetricSystem();
+      metricRegistry = metricSystem.getMetricRegistry();
       stageList = Stage.createStage(stagesConfigList, metricSystem.getMetricRegistry());
-      metricSystem.registry("data-counter", dataCounter);
-      metricSystem.registry("error-counter", errorCounter);
-      metricSystem.registry("null-counter", nullCounter);
+
+      metricRegistry.register("data-counter", dataCounter);
+      metricRegistry.register("error-counter", errorCounter);
+      metricRegistry.register("null-counter", nullCounter);
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -46,6 +52,7 @@ public class PipelineJob extends Job {
 
   /**
    * 数据处理
+   *
    * @param data 处理数据
    * @return 处理结果
    * @throws Exception 异常
@@ -55,7 +62,7 @@ public class PipelineJob extends Job {
     dataCounter.inc();
     for (Stage stage : stageList) {
       try {
-        data = stage.processStage(data);
+        data = (Map<String, Object>) stage.processStage(data);
         if (data == null) {
           nullCounter.inc();
           break;
@@ -68,7 +75,16 @@ public class PipelineJob extends Job {
     return data;
   }
 
-  private void sendErrorData(){
+  private void sendErrorData() {
 
+  }
+
+
+  public MetricRegistry getMetricRegistry() {
+    return metricRegistry;
+  }
+
+  public void setMetricRegistry(MetricRegistry metricRegistry) {
+    this.metricRegistry = metricRegistry;
   }
 }

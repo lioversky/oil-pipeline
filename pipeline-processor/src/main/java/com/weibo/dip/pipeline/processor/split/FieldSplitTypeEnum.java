@@ -11,29 +11,29 @@ public enum FieldSplitTypeEnum implements TypeEnum {
 
   DelimiterSpliter {
     @Override
-    public Splitter getSplitter(Map<String, Object> parmas) {
+    public Splitter getSplitter(Map<String, Object> params) {
 
-      return new DelimiterSplitter(parmas);
+      return new DelimiterSplitter(params);
     }
   }, ListSpliter {
     @Override
-    public Splitter getSplitter(Map<String, Object> parmas) {
-      return new ListSplitter(parmas);
+    public Splitter getSplitter(Map<String, Object> params) {
+      return new ListSplitter(params);
     }
   }, ArraySpliter {
     @Override
-    public Splitter getSplitter(Map<String, Object> parmas) {
-      return new ArraySplitter(parmas);
+    public Splitter getSplitter(Map<String, Object> params) {
+      return new ArraySplitter(params);
     }
   }, RegexSpliter {
     @Override
-    public Splitter getSplitter(Map<String, Object> parmas) {
-      return new RegexSplitter(parmas);
+    public Splitter getSplitter(Map<String, Object> params) {
+      return new RegexSplitter(params);
     }
   }, JsonSpliter {
     @Override
-    public Splitter getSplitter(Map<String, Object> parmas) {
-      return new JsonSplitter(parmas);
+    public Splitter getSplitter(Map<String, Object> params) {
+      return new JsonSplitter(params);
     }
   };
 
@@ -46,7 +46,7 @@ public enum FieldSplitTypeEnum implements TypeEnum {
           .put("split_array", ArraySpliter)
           .build();
 
-  public Splitter getSplitter(Map<String, Object> parmas) {
+  public Splitter getSplitter(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

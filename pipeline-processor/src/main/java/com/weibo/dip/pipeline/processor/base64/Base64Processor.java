@@ -18,14 +18,8 @@ public class Base64Processor extends FieldProcessor {
     this.base64er = base64er;
   }
 
-  public Base64Processor(boolean fieldNotExistError, String columnName,
-      Base64er base64er) {
-    super(fieldNotExistError, columnName);
-    this.base64er = base64er;
-  }
-
   @Override
-  protected Object columnProcess(Object value) throws Exception {
+  protected Object fieldProcess(Object value) throws Exception {
     byte[] data = (byte[]) value;
     return base64er.base64Code(data);
   }

@@ -12,21 +12,21 @@ import java.util.Map;
 public enum FieldRemoveTypeEnum implements TypeEnum {
   Keep {
     @Override
-    public Remover getFieldRemover(Map<String, Object> parmas) {
+    public Remover getFieldRemover(Map<String, Object> params) {
 
-      return new KeepFieldRemover(parmas);
+      return new KeepFieldRemover(params);
     }
   },
   Remove {
     @Override
-    public Remover getFieldRemover(Map<String, Object> parmas) {
-      return new RemoveFieldRemover(parmas);
+    public Remover getFieldRemover(Map<String, Object> params) {
+      return new RemoveFieldRemover(params);
     }
   },
   RemoveNull {
     @Override
-    public Remover getFieldRemover(Map<String, Object> parmas) {
-      return new RemoveNullFieldRemover(parmas);
+    public Remover getFieldRemover(Map<String, Object> params) {
+      return new RemoveNullFieldRemover(params);
     }
   };
 
@@ -36,7 +36,7 @@ public enum FieldRemoveTypeEnum implements TypeEnum {
       "remove_remove_null", RemoveNull
   );
 
-  public Remover getFieldRemover(Map<String, Object> parmas) {
+  public Remover getFieldRemover(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 

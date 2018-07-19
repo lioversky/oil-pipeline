@@ -20,13 +20,8 @@ public class ConverteProcessor extends FieldProcessor {
     this.converter = converter;
   }
 
-  public ConverteProcessor(boolean fieldNotExistError, String columnName, Converter converter) {
-    super(fieldNotExistError, columnName);
-    this.converter = converter;
-  }
-
   @Override
-  public Object columnProcess(Object data) throws Exception {
+  public Object fieldProcess(Object data) throws Exception {
     return converter.converte(data);
   }
 }

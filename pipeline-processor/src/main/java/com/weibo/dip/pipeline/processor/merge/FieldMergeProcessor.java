@@ -2,13 +2,14 @@ package com.weibo.dip.pipeline.processor.merge;
 
 import com.weibo.dip.pipeline.exception.FieldExistException;
 import com.weibo.dip.pipeline.processor.Processor;
+import com.weibo.dip.pipeline.processor.StructMapProcessor;
 import java.util.Map;
 
 /**
  * 值合并处理器.
  * Create by hongxun on 2018/6/27
  */
-public class FieldMergeProcessor extends Processor {
+public class FieldMergeProcessor extends StructMapProcessor {
 
 
   private String targetField;
@@ -23,14 +24,6 @@ public class FieldMergeProcessor extends Processor {
     overwriteIfFieldExist =
         !params.containsKey("overwriteIfFieldExist") || (boolean) params
             .get("overwriteIfFieldExist");
-  }
-
-  public FieldMergeProcessor(String targetField, boolean overwriteIfFieldExist,
-      Merger merger) {
-    this.targetField = targetField;
-    this.overwriteIfFieldExist = overwriteIfFieldExist;
-    this.merger = merger;
-    addConfig();
   }
 
   @Override

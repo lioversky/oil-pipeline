@@ -14,13 +14,13 @@ abstract class Remover extends Configuration {
 
   String[] fields;
 
-  public Remover(Map<String, Object> parmas) {
-    String fields = (String) parmas.get("fields");
+  public Remover(Map<String, Object> params) {
+    String fields = (String) params.get("fields");
     if (Strings.isNullOrEmpty(fields)) {
       throw new AttrCanNotBeNullException("Remover fields can not be null!!!");
     }
     this.fields = StringUtils.split(fields, ",");
-    addConfigs(parmas);
+    addConfigs(params);
   }
 
   abstract Map<String, Object> fieldRemove(Map<String, Object> data) throws Exception;
@@ -39,8 +39,8 @@ class RemoveFieldRemover extends Remover {
     return data;
   }
 
-  public RemoveFieldRemover(Map<String, Object> parmas) {
-    super(parmas);
+  public RemoveFieldRemover(Map<String, Object> params) {
+    super(params);
 
   }
 }
@@ -59,8 +59,8 @@ class KeepFieldRemover extends Remover {
     return newData;
   }
 
-  public KeepFieldRemover(Map<String, Object> parmas) {
-    super(parmas);
+  public KeepFieldRemover(Map<String, Object> params) {
+    super(params);
 
   }
 }
@@ -80,8 +80,8 @@ class RemoveNullFieldRemover extends Remover {
     return data;
   }
 
-  public RemoveNullFieldRemover(Map<String, Object> parmas) {
-    super(parmas);
+  public RemoveNullFieldRemover(Map<String, Object> params) {
+    super(params);
 
   }
 }
