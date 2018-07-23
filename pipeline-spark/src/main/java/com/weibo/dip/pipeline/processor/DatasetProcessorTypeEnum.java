@@ -2,6 +2,16 @@ package com.weibo.dip.pipeline.processor;
 
 import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;
+import com.weibo.dip.pipeline.processor.add.DatasetAddProcessor;
+import com.weibo.dip.pipeline.processor.add.DatasetAddTypeEnum;
+import com.weibo.dip.pipeline.processor.convert.DatasetConvertProcessor;
+import com.weibo.dip.pipeline.processor.convert.DatasetConvertTypeEnum;
+import com.weibo.dip.pipeline.processor.replace.DatasetReplaceProcessor;
+import com.weibo.dip.pipeline.processor.replace.DatasetReplaceTypeEnum;
+import com.weibo.dip.pipeline.processor.split.DatasetSplitProcessor;
+import com.weibo.dip.pipeline.processor.split.DatasetSplitTypeEnum;
+import com.weibo.dip.pipeline.processor.substring.DatasetSubstringProcessor;
+import com.weibo.dip.pipeline.processor.substring.DatasetSubstringTypeEnum;
 import java.util.Map;
 
 /**
@@ -12,11 +22,20 @@ public enum DatasetProcessorTypeEnum implements TypeEnum {
   Add {
     @Override
     public DatasetProcessor getProcessor(Map<String, Object> params) throws RuntimeException {
-      return super.getProcessor(params);
+      String subType = (String) params.get("subType");
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      DatasetAddTypeEnum typeEnum = DatasetAddTypeEnum.getType(subType);
+      return new DatasetAddProcessor(subParams, typeEnum.getDatasetAdder(subParams));
     }
   },
   Convert {
-
+    @Override
+    public DatasetProcessor getProcessor(Map<String, Object> params) throws RuntimeException {
+      String subType = (String) params.get("subType");
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      DatasetConvertTypeEnum typeEnum = DatasetConvertTypeEnum.getType(subType);
+      return new DatasetConvertProcessor(subParams, typeEnum.getDatasetConvertor(subParams));
+    }
   }, Filter {
 
   },
@@ -30,13 +49,31 @@ public enum DatasetProcessorTypeEnum implements TypeEnum {
 
   },
   Replace {
-
+    @Override
+    public DatasetProcessor getProcessor(Map<String, Object> params) throws RuntimeException {
+      String subType = (String) params.get("subType");
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      DatasetReplaceTypeEnum typeEnum = DatasetReplaceTypeEnum.getType(subType);
+      return new DatasetReplaceProcessor(subParams, typeEnum.getDatasetReplacer(subParams));
+    }
   },
   Split {
-
+    @Override
+    public DatasetProcessor getProcessor(Map<String, Object> params) throws RuntimeException {
+      String subType = (String) params.get("subType");
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      DatasetSplitTypeEnum typeEnum = DatasetSplitTypeEnum.getType(subType);
+      return new DatasetSplitProcessor(subParams, typeEnum.getDatasetSpliter(subParams));
+    }
   },
   Substring {
-
+    @Override
+    public DatasetProcessor getProcessor(Map<String, Object> params) throws RuntimeException {
+      String subType = (String) params.get("subType");
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      DatasetSubstringTypeEnum typeEnum = DatasetSubstringTypeEnum.getType(subType);
+      return new DatasetSubstringProcessor(subParams, typeEnum.getDatasetSubstringer(subParams));
+    }
   };
 
   public DatasetProcessor getProcessor(Map<String, Object> params) throws RuntimeException {

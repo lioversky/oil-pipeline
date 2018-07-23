@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.processor.convote;
+package com.weibo.dip.pipeline.processor.convert;
 
 import com.weibo.dip.pipeline.processor.FieldDatasetProcessor;
 import java.util.Map;
@@ -9,12 +9,15 @@ import org.apache.spark.sql.Dataset;
  */
 public class DatasetConvertProcessor extends FieldDatasetProcessor {
 
-  public DatasetConvertProcessor(Map<String, Object> params) {
+  private DatasetConvertor convertor;
+
+  public DatasetConvertProcessor(Map<String, Object> params, DatasetConvertor convertor) {
     super(params);
+    this.convertor = convertor;
   }
 
   @Override
   public Dataset fieldProcess(Dataset data) {
-    return null;
+    return convertor.convert(fieldName,data);
   }
 }

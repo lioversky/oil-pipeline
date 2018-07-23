@@ -31,7 +31,7 @@ public class SubStringProcessorTest {
     String fieldName = "substring_trim";
 
     try {
-      Processor p1 = processorList.get(0);
+      Processor<Map<String,Object>> p1 = processorList.get(0);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, " trimdata ")));
       Assert.assertEquals("trimdata", result.get(fieldName));
 
@@ -47,7 +47,7 @@ public class SubStringProcessorTest {
 
     Map<String, Object> params = ImmutableMap
         .of("fieldNotExistError", true, "subType", "substring_trim", "fieldName", fieldName);
-    Processor p = ProcessorTypeEnum.getType(test_type)
+    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
         .getProcessor(params);
 
     Map<String, Object> result = p.process(data);
@@ -61,7 +61,7 @@ public class SubStringProcessorTest {
     String fieldName = "substring_fixed";
 
     try {
-      Processor p1 = processorList.get(1);
+      Processor<Map<String,Object>> p1 = processorList.get(1);
       Map<String,Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_fixed_111")));
       System.out.println(result);
       Assert.assertEquals("fixed", result.get(fieldName));
@@ -78,7 +78,7 @@ public class SubStringProcessorTest {
     String fieldName = "substring_match";
     try {
 
-      Processor p1 = processorList.get(2);
+      Processor<Map<String,Object>> p1 = processorList.get(2);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_match_111")));
       Assert.assertEquals("match", result.get(fieldName));
 

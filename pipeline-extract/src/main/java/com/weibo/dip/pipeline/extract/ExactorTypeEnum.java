@@ -17,13 +17,13 @@ public enum ExactorTypeEnum implements TypeEnum {
   Regex {
     @Override
     public Extractor getExtractor(Map<String, Object> params) {
-      return new RegexExactor(params);
+      return new RegexExtractor(params);
     }
   },
   Multiple {
     @Override
     public Extractor getExtractor(Map<String, Object> params) {
-      return new OrderMultipleExactor(params);
+      return new OrderMultipleExtractor(params);
     }
   };
 

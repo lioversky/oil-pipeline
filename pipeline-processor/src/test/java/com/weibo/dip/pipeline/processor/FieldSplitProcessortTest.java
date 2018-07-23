@@ -35,7 +35,7 @@ public class FieldSplitProcessortTest {
         .newHashMap(ImmutableMap.of(fieldName, "a,b,c"));
 
     try {
-      Processor p1 = processorList.get(0);
+      Processor<Map<String,Object>> p1 = processorList.get(0);
       Map<String, Object> result = p1
           .process(data);
       Assert.assertTrue(result.containsKey("a") && "a".equals(result.get("a")));
@@ -54,7 +54,7 @@ public class FieldSplitProcessortTest {
         .newHashMap(ImmutableMap.of(fieldName, ""));
     try {
 
-      Processor p1 = processorList.get(3);
+      Processor<Map<String,Object>> p1 = processorList.get(3);
       Map<String, Object> result = p1
           .process(data);
       Assert.assertTrue(result.containsKey("a") && "a".equals(result.get("a")));
@@ -75,7 +75,7 @@ public class FieldSplitProcessortTest {
             "{\"fieldNotExistError\": false,\"fieldName\": \"split\"}"));
     try {
 
-      Processor p1 = processorList.get(4);
+      Processor<Map<String,Object>> p1 = processorList.get(4);
       Map<String, Object> result = p1
           .process(data);
 
@@ -104,7 +104,7 @@ public class FieldSplitProcessortTest {
 
     try {
 
-      Processor p1 = processorList.get(1);
+      Processor<Map<String,Object>> p1 = processorList.get(1);
       Map<String, Object> result = p1
           .process(data);
       Assert.assertTrue(result.containsKey("a") && "a".equals(result.get("a")));
@@ -123,7 +123,7 @@ public class FieldSplitProcessortTest {
         .newHashMap(ImmutableMap.of(fieldName, new Object[]{"a", "b", "c"}));
 
     try {
-      Processor p1 = processorList.get(2);
+      Processor<Map<String,Object>> p1 = processorList.get(2);
       Map<String, Object> result = p1
           .process(data);
       Assert.assertTrue(result.containsKey("a") && "a".equals(result.get("a")));
@@ -141,7 +141,7 @@ public class FieldSplitProcessortTest {
         .newHashMap(ImmutableMap.of(fieldName, "a,b,c,d"));
 
     try {
-      Processor p1 = processorList.get(5);
+      Processor<Map<String,Object>> p1 = processorList.get(5);
       Map<String, Object> result = p1
           .process(data);
       Assert.assertTrue(result.containsKey("d") && "d".equals(result.get("d")));

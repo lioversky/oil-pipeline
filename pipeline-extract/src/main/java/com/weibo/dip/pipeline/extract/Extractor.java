@@ -57,19 +57,19 @@ class DelimiterExacter extends Extractor {
 
 }
 
-class RegexExactor extends Extractor {
+class RegexExtractor extends Extractor {
 
   private String regex;
 
   private Pattern pattern;
 
-  public RegexExactor(Map<String, Object> jsonMap) {
+  public RegexExtractor(Map<String, Object> jsonMap) {
     this.columns = ((ArrayList<String>) jsonMap.get("columns")).toArray(new String[0]);
     this.regex = (String) jsonMap.get("regex");
     this.pattern = Pattern.compile(regex);
   }
 
-  public RegexExactor(String[] columns, String regex) {
+  public RegexExtractor(String[] columns, String regex) {
     this.columns = columns;
     this.regex = regex;
     this.pattern = Pattern.compile(regex);
@@ -104,11 +104,11 @@ class RegexExactor extends Extractor {
 /**
  * 默认提供多个exacter的整合
  */
-abstract class MultipleBaseExactor extends Extractor {
+abstract class MultipleBaseExtractor extends Extractor {
 
   protected List<Extractor> exacters;
 
-  public MultipleBaseExactor(Map<String, Object> jsonMap) {
+  public MultipleBaseExtractor(Map<String, Object> jsonMap) {
     exacters = new ArrayList<>();
     List<Map<String, Object>> exactersMap = (ArrayList<Map<String, Object>>) jsonMap
         .get("extractors");
@@ -119,10 +119,10 @@ abstract class MultipleBaseExactor extends Extractor {
   }
 }
 
-class OrderMultipleExactor extends MultipleBaseExactor {
+class OrderMultipleExtractor extends MultipleBaseExtractor {
 
 
-  public OrderMultipleExactor(Map<String, Object> jsonMap) {
+  public OrderMultipleExtractor(Map<String, Object> jsonMap) {
     super(jsonMap);
   }
 

@@ -19,6 +19,6 @@ public class SubstringLRUDFRegister extends UDFRegister {
     sparkSession.udf()
         .register(udfName, (String value, Integer left, Integer right) ->
                 StringUtils.substring(value, left, right < 0 ? value.length() : value.length() - right),
-            DataTypes.createArrayType(DataTypes.StringType));
+            DataTypes.StringType);
   }
 }

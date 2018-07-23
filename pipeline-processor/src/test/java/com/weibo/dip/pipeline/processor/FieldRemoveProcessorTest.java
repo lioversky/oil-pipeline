@@ -31,7 +31,7 @@ public class FieldRemoveProcessorTest {
     Map<String, Object> params = ImmutableMap
         .of("subType", "remove_remove", "params", ImmutableMap
             .of("fields", fields));
-    Processor p = ProcessorTypeEnum.getType(test_type)
+    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
         .getProcessor(params);
 
     try {
@@ -53,7 +53,7 @@ public class FieldRemoveProcessorTest {
     Map<String, Object> params = ImmutableMap
         .of("subType", "remove_keep", "params", ImmutableMap
             .of("fields", fields));
-    Processor p = ProcessorTypeEnum.getType(test_type)
+    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
         .getProcessor(params);
 
     try {
@@ -75,7 +75,7 @@ public class FieldRemoveProcessorTest {
     Map<String, Object> params = ImmutableMap
         .of("subType", "remove_remove_null", "params", ImmutableMap
             .of("fields", fields));
-    Processor p = ProcessorTypeEnum.getType(test_type)
+    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
         .getProcessor(params);
 
     try {
@@ -95,7 +95,7 @@ public class FieldRemoveProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
 
-      Processor p = processorList.get(0);
+      Processor<Map<String,Object>> p = processorList.get(0);
       data = p.process(data);
       System.out.println(data);
       Assert.assertFalse(data.containsKey("a"));
@@ -111,7 +111,7 @@ public class FieldRemoveProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
 
-      Processor p = processorList.get(1);
+      Processor<Map<String,Object>> p = processorList.get(1);
       data = p.process(data);
       Assert.assertFalse(data.containsKey("c"));
       Assert.assertEquals(2, data.size());
@@ -126,7 +126,7 @@ public class FieldRemoveProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("b", "bb", "c", "cc"));
     try {
 
-      Processor p = processorList.get(1);
+      Processor<Map<String,Object>> p = processorList.get(1);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("b"));
       Assert.assertEquals(2, data.size());

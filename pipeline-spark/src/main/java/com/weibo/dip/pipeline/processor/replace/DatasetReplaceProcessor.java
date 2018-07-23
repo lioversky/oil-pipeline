@@ -11,8 +11,9 @@ public class DatasetReplaceProcessor extends FieldDatasetProcessor {
 
   private DatasetReplacer replacer;
 
-  public DatasetReplaceProcessor(Map<String, Object> params) {
+  public DatasetReplaceProcessor(Map<String, Object> params,DatasetReplacer replacer) {
     super(params);
+    this.replacer = replacer;
   }
 
   @Override

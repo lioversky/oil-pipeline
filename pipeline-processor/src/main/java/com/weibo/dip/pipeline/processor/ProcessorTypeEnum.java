@@ -6,8 +6,8 @@ import com.weibo.dip.pipeline.processor.add.FieldAddProcessor;
 import com.weibo.dip.pipeline.processor.add.FieldAddTypeEnum;
 import com.weibo.dip.pipeline.processor.base64.Base64Processor;
 import com.weibo.dip.pipeline.processor.base64.Base64TypeEnum;
-import com.weibo.dip.pipeline.processor.converte.ConverteProcessor;
-import com.weibo.dip.pipeline.processor.converte.ConverteTypeEnum;
+import com.weibo.dip.pipeline.processor.converte.ConvertProcessor;
+import com.weibo.dip.pipeline.processor.converte.ConvertTypeEnum;
 import com.weibo.dip.pipeline.processor.filter.ExprFilterProcessor;
 import com.weibo.dip.pipeline.processor.flatten.FlattenProcessor;
 import com.weibo.dip.pipeline.processor.flatten.FlattenerTypeEnum;
@@ -23,7 +23,6 @@ import com.weibo.dip.pipeline.processor.split.FieldSplitTypeEnum;
 import com.weibo.dip.pipeline.processor.substring.SubStringProcessor;
 import com.weibo.dip.pipeline.processor.substring.SubStringTypeEnum;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Processor类型生成器.
@@ -65,8 +64,8 @@ public enum ProcessorTypeEnum implements TypeEnum {
     public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
       String subType = (String) params.get("subType");
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      ConverteTypeEnum converteTypeEnum = ConverteTypeEnum.getType(subType);
-      return new ConverteProcessor(subParams, converteTypeEnum.getConverter(subParams));
+      ConvertTypeEnum convertTypeEnum = ConvertTypeEnum.getType(subType);
+      return new ConvertProcessor(subParams, convertTypeEnum.getConverter(subParams));
     }
   },
   /**

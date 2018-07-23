@@ -64,7 +64,7 @@ public class FieldMergeProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
 
-      Processor p = processorList.get(0);
+      Processor<Map<String,Object>> p = processorList.get(0);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge"));
       Assert.assertEquals("aa,bb,cc", data.get("merge"));
@@ -79,7 +79,7 @@ public class FieldMergeProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
 
-      Processor p = processorList.get(1);
+      Processor<Map<String,Object>> p = processorList.get(1);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof List);
       Assert.assertEquals("aa", ((List) data.get("merge")).get(0));
@@ -99,7 +99,7 @@ public class FieldMergeProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "c", "cc"));
     try {
 
-      Processor p = processorList.get(2);
+      Processor<Map<String,Object>> p = processorList.get(2);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof List);
       Assert.assertEquals("aa", ((List) data.get("merge")).get(0));
@@ -116,7 +116,7 @@ public class FieldMergeProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
 
-      Processor p = processorList.get(3);
+      Processor<Map<String,Object>> p = processorList.get(3);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof Set);
       Assert.assertEquals(3, ((Set) data.get("merge")).size());
@@ -131,7 +131,7 @@ public class FieldMergeProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
 
-      Processor p = processorList.get(4);
+      Processor<Map<String,Object>> p = processorList.get(4);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof Map);
       Assert.assertEquals(3, ((Map<String, Object>) data.get("merge")).size());

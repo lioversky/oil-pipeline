@@ -38,7 +38,7 @@ public class ReplaceProcessorTest {
 
     try {
 
-      Processor p1 = processorList.get(0);
+      Processor<Map<String,Object>> p1 = processorList.get(0);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, test_time)));
       Assert.assertTrue(result.get(fieldName) instanceof Date);
       Assert.assertEquals(test_time, new DateTime(result.get(fieldName)).toString(format));
@@ -54,7 +54,7 @@ public class ReplaceProcessorTest {
     String fieldName = "replace_str_timestamp";
 
     try {
-      Processor p1 = processorList.get(1);
+      Processor<Map<String,Object>> p1 = processorList.get(1);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, test_time)));
       Assert.assertTrue(result.get(fieldName) instanceof Long);
       Assert.assertEquals(test_timestamp, result.get(fieldName));
@@ -70,7 +70,7 @@ public class ReplaceProcessorTest {
 
     try {
 
-      Processor p1 = processorList.get(2);
+      Processor<Map<String,Object>> p1 = processorList.get(2);
 
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, test_time)));
       Assert.assertTrue(result.get(fieldName) instanceof Long);
@@ -88,7 +88,7 @@ public class ReplaceProcessorTest {
 
     try {
 
-      Processor p1 = processorList.get(3);
+      Processor<Map<String,Object>> p1 = processorList.get(3);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, test_time)));
       Assert.assertEquals("20180627 21:36:00", result.get(fieldName));
     } catch (Exception e) {
@@ -102,7 +102,7 @@ public class ReplaceProcessorTest {
 
     try {
 
-      Processor p1 = processorList.get(4);
+      Processor<Map<String,Object>> p1 = processorList.get(4);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, test_timestamp / 1000 + "")));
       Assert.assertEquals(test_time, result.get(fieldName));
 
@@ -118,7 +118,7 @@ public class ReplaceProcessorTest {
 
     try {
 
-      Processor p1 = processorList.get(5);
+      Processor<Map<String,Object>> p1 = processorList.get(5);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, test_timestamp + "")));
       System.out.println(result);
       Assert.assertEquals(test_time, result.get(fieldName));
@@ -133,7 +133,7 @@ public class ReplaceProcessorTest {
     String fieldName = "replace_regex";
     try {
 
-      Processor p1 = processorList.get(6);
+      Processor<Map<String,Object>> p1 = processorList.get(6);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "aaabbbcccddd123456")));
       Assert.assertEquals("123456", result.get(fieldName));
 
@@ -147,7 +147,7 @@ public class ReplaceProcessorTest {
     String fieldName = "replace_replace_str";
     try {
 
-      Processor p1 = processorList.get(7);
+      Processor<Map<String,Object>> p1 = processorList.get(7);
       Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "aaabbbcccddd123456")));
       Assert.assertEquals("aaabbbcccddd", result.get(fieldName));
     } catch (Exception e) {

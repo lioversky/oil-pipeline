@@ -1,12 +1,12 @@
 package com.weibo.dip.pipeline.spark;
 
 import com.codahale.metrics.MetricRegistry;
-import com.google.common.collect.Lists;
-import com.weibo.dip.pipeline.extract.ExactorTypeEnum;
-import com.weibo.dip.pipeline.extract.Extractor;
+import com.weibo.dip.pipeline.extract.DatasetExactorTypeEnum;
+import com.weibo.dip.pipeline.extract.DatasetExtractor;
 import com.weibo.dip.pipeline.runner.Runner;
 import com.weibo.dip.pipeline.stage.DatasetProcessStage;
 import com.weibo.dip.pipeline.stage.Stage;
+import com.weibo.dip.pipeline.udf.UDFRegister;
 import java.util.List;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
@@ -17,14 +17,13 @@ import org.apache.spark.sql.streaming.StreamingQuery;
 /**
  * Create by hongxun on 2018/7/5
  */
-public class StructuredRunner extends Runner {
+public class StructuredStreamingRunner extends Runner {
 
-  private SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();
+  private SparkSession sparkSession;
   //  spark执行类型
   private String engineType;
   private String sourceFormat;
   private Map<String, String> sourceOptions;
-  private Extractor extractor;
 
   private Map<String, Object> preConfig;
   private Map<String, Object> aggConfig;
@@ -34,16 +33,19 @@ public class StructuredRunner extends Runner {
   private String sinkMode;
   private Map<String, String> sinkOptions;
 
+  //  抽取器
+  private DatasetExtractor extractor;
+
   private StreamingQuery query;
 
-  public StructuredRunner(Map<String, Object> configs) {
+  public StructuredStreamingRunner(Map<String, Object> configs) {
     //source配置
     engineType = (String) configs.get("engineType");
     Map<String, Object> sourceConfig = (Map<String, Object>) configs.get("sourceConfig");
     sourceFormat = (String) sourceConfig.get("format");
     sourceOptions = (Map<String, String>) sourceConfig.get("options");
     Map<String, Object> extractConfig = (Map<String, Object>) sourceConfig.get("extractor");
-    extractor = ExactorTypeEnum.getType(extractConfig);
+    extractor = DatasetExactorTypeEnum.getType(extractConfig);
     //process配置
     Map<String, Object> processConfig = (Map<String, Object>) configs.get("processConfig");
     preConfig = (Map<String, Object>) processConfig.get("pre");
@@ -63,12 +65,27 @@ public class StructuredRunner extends Runner {
    */
   @Override
   public void start() throws Exception {
-    Dataset<Row> sourceDataset = loadStreamDataSet(sourceFormat, sourceOptions);
-    Dataset resultDataset = process(sourceDataset);
-
+    //创建SparkSession
+    sparkSession = SparkSession.builder().master("local").getOrCreate();
+    //注册udf
+    UDFRegister.registerAllUDF(sparkSession);
+    //加载source源
+    Dataset<Row> sourceDataset = loadStreamDataSet();
+    //抽取
+    Dataset extractDataset = extract(sourceDataset);
+    //处理
+    Dataset resultDataset = process(extractDataset);
+    //写出
     query = writeStream(resultDataset);
     query.awaitTermination();
 
+  }
+
+  private Dataset extract(Dataset dataset) {
+    if ("kafka".equals(sourceFormat)) {
+      dataset = dataset.selectExpr("CAST(value AS STRING) as _value_");
+    }
+    return extractor.extract(dataset);
   }
 
   /**
@@ -92,9 +109,9 @@ public class StructuredRunner extends Runner {
 
   /**
    * 前处理阶段，在StructuredRunner只取第一个stage，因为没有条件所以全部可以在一个stage里
+   *
    * @param dataset 数据集
    * @return 处理后数据集
-   * @throws Exception
    */
   private Dataset pre(Dataset dataset) throws Exception {
     List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) preConfig
@@ -162,11 +179,11 @@ public class StructuredRunner extends Runner {
 */
 
 
-  private Dataset<Row> loadStreamDataSet(String format, Map<String, String> options) {
+  private Dataset<Row> loadStreamDataSet() {
     return sparkSession
         .readStream()
-        .format(format)
-        .options(options).load();
+        .format(sourceFormat)
+        .options(sourceOptions).load();
   }
 
 

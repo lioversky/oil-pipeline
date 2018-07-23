@@ -12,8 +12,9 @@ public class DatasetSubstringProcessor extends FieldDatasetProcessor {
 
   private DatasetSubstringer substringer;
 
-  public DatasetSubstringProcessor(Map<String, Object> params) {
+  public DatasetSubstringProcessor(Map<String, Object> params,DatasetSubstringer substringer) {
     super(params);
+    this.substringer = substringer;
   }
 
   @Override

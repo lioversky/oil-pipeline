@@ -21,7 +21,7 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 /**
  * Create by hongxun on 2018/7/4
  */
-public class StreamingRunner extends Runner {
+public class SparkStreamingRunner extends Runner {
 
   private SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();
   //  spark执行类型
@@ -47,7 +47,7 @@ public class StreamingRunner extends Runner {
    * @param configs
    */
   @SuppressWarnings({"unchecked"})
-  public StreamingRunner(Map<String, Object> configs) {
+  public SparkStreamingRunner(Map<String, Object> configs) {
     try {
       //source配置
       engineType = (String) configs.get("engineType");
@@ -75,7 +75,7 @@ public class StreamingRunner extends Runner {
             .getOrCreate(checkpointDirectory, createContextFunc);
       }
     } catch (Exception e) {
-      throw new RuntimeException("Create StreamingRunner Error !!!", e);
+      throw new RuntimeException("Create SparkStreamingRunner Error !!!", e);
     }
 
   }

@@ -1,1 +1,3 @@
 com.weibo.dip.pipeline.udf.SubstringLRUDFRegister
+com.weibo.dip.pipeline.udf.UrlArgsSplitUDFRegister
+com.weibo.dip.pipeline.udf.SubElementsUDFRegister

@@ -14,7 +14,7 @@ public class MD5EncodeProcessorTest {
 
   public void testMD5() {
     Map<String, Object> params = ImmutableMap.of("fieldName", "md5");
-    Processor md5 = ProcessorTypeEnum.getType("processor_md5")
+    Processor<Map<String,Object>> md5 = ProcessorTypeEnum.getType("processor_md5")
         .getProcessor(params);
 
     try {
@@ -34,7 +34,7 @@ public class MD5EncodeProcessorTest {
     try {
       List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      Processor p = processorList.get(0);
+      Processor<Map<String,Object>> p = processorList.get(0);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("md5"));
       Assert.assertNotEquals("mmmmddddd5555", data.get("md5"));

@@ -9,19 +9,19 @@ import java.util.Map;
  */
 
 
-public class ConverteProcessor extends FieldProcessor {
+public class ConvertProcessor extends FieldProcessor {
 
   private static final long serialVersionUID = 1L;
 
-  private Converter converter;
+  private Convertor convertor;
 
-  public ConverteProcessor(Map<String, Object> params, Converter converter) {
+  public ConvertProcessor(Map<String, Object> params, Convertor convertor) {
     super(params);
-    this.converter = converter;
+    this.convertor = convertor;
   }
 
   @Override
   public Object fieldProcess(Object data) throws Exception {
-    return converter.converte(data);
+    return convertor.converte(data);
   }
 }

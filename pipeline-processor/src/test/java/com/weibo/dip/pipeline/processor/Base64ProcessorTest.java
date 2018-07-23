@@ -40,7 +40,7 @@ public class Base64ProcessorTest {
     try {
       List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      for (Processor p : processorList) {
+      for (Processor<Map<String,Object>> p : processorList) {
         data = p.process(data);
       }
       Assert.assertTrue(data.containsKey("base64"));

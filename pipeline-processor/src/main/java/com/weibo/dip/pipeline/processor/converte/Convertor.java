@@ -14,9 +14,9 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Create by hongxun on 2018/7/1
  */
-abstract class Converter extends Configuration {
+abstract class Convertor extends Configuration {
 
-  public Converter(Map<String, Object> params) {
+  public Convertor(Map<String, Object> params) {
     if (params != null) {
       addConfigs(params);
     }
@@ -27,9 +27,9 @@ abstract class Converter extends Configuration {
 }
 
 
-class IntegerConverter extends Converter {
+class IntegerConvertor extends Convertor {
 
-  public IntegerConverter(Map<String, Object> params) {
+  public IntegerConvertor(Map<String, Object> params) {
     super(params);
   }
 
@@ -38,9 +38,9 @@ class IntegerConverter extends Converter {
   }
 }
 
-class LongConverter extends Converter {
+class LongConvertor extends Convertor {
 
-  public LongConverter(Map<String, Object> params) {
+  public LongConvertor(Map<String, Object> params) {
     super(params);
   }
 
@@ -49,9 +49,9 @@ class LongConverter extends Converter {
   }
 }
 
-class DoubleConverter extends Converter {
+class DoubleConvertor extends Convertor {
 
-  public DoubleConverter(Map<String, Object> params) {
+  public DoubleConvertor(Map<String, Object> params) {
     super(params);
   }
 
@@ -60,9 +60,9 @@ class DoubleConverter extends Converter {
   }
 }
 
-class FloatConverter extends Converter {
+class FloatConvertor extends Convertor {
 
-  public FloatConverter(Map<String, Object> params) {
+  public FloatConvertor(Map<String, Object> params) {
     super(params);
   }
 
@@ -71,9 +71,9 @@ class FloatConverter extends Converter {
   }
 }
 
-class StringConverter extends Converter {
+class StringConvertor extends Convertor {
 
-  public StringConverter(Map<String, Object> params) {
+  public StringConvertor(Map<String, Object> params) {
     super(params);
   }
 
@@ -96,9 +96,9 @@ class StringConverter extends Converter {
 
 // todo: byte[]
 
-class ToLowerCaseConverter extends Converter {
+class ToLowerCaseConvertor extends Convertor {
 
-  public ToLowerCaseConverter(Map<String, Object> params) {
+  public ToLowerCaseConvertor(Map<String, Object> params) {
 
     super(params);
   }
@@ -109,9 +109,9 @@ class ToLowerCaseConverter extends Converter {
   }
 }
 
-class ToUpperCaseConverter extends Converter {
+class ToUpperCaseConvertor extends Convertor {
 
-  public ToUpperCaseConverter(Map<String, Object> params) {
+  public ToUpperCaseConvertor(Map<String, Object> params) {
 
     super(params);
   }
@@ -122,11 +122,11 @@ class ToUpperCaseConverter extends Converter {
   }
 }
 
-class StrToArrayConverter extends Converter {
+class StrToArrayConvertor extends Convertor {
 
   private String splitStr;
 
-  public StrToArrayConverter(Map<String, Object> params) {
+  public StrToArrayConvertor(Map<String, Object> params) {
     super(params);
     splitStr = (String) params.get("splitStr");
   }
@@ -138,14 +138,14 @@ class StrToArrayConverter extends Converter {
 }
 
 
-class UrlArgsConverter extends Converter {
+class UrlArgsConvertor extends Convertor {
 
   /**
    * 保留字段
    */
   private List<String> keepFields;
 
-  public UrlArgsConverter(Map<String, Object> params) {
+  public UrlArgsConvertor(Map<String, Object> params) {
     super(params);
     String fields = (String) params.get("keepFields");
     if (StringUtils.isNotEmpty(fields)) {
@@ -167,7 +167,7 @@ class UrlArgsConverter extends Converter {
   }
 }
 
-class MappingConverter extends Converter {
+class MappingConvertor extends Convertor {
 
   private Map<String, Object> mapping;
 
@@ -176,7 +176,7 @@ class MappingConverter extends Converter {
     return mapping.get(data);
   }
 
-  public MappingConverter(Map<String, Object> params) {
+  public MappingConvertor(Map<String, Object> params) {
     super(params);
     mapping = (Map<String, Object>) params.get("mapping");
     if (mapping == null) {
@@ -185,9 +185,9 @@ class MappingConverter extends Converter {
   }
 }
 
-class IntervalConverter extends Converter {
+class IntervalConvertor extends Convertor {
 
-  public IntervalConverter(Map<String, Object> params) {
+  public IntervalConvertor(Map<String, Object> params) {
     super(params);
   }
 
