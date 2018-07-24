@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * Create by hongxun on 2018/7/16
  */
 public class DatasetProcessStage extends Stage<Dataset> {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(DatasetProcessStage.class);
   private List<DatasetProcessor> processorList;
 

@@ -4,9 +4,11 @@ import com.codahale.metrics.MetricRegistry;
 import com.weibo.dip.pipeline.extract.DatasetExactorTypeEnum;
 import com.weibo.dip.pipeline.extract.DatasetExtractor;
 import com.weibo.dip.pipeline.runner.Runner;
+import com.weibo.dip.pipeline.stage.DatasetAggregateStage;
 import com.weibo.dip.pipeline.stage.DatasetProcessStage;
 import com.weibo.dip.pipeline.stage.Stage;
 import com.weibo.dip.pipeline.udf.UDFRegister;
+import com.weibo.dip.pipeline.util.DatasetUtil;
 import java.util.List;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
@@ -24,6 +26,7 @@ public class StructuredStreamingRunner extends Runner {
   private String engineType;
   private String sourceFormat;
   private Map<String, String> sourceOptions;
+  private List<Map<String, Object>> tables;
 
   private Map<String, Object> preConfig;
   private Map<String, Object> aggConfig;
@@ -44,6 +47,7 @@ public class StructuredStreamingRunner extends Runner {
     Map<String, Object> sourceConfig = (Map<String, Object>) configs.get("sourceConfig");
     sourceFormat = (String) sourceConfig.get("format");
     sourceOptions = (Map<String, String>) sourceConfig.get("options");
+    tables = (List<Map<String, Object>>) sourceConfig.get("tables");
     Map<String, Object> extractConfig = (Map<String, Object>) sourceConfig.get("extractor");
     extractor = DatasetExactorTypeEnum.getType(extractConfig);
     //process配置
@@ -71,6 +75,10 @@ public class StructuredStreamingRunner extends Runner {
     UDFRegister.registerAllUDF(sparkSession);
     //加载source源
     Dataset<Row> sourceDataset = loadStreamDataSet();
+    //其它依赖数据源
+    if (tables != null) {
+      DatasetUtil.cache(sparkSession, tables);
+    }
     //抽取
     Dataset extractDataset = extract(sourceDataset);
     //处理
@@ -117,25 +125,47 @@ public class StructuredStreamingRunner extends Runner {
     List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) preConfig
         .get("stages");
     if (!stagesConfigList.isEmpty()) {
-      Map<String, Object> stageConfigMap = stagesConfigList.get(0);
-      List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
-          .get("processors");
-      DatasetProcessStage processStage = new DatasetProcessStage(new MetricRegistry(),
-          processorConfigList, Stage.createStageId("DatasetProcess"));
-      return processStage.processStage(dataset);
+      return processStage(dataset, stagesConfigList);
     }
     return dataset;
   }
 
-  private Dataset agg(Dataset dataset) {
+  /**
+   * 执行聚合sql语句
+   *
+   * @param dataset 数据集
+   * @return 数据集
+   */
+  private Dataset agg(Dataset dataset) throws Exception {
+    DatasetAggregateStage aggregateStage = new DatasetAggregateStage(new MetricRegistry(),
+        aggConfig, Stage.createStageId("DatasetAggregateStage"));
+    return aggregateStage.processStage(dataset);
+  }
+
+  /**
+   * 执行 - 后处理
+   *
+   * @param dataset 数据集
+   * @return 数据集
+   */
+  private Dataset pro(Dataset dataset) throws Exception {
+    List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) proConfig
+        .get("stages");
+    if (!stagesConfigList.isEmpty()) {
+      return processStage(dataset, stagesConfigList);
+    }
     return dataset;
   }
 
-  private Dataset pro(Dataset dataset) {
-    return dataset;
+  private Dataset processStage(Dataset dataset, List<Map<String, Object>> stagesConfigList)
+      throws Exception {
+    Map<String, Object> stageConfigMap = stagesConfigList.get(0);
+    List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
+        .get("processors");
+    DatasetProcessStage processStage = new DatasetProcessStage(new MetricRegistry(),
+        processorConfigList, Stage.createStageId("DatasetProcessStage"));
+    return processStage.processStage(dataset);
   }
-
-
 
 
 /*
@@ -179,14 +209,25 @@ public class StructuredStreamingRunner extends Runner {
 */
 
 
+  /**
+   * structured streaming source
+   *
+   * @return dataset
+   */
   private Dataset<Row> loadStreamDataSet() {
     return sparkSession
         .readStream()
         .format(sourceFormat)
-        .options(sourceOptions).load();
+        .options(sourceOptions)
+        .load();
   }
 
-
+  /**
+   * structured streaming sink
+   *
+   * @param dataset 数据
+   * @return query
+   */
   private StreamingQuery writeStream(Dataset dataset) {
     return dataset.writeStream()
         .outputMode(sinkMode)
