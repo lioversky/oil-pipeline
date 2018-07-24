@@ -8,18 +8,7 @@ import java.util.Map;
  * Create by hongxun on 2018/7/19
  */
 public enum DatasetReplaceTypeEnum implements TypeEnum {
-  Base64Encode {
-    @Override
-    public DatasetReplacer getDatasetReplacer(Map<String, Object> params) {
-      return new Base64EncodeReplacer(params);
-    }
-  },
-  Base64Decode {
-    @Override
-    public DatasetReplacer getDatasetReplacer(Map<String, Object> params) {
-      return new Base64DecodeReplacer(params);
-    }
-  },
+
   Regex {
     @Override
     public DatasetReplacer getDatasetReplacer(Map<String, Object> params) {
@@ -30,8 +19,6 @@ public enum DatasetReplaceTypeEnum implements TypeEnum {
 
   private static final Map<String, DatasetReplaceTypeEnum> types =
       new ImmutableMap.Builder<String, DatasetReplaceTypeEnum>()
-          .put("replace_base64encode", Base64Encode)
-          .put("replace_base64decode", Base64Decode)
           .put("replace_regex", Regex)
           .build();
 

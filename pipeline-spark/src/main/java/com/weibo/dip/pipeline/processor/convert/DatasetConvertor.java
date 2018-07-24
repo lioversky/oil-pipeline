@@ -1,12 +1,12 @@
 package com.weibo.dip.pipeline.processor.convert;
 
-
+import static org.apache.spark.sql.functions.base64;
 import static org.apache.spark.sql.functions.callUDF;
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.lit;
+import static org.apache.spark.sql.functions.unbase64;
 
 import com.weibo.dip.pipeline.configuration.Configuration;
-import java.util.List;
 import java.util.Map;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
@@ -38,5 +38,29 @@ class UrlArgsDatasetConvertor extends DatasetConvertor {
 
     return dataset.withColumn(fieldName, callUDF("sub_element", args, lit(keepFields)));
 
+  }
+}
+
+class Base64EncodeConvertor extends DatasetConvertor {
+
+  public Base64EncodeConvertor(Map<String, Object> params) {
+    super(params);
+  }
+
+  @Override
+  public Dataset convert(String fieldName, Dataset dataset) {
+    return dataset.withColumn(fieldName, base64(col(fieldName)));
+  }
+}
+
+class Base64DecodeConvertor extends DatasetConvertor {
+
+  public Base64DecodeConvertor(Map<String, Object> params) {
+    super(params);
+  }
+
+  @Override
+  public Dataset convert(String fieldName, Dataset dataset) {
+    return dataset.withColumn(fieldName, unbase64(col(fieldName)));
   }
 }

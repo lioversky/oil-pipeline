@@ -1,10 +1,10 @@
 package com.weibo.dip.pipeline.processor.add;
 
 import static org.apache.spark.sql.functions.col;
-import static org.apache.spark.sql.functions.unix_timestamp;
 import static org.apache.spark.sql.functions.current_timestamp;
 import static org.apache.spark.sql.functions.date_format;
 import static org.apache.spark.sql.functions.lit;
+import static org.apache.spark.sql.functions.unix_timestamp;
 
 import java.util.Map;
 import org.apache.spark.sql.Dataset;

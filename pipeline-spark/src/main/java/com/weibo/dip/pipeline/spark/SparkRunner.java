@@ -6,10 +6,12 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.functions;
+
 /**
  * 支持多数据源.
  * Create by hongxun on 2018/7/5
  */
+
 public class SparkRunner extends Runner {
 
   private SparkSession sparkSession = SparkSession.builder().master("local").getOrCreate();
@@ -19,10 +21,9 @@ public class SparkRunner extends Runner {
 
   }
 
-  private void process(){
+  private void process() {
     Dataset<Row> dataset = sparkSession.sql("");
-    dataset.withColumn("",functions.col(""));
-//    sparkSession.createdatafra
+    dataset.withColumn("", functions.col(""));
   }
 
 

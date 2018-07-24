@@ -10,6 +10,7 @@ import org.apache.spark.sql.Dataset;
 public class DatasetAddProcessor  extends FieldDatasetProcessor {
 
   private DatasetAdder adder;
+
   @Override
   public Dataset fieldProcess(Dataset data) {
     return adder.add(data);

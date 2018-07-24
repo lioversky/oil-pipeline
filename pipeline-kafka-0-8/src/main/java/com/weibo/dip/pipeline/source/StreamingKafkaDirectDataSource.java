@@ -83,7 +83,7 @@ public class StreamingKafkaDirectDataSource extends StreamingDataSource {
               }
             }
         );
-//        如果不是动态group,更新offset
+  //如果不是动态group,更新offset
     if (!consumerGroupTimeRoll) {
       messages.foreachRDD((rdd, time) -> {
         listener.addMessage(time, ((HasOffsetRanges) rdd.rdd()).offsetRanges());
@@ -96,8 +96,6 @@ public class StreamingKafkaDirectDataSource extends StreamingDataSource {
       }
 
     });
-
-//		lines = lines.repartition(numPartitions);
 
     return lines;
   }

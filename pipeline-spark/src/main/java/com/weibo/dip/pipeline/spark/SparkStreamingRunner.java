@@ -44,7 +44,7 @@ public class SparkStreamingRunner extends Runner {
 
   /**
    *
-   * @param configs
+   * @param configs runner配置
    */
   @SuppressWarnings({"unchecked"})
   public SparkStreamingRunner(Map<String, Object> configs) {
@@ -122,7 +122,7 @@ public class SparkStreamingRunner extends Runner {
   }
 
 
-  private void write(JavaDStream dStream) {
+  private void write(JavaDStream dstream) {
 
   }
 

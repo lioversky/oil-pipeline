@@ -211,7 +211,7 @@ class ReplaceStrReplacer extends Replacer {
 class RegexReplacer extends Replacer {
 
   private String target;
-  private Pattern p;
+  private Pattern pattern;
 
   public RegexReplacer(Map<String, Object> params) {
     super(params);
@@ -220,11 +220,11 @@ class RegexReplacer extends Replacer {
       throw new AttrCanNotBeNullException("regex replace regex can not be null!!!");
     }
     this.target = Strings.nullToEmpty((String) params.get("target"));
-    p = Pattern.compile(regex);
+    pattern = Pattern.compile(regex);
   }
 
   public Object replace(String data) throws Exception {
-    Matcher m = p.matcher(data);
+    Matcher m = pattern.matcher(data);
     if (m.find()) {
       return m.replaceAll(target);
     }

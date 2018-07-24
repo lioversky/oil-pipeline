@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class StringUtil {
 
-  public static Map<String,String> urlArgsSplit(String urlargs){
+  public static Map<String, String> urlArgsSplit(String urlargs) {
     Map<String, String> argsMap = new HashMap<>();
     if (urlargs != null) {
       String[] params = urlargs.split("&");

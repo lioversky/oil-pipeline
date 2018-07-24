@@ -1,14 +1,14 @@
 package com.weibo.dip.pipeline.source;
 
+import java.util.List;
 import java.util.Map;
-import org.apache.spark.streaming.api.java.JavaDStream;
-import org.apache.spark.streaming.api.java.JavaStreamingContext;
-
-
-import java.util.*;
-import org.apache.spark.streaming.api.java.*;
-import org.apache.spark.streaming.kafka010.*;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaInputDStream;
+import org.apache.spark.streaming.api.java.JavaStreamingContext;
+import org.apache.spark.streaming.kafka010.ConsumerStrategies;
+import org.apache.spark.streaming.kafka010.KafkaUtils;
+import org.apache.spark.streaming.kafka010.LocationStrategies;
 
 /**
  * Create by hongxun on 2018/7/5

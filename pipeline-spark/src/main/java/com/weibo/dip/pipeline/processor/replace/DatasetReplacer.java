@@ -23,31 +23,6 @@ public abstract class DatasetReplacer extends Configuration {
   abstract Dataset replace(String fieldName, Dataset dataset);
 }
 
-
-class Base64EncodeReplacer extends DatasetReplacer {
-
-  public Base64EncodeReplacer(Map<String, Object> params) {
-    super(params);
-  }
-
-  @Override
-  public Dataset replace(String fieldName, Dataset dataset) {
-    return dataset.withColumn(fieldName, base64(col(fieldName)));
-  }
-}
-
-class Base64DecodeReplacer extends DatasetReplacer {
-
-  public Base64DecodeReplacer(Map<String, Object> params) {
-    super(params);
-  }
-
-  @Override
-  public Dataset replace(String fieldName, Dataset dataset) {
-    return dataset.withColumn(fieldName, unbase64(col(fieldName)));
-  }
-}
-
 /**
  * 正则替换
  */

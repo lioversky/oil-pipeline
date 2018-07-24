@@ -20,9 +20,10 @@ public class SubElementsUDFRegister extends UDFRegister {
   public void register(SparkSession sparkSession) {
     sparkSession.udf()
         .register(udfName,
-            (scala.collection.immutable.HashMap<String, String> map, scala.collection.mutable.WrappedArray colNames) -> {
+            (scala.collection.immutable.HashMap<String, String> map,
+                scala.collection.mutable.WrappedArray colNames) -> {
               Map<String, String> newData = new HashMap<>();
-              Object[] array = (Object[])colNames.array();
+              Object[] array = (Object[]) colNames.array();
               for (Object col : array) {
                 String colName = (String) col;
                 if (map.contains(colName)) {

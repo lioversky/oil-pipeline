@@ -41,6 +41,7 @@ public class StructuredStreamingRunner extends Runner {
 
   private StreamingQuery query;
 
+  @SuppressWarnings({"unchecked"})
   public StructuredStreamingRunner(Map<String, Object> configs) {
     //source配置
     engineType = (String) configs.get("engineType");
@@ -121,10 +122,11 @@ public class StructuredStreamingRunner extends Runner {
    * @param dataset 数据集
    * @return 处理后数据集
    */
+  @SuppressWarnings({"unchecked"})
   private Dataset pre(Dataset dataset) throws Exception {
     List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) preConfig
         .get("stages");
-    if (!stagesConfigList.isEmpty()) {
+    if (stagesConfigList != null && !stagesConfigList.isEmpty()) {
       return processStage(dataset, stagesConfigList);
     }
     return dataset;
@@ -148,15 +150,24 @@ public class StructuredStreamingRunner extends Runner {
    * @param dataset 数据集
    * @return 数据集
    */
+  @SuppressWarnings({"unchecked"})
   private Dataset pro(Dataset dataset) throws Exception {
     List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) proConfig
         .get("stages");
-    if (!stagesConfigList.isEmpty()) {
+    if (stagesConfigList != null && !stagesConfigList.isEmpty()) {
       return processStage(dataset, stagesConfigList);
     }
     return dataset;
   }
 
+  /**
+   * 处理pre及pro共用方法
+   * @param dataset 数据集
+   * @param stagesConfigList stage配置
+   * @return 数据集
+   * @throws Exception 异常信息
+   */
+  @SuppressWarnings({"unchecked"})
   private Dataset processStage(Dataset dataset, List<Map<String, Object>> stagesConfigList)
       throws Exception {
     Map<String, Object> stageConfigMap = stagesConfigList.get(0);
