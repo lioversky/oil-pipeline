@@ -19,11 +19,22 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
 /**
+ * dataset工具类
  * Create by hongxun on 2018/7/23
  */
 public class DatasetUtil {
 
-  public static Dataset splitDataset(Dataset dataset, String fieldName, String arrName,
+  /**
+   * 切分列，一列内容切分成多列
+   *
+   * @param dataset 数据集
+   * @param fieldName 要切分列名称
+   * @param arrName 如果保留原列时，此值与待切分列不同，否则相同
+   * @param splitStr 列值分隔符
+   * @param targetFields 切分后的列名数组
+   * @return 增加多列的数据集
+   */
+  public static Dataset splitDatasetField(Dataset dataset, String fieldName, String arrName,
       String splitStr,
       String[] targetFields) {
     dataset = dataset.withColumn(arrName, functions.split(col(fieldName), splitStr));
@@ -34,6 +45,12 @@ public class DatasetUtil {
   }
 
 
+  /**
+   * cache文件数据
+   *
+   * @param spark SparkSession
+   * @param tables 配置列表
+   */
   public static void cache(SparkSession spark, List<Map<String, Object>> tables) throws Exception {
     for (Map<String, Object> map : tables) {
       String cacheType = (String) map.get("type");

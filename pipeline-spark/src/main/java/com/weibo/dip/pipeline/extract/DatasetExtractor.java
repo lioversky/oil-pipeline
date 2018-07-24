@@ -2,7 +2,6 @@ package com.weibo.dip.pipeline.extract;
 
 import static org.apache.spark.sql.functions.col;
 import static org.apache.spark.sql.functions.regexp_extract;
-import static org.apache.spark.sql.functions.split;
 
 import com.weibo.dip.pipeline.util.DatasetUtil;
 import java.io.Serializable;
@@ -37,7 +36,7 @@ class DelimiterDatasetExtractor extends DatasetExtractor {
 
   @Override
   public Dataset extract(Dataset dataset) {
-    return DatasetUtil.splitDataset(dataset, fieldName, fieldName, splitStr, targetFields);
+    return DatasetUtil.splitDatasetField(dataset, fieldName, fieldName, splitStr, targetFields);
   }
 
   public DelimiterDatasetExtractor(Map<String, Object> params) {

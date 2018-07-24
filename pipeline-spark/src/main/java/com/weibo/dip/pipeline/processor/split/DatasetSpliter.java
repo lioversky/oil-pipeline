@@ -1,14 +1,9 @@
 package com.weibo.dip.pipeline.processor.split;
 
-import static org.apache.spark.sql.functions.col;
-import static org.apache.spark.sql.functions.split;
-
 import com.weibo.dip.pipeline.configuration.Configuration;
 import com.weibo.dip.pipeline.util.DatasetUtil;
-import java.util.ArrayList;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.functions;
 
 /**
  * Create by hongxun on 2018/7/23
@@ -35,7 +30,7 @@ class DelimiterDatasetSplitter extends DatasetSpliter {
 
   @Override
   public Dataset split(String fieldName, Dataset dataset) {
-    return DatasetUtil.splitDataset(dataset, fieldName, fieldName, splitStr, targetFields);
+    return DatasetUtil.splitDatasetField(dataset, fieldName, fieldName, splitStr, targetFields);
   }
 }
 
