@@ -9,7 +9,7 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>pipeline-common</module>
+    <module>pipeline-api</module>
     <module>pipeline-engine</module>
     <module>pipeline-processor</module>
     <module>pipeline-sink</module>
@@ -23,6 +23,7 @@
     <module>pipeline-kafka-0-8</module>
     <module>pipeline-kafka-0-10</module>
     <module>pipeline-kafka</module>
+    <module>pipeline-spark-api</module>
   </modules>
 
   <properties>

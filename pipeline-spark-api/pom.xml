@@ -9,48 +9,35 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>pipeline-processor</artifactId>
-
+  <artifactId>pipeline-spark-api</artifactId>
 
   <dependencies>
     <dependency>
       <groupId>oil-pipeline</groupId>
-      <artifactId>pipeline-util</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <artifactId>pipeline-job</artifactId>
+      <version>${parent.version}</version>
     </dependency>
     <dependency>
       <groupId>oil-pipeline</groupId>
-      <artifactId>pipeline-api</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.nutz</groupId>
-      <artifactId>nutz</artifactId>
+      <artifactId>pipeline-util</artifactId>
+      <version>${parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>oil-pipeline</groupId>
+      <artifactId>pipeline-extract</artifactId>
+      <version>${parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_${scala.binary.version}</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql-kafka-${kafka010.version}_${scala.binary.version}</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming_${scala.binary.version}</artifactId>
     </dependency>
   </dependencies>
 </project>

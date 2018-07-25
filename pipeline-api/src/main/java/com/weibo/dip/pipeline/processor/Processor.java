@@ -1,7 +1,6 @@
 package com.weibo.dip.pipeline.processor;
 
 import com.weibo.dip.pipeline.configuration.Configuration;
-import java.io.Serializable;
 import java.util.Map;
 
 /**
