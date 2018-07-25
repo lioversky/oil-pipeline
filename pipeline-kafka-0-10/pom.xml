@@ -17,7 +17,11 @@
       <artifactId>pipeline-spark-api</artifactId>
       <version>${parent.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka-clients</artifactId>
+      <version>${kafka_010.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-streaming-kafka-${kafka010.version}_${scala.binary.version}</artifactId>

@@ -13,6 +13,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
 
 /**
+ * 中间过程为dataset的runner父类，含一些公用方法
  * Create by hongxun on 2018/7/24
  */
 public abstract class DatasetRunner extends Runner {

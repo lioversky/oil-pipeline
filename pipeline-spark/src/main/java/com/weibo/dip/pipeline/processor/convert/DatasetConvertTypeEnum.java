@@ -8,6 +8,12 @@ import java.util.Map;
  * Create by hongxun on 2018/7/23
  */
 public enum DatasetConvertTypeEnum implements TypeEnum {
+  MD5 {
+    @Override
+    public DatasetConvertor getDatasetConvertor(Map<String, Object> params) {
+      return new MD5Convertor(params);
+    }
+  },
   Base64Encode {
     @Override
     public DatasetConvertor getDatasetConvertor(Map<String, Object> params) {
@@ -37,6 +43,7 @@ public enum DatasetConvertTypeEnum implements TypeEnum {
 //          .put("converte_tolowercase", ToLowerCase)
 //          .put("converte_touppercase", ToUpperCase)
 //          .put("converte_strtoarray", StrToArray)
+          .put("converte_md5", MD5)
           .put("converte_base64encode", Base64Encode)
           .put("converte_base64eecode", Base64Decode)
           .put("converte_urlargs", UrlArgsConverter)

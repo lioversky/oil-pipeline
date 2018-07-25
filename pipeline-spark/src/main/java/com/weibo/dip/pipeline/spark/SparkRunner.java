@@ -8,7 +8,7 @@ import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 /**
- * 支持多数据源.
+ * 离线spark的runner
  * Create by hongxun on 2018/7/5
  */
 

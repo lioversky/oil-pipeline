@@ -19,7 +19,29 @@
       <artifactId>pipeline-spark-api</artifactId>
       <version>${parent.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>oil-pipeline</groupId>
+      <artifactId>pipeline-job</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>oil-pipeline</groupId>
+      <artifactId>pipeline-util</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>oil-pipeline</groupId>
+      <artifactId>pipeline-extract</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql_${scala.binary.version}</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql-kafka-${kafka010.version}_${scala.binary.version}</artifactId>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

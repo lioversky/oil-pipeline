@@ -4,6 +4,7 @@ import java.util.Map;
 import org.apache.spark.sql.Dataset;
 
 /**
+ * dataset的processor顶层类
  * Create by hongxun on 2018/7/10
  */
 public abstract class DatasetProcessor extends Processor<Dataset> {

@@ -4,10 +4,14 @@ import java.util.Map;
 import org.apache.spark.sql.Dataset;
 
 /**
+ * dataset列处理器顶层类
  * Create by hongxun on 2018/7/10
  */
 public abstract class FieldDatasetProcessor extends DatasetProcessor {
 
+  /**
+   * 处理列名
+   */
   protected String fieldName;
 
   public FieldDatasetProcessor(Map<String, Object> params) {

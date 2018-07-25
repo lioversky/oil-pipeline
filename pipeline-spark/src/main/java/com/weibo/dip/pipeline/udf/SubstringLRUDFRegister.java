@@ -5,6 +5,7 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.DataTypes;
 
 /**
+ * 左右定长截取子串udf
  * Create by hongxun on 2018/7/10
  */
 

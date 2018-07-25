@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.spark.sql.Dataset;
 
 /**
+ * 转换处理器
  * Create by hongxun on 2018/7/19
  */
 public class DatasetConvertProcessor extends FieldDatasetProcessor {

@@ -19,6 +19,7 @@ import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
 /**
+ * Spark Streaming的Runner
  * Create by hongxun on 2018/7/4
  */
 public class SparkStreamingRunner extends Runner {

@@ -17,17 +17,22 @@ public enum DatasetExactorTypeEnum implements TypeEnum {
   Regex {
     @Override
     public DatasetExtractor getExtractor(Map<String, Object> params) {
-      return new RegexDataExtractor(params);
+      return new RegexDatasetExtractor(params);
     }
   },
-  Json {};
+  Json {
+    @Override
+    public DatasetExtractor getExtractor(Map<String, Object> params) {
+      return new JsonDatasetExtractor(params);
+    }
+  };
 
 
   private static final Map<String, DatasetExactorTypeEnum> types =
       new ImmutableMap.Builder<String, DatasetExactorTypeEnum>()
           .put("extract_delimiter", Delimiter)
           .put("extract_regex", Regex)
-          .put("extract_json",Json)
+          .put("extract_json", Json)
           .build();
 
   public DatasetExtractor getExtractor(Map<String, Object> params) {

@@ -41,6 +41,7 @@
     <kafka08.version>0-8</kafka08.version>
     <kafka010.version>0-10</kafka010.version>
     <kafka_010.version>0.10.2.1</kafka_010.version>
+    <kafka_080.version>0.8.2.1</kafka_080.version>
     <scala.version>2.11.5</scala.version>
     <scala.binary.version>2.11</scala.binary.version>
     <spark.version>2.2.1</spark.version>
@@ -168,7 +169,7 @@
       </dependency>
       <!-- end spark-->
       <!-- start kafka-->
-      <dependency>
+      <!--<dependency>
         <groupId>org.apache.kafka</groupId>
         <artifactId>kafka_${scala.binary.version}</artifactId>
         <version>${kafka_010.version}</version>
@@ -178,6 +179,11 @@
         <artifactId>kafka-clients</artifactId>
         <version>${kafka_010.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka_${scala.binary.version}</artifactId>
+        <version>${kafka_080.version}</version>
+      </dependency>-->
     </dependencies>
   </dependencyManagement>
 

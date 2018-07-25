@@ -9,6 +9,7 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.streaming.StreamingQuery;
 
 /**
+ * StructuredStreaming的Runner
  * Create by hongxun on 2018/7/5
  */
 public class StructuredStreamingRunner extends DatasetRunner {

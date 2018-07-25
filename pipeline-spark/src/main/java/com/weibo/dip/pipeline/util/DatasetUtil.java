@@ -1,6 +1,8 @@
 package com.weibo.dip.pipeline.util;
 
+import static org.apache.spark.sql.functions.callUDF;
 import static org.apache.spark.sql.functions.col;
+import static org.apache.spark.sql.functions.lit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,27 @@ public class DatasetUtil {
     return dataset.drop(arrName);
   }
 
+  /**
+   * 按正则切分列，一列内容切分成多列
+   *
+   * @param dataset 数据集
+   * @param fieldName 要切分列名称
+   * @param arrName 如果保留原列时，此值与待切分列不同，否则相同
+   * @param regex 正则匹配符
+   * @param targetFields 切分后的列名数组
+   * @return 增加多列的数据集
+   */
+  public static Dataset regexSplitDatasetField(Dataset dataset, String fieldName, String arrName,
+      String regex,
+      String[] targetFields) {
+    dataset = dataset.withColumn(arrName,
+        callUDF("regex_to_array", col(fieldName), lit(regex), lit(targetFields.length)))
+        .where(col(arrName).isNotNull());
+    for (int i = 0; i < targetFields.length; i++) {
+      dataset = dataset.withColumn(targetFields[i], col(arrName).getItem(i));
+    }
+    return dataset.drop(arrName);
+  }
 
   /**
    * cache文件数据
