@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Create by hongxun on 2018/7/5
  */
-public enum DatasetExactorTypeEnum implements TypeEnum {
+public enum DatasetExtractorTypeEnum implements TypeEnum {
   Delimiter {
     @Override
     public DatasetExtractor getExtractor(Map<String, Object> params) {
@@ -28,8 +28,8 @@ public enum DatasetExactorTypeEnum implements TypeEnum {
   };
 
 
-  private static final Map<String, DatasetExactorTypeEnum> types =
-      new ImmutableMap.Builder<String, DatasetExactorTypeEnum>()
+  private static final Map<String, DatasetExtractorTypeEnum> types =
+      new ImmutableMap.Builder<String, DatasetExtractorTypeEnum>()
           .put("extract_delimiter", Delimiter)
           .put("extract_regex", Regex)
           .put("extract_json", Json)
@@ -39,7 +39,7 @@ public enum DatasetExactorTypeEnum implements TypeEnum {
     throw new RuntimeException("Abstract Error!!!");
   }
 
-  public static DatasetExactorTypeEnum getType(String typeName) {
+  public static DatasetExtractorTypeEnum getType(String typeName) {
     return types.get(typeName);
   }
 

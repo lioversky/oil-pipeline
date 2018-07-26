@@ -1,9 +1,8 @@
-package com.weibo.dip.pipeline.spark;
+package com.weibo.dip.pipeline.runner;
 
 import com.codahale.metrics.MetricRegistry;
-import com.weibo.dip.pipeline.extract.DatasetExactorTypeEnum;
+import com.weibo.dip.pipeline.extract.DatasetExtractorTypeEnum;
 import com.weibo.dip.pipeline.extract.DatasetExtractor;
-import com.weibo.dip.pipeline.runner.Runner;
 import com.weibo.dip.pipeline.stage.DatasetAggregateStage;
 import com.weibo.dip.pipeline.stage.DatasetProcessStage;
 import com.weibo.dip.pipeline.stage.Stage;
@@ -21,6 +20,7 @@ public abstract class DatasetRunner extends Runner {
   protected SparkSession sparkSession;
   //  spark执行类型
   protected String engineType;
+  protected Map<String, Object> sourceConfig;
   protected String sourceFormat;
   protected Map<String, String> sourceOptions;
   protected List<Map<String, Object>> tables;
@@ -29,6 +29,7 @@ public abstract class DatasetRunner extends Runner {
   protected Map<String, Object> aggConfig;
   protected Map<String, Object> proConfig;
 
+  protected Map<String, Object> sinkConfig;
   protected String sinkFormat;
   protected String sinkMode;
   protected Map<String, String> sinkOptions;
@@ -38,12 +39,14 @@ public abstract class DatasetRunner extends Runner {
   public DatasetRunner(Map<String, Object> configs) {
     //source配置
     engineType = (String) configs.get("engineType");
-    Map<String, Object> sourceConfig = (Map<String, Object>) configs.get("sourceConfig");
+    sourceConfig = (Map<String, Object>) configs.get("sourceConfig");
     sourceFormat = (String) sourceConfig.get("format");
     sourceOptions = (Map<String, String>) sourceConfig.get("options");
     tables = (List<Map<String, Object>>) sourceConfig.get("tables");
     Map<String, Object> extractConfig = (Map<String, Object>) sourceConfig.get("extractor");
-    extractor = DatasetExactorTypeEnum.getType(extractConfig);
+    if (extractConfig != null) {
+      extractor = DatasetExtractorTypeEnum.getType(extractConfig);
+    }
 
     //process配置
     Map<String, Object> processConfig = (Map<String, Object>) configs.get("processConfig");
@@ -51,7 +54,7 @@ public abstract class DatasetRunner extends Runner {
     aggConfig = (Map<String, Object>) processConfig.get("agg");
     proConfig = (Map<String, Object>) processConfig.get("pro");
     //sink配置
-    Map<String, Object> sinkConfig = (Map<String, Object>) configs.get("sinkConfig");
+    sinkConfig = (Map<String, Object>) configs.get("sinkConfig");
     sinkFormat = (String) sinkConfig.get("format");
     sinkMode = (String) sinkConfig.get("mode");
     sinkOptions = (Map<String, String>) sinkConfig.get("options");
@@ -59,6 +62,7 @@ public abstract class DatasetRunner extends Runner {
 
   /**
    * 抽取数据
+   *
    * @param dataset 数据集
    * @return 抽取结果数据集
    */

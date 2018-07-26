@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.spark;
+package com.weibo.dip.pipeline.runner;
 
 import com.weibo.dip.pipeline.udf.UDFRegister;
 import com.weibo.dip.pipeline.util.DatasetUtil;

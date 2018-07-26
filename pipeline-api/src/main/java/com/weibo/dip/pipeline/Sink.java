@@ -1,7 +1,7 @@
 package com.weibo.dip.pipeline;
 
 
-public class Sink extends Step{
+public abstract class Sink<T> extends Step {
 
-
+  public abstract void write(T t);
 }

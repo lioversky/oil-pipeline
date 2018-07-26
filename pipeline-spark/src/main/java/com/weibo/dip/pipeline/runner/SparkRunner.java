@@ -1,7 +1,9 @@
-package com.weibo.dip.pipeline.spark;
+package com.weibo.dip.pipeline.runner;
 
+import com.weibo.dip.pipeline.extract.FileTableExtractor;
+import com.weibo.dip.pipeline.sink.DatasetDataSink;
+import com.weibo.dip.pipeline.sink.DatasetSinkTypeEnum;
 import com.weibo.dip.pipeline.udf.UDFRegister;
-import com.weibo.dip.pipeline.util.DatasetUtil;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -14,10 +16,12 @@ import org.apache.spark.sql.SparkSession;
 
 public class SparkRunner extends DatasetRunner {
 
+  private DatasetDataSink datasetSink;
 
   @SuppressWarnings({"unchecked"})
   public SparkRunner(Map<String, Object> configs) {
     super(configs);
+    datasetSink = DatasetSinkTypeEnum.getDatasetSinkByMap(sinkConfig);
   }
 
   @Override
@@ -30,7 +34,7 @@ public class SparkRunner extends DatasetRunner {
     Dataset<Row> sourceDataset = loadSparkDataSet();
     //其它依赖数据源
     if (tables != null) {
-      DatasetUtil.cache(sparkSession, tables);
+      FileTableExtractor.cacheTable(sparkSession, tables);
     }
     //抽取
     Dataset extractDataset = extract(sourceDataset);
@@ -41,6 +45,9 @@ public class SparkRunner extends DatasetRunner {
 
 
   private Dataset<Row> loadSparkDataSet() {
+    if (sourceFormat == null) {
+      return sparkSession.emptyDataFrame();
+    }
     return sparkSession
         .read()
         .format(sourceFormat)
@@ -48,11 +55,7 @@ public class SparkRunner extends DatasetRunner {
   }
 
   private void write(Dataset dataset) {
-    dataset.write()
-        .mode(sinkMode)
-        .format(sinkFormat)
-        .options(sinkOptions)
-        .save();
+    datasetSink.write(dataset);
   }
 
   @Override

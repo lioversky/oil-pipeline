@@ -2,6 +2,7 @@ package com.weibo.dip.pipeline.extract;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,28 +24,27 @@ import org.apache.spark.sql.types.StructType;
  * 文件内容提取器
  * Create by hongxun on 2018/7/25
  */
-public abstract class FielTableExtractor implements Serializable {
+public abstract class FileTableExtractor implements Serializable {
 
   protected String fileType;
   protected String tableName;
   protected String filePath;
   protected String cache;
+  protected Number repartition;
 
 
-  protected DataFrameReader reader;
-
-  public FielTableExtractor(Map<String, Object> params) {
+  public FileTableExtractor(Map<String, Object> params) {
     this.tableName = (String) params.get("tableName");
     //如果从文件中读取，映射成表
 
     this.fileType = (String) params.get("fileType");
     this.filePath = (String) params.get("filePath");
     this.cache = (String) params.get("cache");
+    this.repartition = (Number) params.get("repartition");
   }
 
-  public void cacheTable(SparkSession spark, Map<String, Object> map) {
+  public void cacheTable(SparkSession spark) {
 
-    reader = spark.read();
     Dataset dataset = extract(spark);
     //如果包含sql，做二次处理
     //    if (map.containsKey("sql")) {
@@ -53,26 +53,43 @@ public abstract class FielTableExtractor implements Serializable {
     //      sql.replace("${table}", tmpTableName);
     //      dataset = spark.sql(sql);
     //    }
-    Number repartition = (Number) map.get("repartition");
+
     if (repartition != null) {
       dataset = dataset.repartition(repartition.intValue());
     }
     dataset.createOrReplaceTempView(tableName);
 
     //数据是否需要缓存
-    String cache = (String) map.get("cache");
     if (cache == null || "true".equals(cache)) {
       spark.sql("cache table " + tableName);
     }
   }
 
   public abstract Dataset extract(SparkSession spark);
+
+
+  public static void cacheTable(SparkSession spark, List<Map<String, Object>> tables)
+      throws Exception {
+    FileTableExtractor extractor = null;
+    for (Map<String, Object> map : tables) {
+      String cacheType = (String) map.get("type");
+      if ("table".equals(cacheType)) {
+        extractor = FileTableExtractorTypeEnum.getType("table", map);
+      } else if ("file".equals(cacheType)) {
+        String fileType = (String) map.get("fileType");
+        extractor = FileTableExtractorTypeEnum.getType(fileType, map);
+      }
+      extractor.cacheTable(spark);
+    }
+  }
+
+
 }
 
 /**
  * csv格式内容提取器
  */
-class CsvTableExtractor extends FielTableExtractor {
+class CsvTableExtractor extends FileTableExtractor {
 
   /**
    * 字段列名
@@ -95,18 +112,17 @@ class CsvTableExtractor extends FielTableExtractor {
   public Dataset extract(SparkSession spark) {
     //判断是否含表头
     if (StringUtils.isNotEmpty(header) && "true".equals(header)) {
-      return reader.format(fileType).option("header", "true").load(filePath);
+      return spark.read().format(fileType).option("header", "true").load(filePath);
     } else {
-      return reader.format(fileType).load(filePath).toDF(columns);
+      return spark.read().format(fileType).load(filePath).toDF(columns);
     }
   }
 }
 
-
 /**
  * 分隔符和正则提取的父类
  */
-class SplitTableExtractor extends FielTableExtractor {
+class SplitTableExtractor extends FileTableExtractor {
 
   protected String[] columns;
   protected FlatMapFunction<String, Row> func;
@@ -120,7 +136,7 @@ class SplitTableExtractor extends FielTableExtractor {
   public Dataset extract(SparkSession spark) {
     //text格式加载数据
     //读取数据
-    Dataset lineDataset = reader.format(fileType).load(filePath);
+    Dataset lineDataset = spark.read().format(fileType).load(filePath);
 
     //创建schema
 
@@ -147,11 +163,14 @@ class DelimiterTableExtractor extends SplitTableExtractor {
   public DelimiterTableExtractor(Map<String, Object> params) {
     super(params);
     splitStr = (String) params.get("splitStr");
-    func = line -> {
-      List<Row> resultList = new ArrayList<>();
-      String[] values = line.split(splitStr);
-      resultList.add(RowFactory.create(values));
-      return resultList.iterator();
+    func = new FlatMapFunction<String, Row>() {
+      @Override
+      public Iterator<Row> call(String line) throws Exception {
+        List<Row> resultList = new ArrayList<>();
+        String[] values = line.split(splitStr);
+        resultList.add(RowFactory.create(values));
+        return resultList.iterator();
+      }
     };
   }
 }
@@ -168,17 +187,20 @@ class RegexTableExtractor extends SplitTableExtractor {
     super(params);
     regex = (String) params.get("regex");
     this.pattern = Pattern.compile(regex);
-    func = line -> {
-      List<Row> resultList = new ArrayList<>();
-      Matcher matcher = pattern.matcher(line);
-      String[] values = new String[columns.length];
-      if (matcher.find() && matcher.groupCount() == columns.length) {
-        for (int index = 1; index <= matcher.groupCount(); index++) {
-          values[index - 1] = matcher.group(index);
+    func = new FlatMapFunction<String, Row>() {
+      @Override
+      public Iterator<Row> call(String line) throws Exception {
+        List<Row> resultList = new ArrayList<>();
+        Matcher matcher = pattern.matcher(line);
+        String[] values = new String[columns.length];
+        if (matcher.find() && matcher.groupCount() == columns.length) {
+          for (int index = 1; index <= matcher.groupCount(); index++) {
+            values[index - 1] = matcher.group(index);
+          }
         }
+        resultList.add(RowFactory.create(values));
+        return resultList.iterator();
       }
-      resultList.add(RowFactory.create(values));
-      return resultList.iterator();
     };
   }
 }
@@ -186,7 +208,7 @@ class RegexTableExtractor extends SplitTableExtractor {
 /**
  * 已存在spark或者hive表，执行sql
  */
-class SparkTableExtractor extends FielTableExtractor {
+class SparkTableExtractor extends FileTableExtractor {
 
   private String sql;
 
@@ -203,14 +225,14 @@ class SparkTableExtractor extends FielTableExtractor {
 /**
  * 其它包含schema结构文件，如果parquet rcfile json
  */
-class SchmaTableExtractor extends FielTableExtractor {
+class SchemaTableExtractor extends FileTableExtractor {
 
-  public SchmaTableExtractor(Map<String, Object> params) {
+  public SchemaTableExtractor(Map<String, Object> params) {
     super(params);
   }
 
   @Override
   public Dataset extract(SparkSession spark) {
-    return reader.format(fileType).load(filePath);
+    return spark.read().format(fileType).load(filePath);
   }
 }
