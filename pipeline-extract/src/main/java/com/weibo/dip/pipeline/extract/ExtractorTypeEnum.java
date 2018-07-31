@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Create by hongxun on 2018/7/5
  */
-public enum ExactorTypeEnum implements TypeEnum {
+public enum ExtractorTypeEnum implements TypeEnum {
   Delimiter {
     @Override
     public Extractor getExtractor(Map<String, Object> params) {
@@ -27,18 +27,18 @@ public enum ExactorTypeEnum implements TypeEnum {
     }
   };
 
-  private static final Map<String, ExactorTypeEnum> types =
-      new ImmutableMap.Builder<String, ExactorTypeEnum>()
-          .put("exact_delimiter", Delimiter)
-          .put("exact_regex", Regex)
-          .put("exact_multiple", Multiple)
+  private static final Map<String, ExtractorTypeEnum> types =
+      new ImmutableMap.Builder<String, ExtractorTypeEnum>()
+          .put("extract_delimiter", Delimiter)
+          .put("extract_regex", Regex)
+          .put("extract_multiple", Multiple)
           .build();
 
   public Extractor getExtractor(Map<String, Object> params) {
     throw new RuntimeException("Abstract Error!!!");
   }
 
-  public static ExactorTypeEnum getType(String typeName) {
+  public static ExtractorTypeEnum getType(String typeName) {
     return types.get(typeName);
   }
 

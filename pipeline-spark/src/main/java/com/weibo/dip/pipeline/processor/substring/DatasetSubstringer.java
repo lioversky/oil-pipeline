@@ -27,10 +27,10 @@ public abstract class DatasetSubstringer extends Configuration {
 /**
  * 截空格
  */
-class TrimProcessor extends DatasetSubstringer {
+class TrimDatasetSubstringer extends DatasetSubstringer {
 
 
-  public TrimProcessor(Map<String, Object> params) {
+  public TrimDatasetSubstringer(Map<String, Object> params) {
     super(params);
   }
 
@@ -43,7 +43,7 @@ class TrimProcessor extends DatasetSubstringer {
 /**
  * 左右子串
  */
-class SubstringLRProcessor extends DatasetSubstringer {
+class LRDatasetSubstringer extends DatasetSubstringer {
 
   private Integer left;
   private Integer right;
@@ -54,7 +54,7 @@ class SubstringLRProcessor extends DatasetSubstringer {
         .withColumn(fieldName, callUDF("substring_lr", col(fieldName), lit(left), lit(right)));
   }
 
-  public SubstringLRProcessor(Map<String, Object> params) {
+  public LRDatasetSubstringer(Map<String, Object> params) {
     super(params);
     this.left = params.containsKey("left") ? ((Number) params.get("left")).intValue() : 0;
     this.right = params.containsKey("right") ? ((Number) params.get("right")).intValue() : -1;
@@ -64,7 +64,7 @@ class SubstringLRProcessor extends DatasetSubstringer {
 /**
  * 定长子串
  */
-class SubstringProcessor extends DatasetSubstringer {
+class FixedDatasetSubstringer extends DatasetSubstringer {
 
   private int start;
   private int length;
@@ -74,7 +74,7 @@ class SubstringProcessor extends DatasetSubstringer {
     return dataset.withColumn(fieldName, functions.substring(col(fieldName), start, length));
   }
 
-  public SubstringProcessor(Map<String, Object> params) {
+  public FixedDatasetSubstringer(Map<String, Object> params) {
     super(params);
     this.start = params.containsKey("start") ? ((Number) params.get("start")).intValue() : 0;
     this.length = params.containsKey("length") ? ((Number) params.get("length")).intValue() : -1;
@@ -84,12 +84,12 @@ class SubstringProcessor extends DatasetSubstringer {
 /**
  * 分隔索引子串
  */
-class SubstringIndexProcessor extends DatasetSubstringer {
+class IndexDatasetSubstringer extends DatasetSubstringer {
 
   private String delim;
   private int count;
 
-  public SubstringIndexProcessor(Map<String, Object> params) {
+  public IndexDatasetSubstringer(Map<String, Object> params) {
     super(params);
     delim = (String) params.get("delim");
     count = (Integer) params.get("count");

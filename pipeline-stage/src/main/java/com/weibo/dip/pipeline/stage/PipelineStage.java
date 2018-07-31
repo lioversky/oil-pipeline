@@ -1,6 +1,5 @@
 package com.weibo.dip.pipeline.stage;
 
-import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
@@ -17,21 +16,19 @@ import org.slf4j.LoggerFactory;
  * stage pipeline实现，将各procesoor串行执行.
  * Create by hongxun on 2018/06/28
  */
-public class PipelineStage extends Stage<Map<String, Object>> {
+public abstract class PipelineStage extends Stage<Map<String, Object>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PipelineStage.class);
 
   private List<Processor> processorList;
-  private Timer stageTimer;
 
-  public PipelineStage(MetricRegistry metricRegistry,
-      List<Map<String, Object>> processorsCofnigList, String stageId) {
-    super(metricRegistry, stageId);
+  public PipelineStage(List<Map<String, Object>> processorsCofnigList, String stageId) {
+    super(stageId);
     processorList = createProcessorList(processorsCofnigList);
-    stageTimer = metricRegistry.timer(String.format("%s_timer", stageId));
 
   }
 
+  public abstract Timer getStageTimer();
 
   /**
    * 串行处理stage
@@ -41,7 +38,7 @@ public class PipelineStage extends Stage<Map<String, Object>> {
     if (data == null) {
       return null;
     }
-    Context context = stageTimer.time();
+    Context context = getStageTimer().time();
     try {
       for (Processor processor : processorList) {
         data = (Map<String, Object>) processor.process(data);

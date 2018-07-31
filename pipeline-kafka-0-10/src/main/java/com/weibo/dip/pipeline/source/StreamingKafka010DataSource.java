@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.source;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -13,14 +14,19 @@ import org.apache.spark.streaming.kafka010.LocationStrategies;
 /**
  * Create by hongxun on 2018/7/5
  */
-public class StreamingKafkaDirectDataSource extends StreamingDataSource {
+public class StreamingKafka010DataSource extends StreamingDataSource {
 
   private Map<String, Object> kafkaParams;
   private List<String> topics;
 
-  public StreamingKafkaDirectDataSource(Map map) {
-    super(map);
+  public StreamingKafka010DataSource(Map params) {
+    super(params);
+    kafkaParams = (Map<String, Object>) params.get("options");
+
+    String topicStr = (String) kafkaParams.remove("topic");
+    topics = Arrays.asList(topicStr.split(","));
   }
+
 
   @Override
   public JavaDStream createSource(JavaStreamingContext streamingContext) {
@@ -28,7 +34,7 @@ public class StreamingKafkaDirectDataSource extends StreamingDataSource {
         KafkaUtils.createDirectStream(
             streamingContext,
             LocationStrategies.PreferConsistent(),
-            ConsumerStrategies.<String, String>Subscribe(topics, kafkaParams)
+            ConsumerStrategies.Subscribe(topics, kafkaParams)
         );
     return stream.map(record -> record.value());
   }

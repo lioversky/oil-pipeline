@@ -1,6 +1,5 @@
 package com.weibo.dip.pipeline.stage;
 
-import com.codahale.metrics.Counter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
@@ -17,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * <p>CaseWhenStage</p> 的执行段为stage列表，可以包含pipeline，也可包含其它casewhen
  * Create by hongxun on 2018/6/29
  */
-public class CaseWhenStage extends Stage<Map<String,Object>> {
+public class CaseWhenStage extends Stage<Map<String, Object>> {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CaseWhenStage.class);
 
@@ -36,7 +35,7 @@ public class CaseWhenStage extends Stage<Map<String,Object>> {
    */
   public CaseWhenStage(MetricRegistry registry, List<Map<String, Object>> params, String stageId)
       throws Exception {
-    super(registry, stageId);
+    super( stageId);
     stageTimer = registry.timer(String.format("%s_timer", stageId));
     casewhenMap = create(params);
   }
@@ -59,7 +58,7 @@ public class CaseWhenStage extends Stage<Map<String,Object>> {
       LOGGER.info(String
           .format("%s condition:%s, stage size: %d", stageId, conditionParam,
               stagesConfigList.size()));
-      List<Stage> subStageList = Stage.createStage(stagesConfigList, metricRegistry);
+      List<Stage> subStageList = Stage.createStage(stagesConfigList);
       map.put(Condition.createCondition(conditionParam), subStageList);
 
     }

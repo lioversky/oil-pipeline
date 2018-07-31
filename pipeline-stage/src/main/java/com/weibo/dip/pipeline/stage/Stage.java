@@ -2,7 +2,6 @@ package com.weibo.dip.pipeline.stage;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Lists;
-import com.weibo.dip.pipeline.metrics.MetricSystem;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -21,25 +20,16 @@ public abstract class Stage<T> implements Serializable {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(Stage.class);
 
-  protected MetricRegistry metricRegistry;
-
 
   protected String stageId;
 
-  public Stage(MetricRegistry metricRegistry, String stageId) {
-    this.metricRegistry = metricRegistry;
+  public Stage(String stageId) {
+
     this.stageId = stageId;
   }
 
   public abstract T processStage(T data) throws Exception;
 
-  public MetricRegistry getMetricRegistry() {
-    return metricRegistry;
-  }
-
-  public void setMetricRegistry(MetricRegistry metricRegistry) {
-    this.metricRegistry = metricRegistry;
-  }
 
   /**
    * 递归创建stage.
@@ -50,8 +40,7 @@ public abstract class Stage<T> implements Serializable {
    * @throws Exception stage类型不存在异常
    */
   @SuppressWarnings({"unchecked"})
-  public static List<Stage> createStage(List<Map<String, Object>> stagesConfigList,
-      MetricRegistry parentRegistry)
+  public static List<Stage> createStage(List<Map<String, Object>> stagesConfigList)
       throws Exception {
     List<Stage> result = Lists.newArrayList();
 
@@ -67,10 +56,10 @@ public abstract class Stage<T> implements Serializable {
       } else if ("pipeline".equals(stageType)) {
         List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
             .get("processors");
-        result.add(new PipelineStage(metricRegistry, processorConfigList, stageId));
+        result.add(new PipelineStageNoMetric( processorConfigList, stageId));
       }
       //注册metrics
-      parentRegistry.register(stageId, metricRegistry);
+//      parentRegistry.register(stageId, metricRegistry);
     }
     return result;
   }

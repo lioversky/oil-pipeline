@@ -3,6 +3,8 @@ package com.weibo.dip.pipeline.runner;
 import com.weibo.dip.pipeline.extract.FileTableExtractor;
 import com.weibo.dip.pipeline.sink.DatasetDataSink;
 import com.weibo.dip.pipeline.sink.DatasetSinkTypeEnum;
+import com.weibo.dip.pipeline.source.DatasetSource;
+import com.weibo.dip.pipeline.source.DatasetSourceTypeEnum;
 import com.weibo.dip.pipeline.udf.UDFRegister;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
@@ -16,11 +18,13 @@ import org.apache.spark.sql.SparkSession;
 
 public class SparkRunner extends DatasetRunner {
 
+  private DatasetSource datasetSource;
   private DatasetDataSink datasetSink;
 
   @SuppressWarnings({"unchecked"})
   public SparkRunner(Map<String, Object> configs) {
     super(configs);
+    datasetSource = DatasetSourceTypeEnum.getType(sourceFormat, sourceConfig);
     datasetSink = DatasetSinkTypeEnum.getDatasetSinkByMap(sinkConfig);
   }
 
@@ -48,10 +52,22 @@ public class SparkRunner extends DatasetRunner {
     if (sourceFormat == null) {
       return sparkSession.emptyDataFrame();
     }
-    return sparkSession
-        .read()
-        .format(sourceFormat)
-        .options(sourceOptions).load();
+    // todo:spark dataset source
+
+    return datasetSource.createSource(sparkSession);
+  }
+
+  /**
+   * 抽取数据
+   *
+   * @param dataset 数据集
+   * @return 抽取结果数据集
+   */
+  protected Dataset extract(Dataset dataset) {
+    if (extractor == null) {
+      return dataset;
+    }
+    return extractor.extract(dataset);
   }
 
   private void write(Dataset dataset) {

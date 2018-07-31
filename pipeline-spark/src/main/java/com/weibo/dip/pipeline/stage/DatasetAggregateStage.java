@@ -14,9 +14,9 @@ public class DatasetAggregateStage extends Stage<Dataset> {
   private String tempTableName;
   private String sql;
 
-  public DatasetAggregateStage(MetricRegistry metricRegistry, Map<String, Object> configMap,
+  public DatasetAggregateStage(Map<String, Object> configMap,
       String stageId) {
-    super(metricRegistry, stageId);
+    super(stageId);
     if (configMap.containsKey("tempTableName")) {
       tempTableName = (String) configMap.get("tempTableName");
     }

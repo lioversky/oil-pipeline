@@ -114,7 +114,7 @@ abstract class MultipleBaseExtractor extends Extractor {
         .get("extractors");
     for (Map<String, Object> map : exactersMap) {
       String extractType = (String) map.get("type");
-      exacters.add(ExactorTypeEnum.getType(extractType).getExtractor(map));
+      exacters.add(ExtractorTypeEnum.getType(extractType).getExtractor(map));
     }
   }
 }

@@ -20,9 +20,8 @@ public class DatasetProcessStage extends Stage<Dataset> {
   private static final Logger LOGGER = LoggerFactory.getLogger(DatasetProcessStage.class);
   private List<DatasetProcessor> processorList;
 
-  public DatasetProcessStage(MetricRegistry metricRegistry,
-      List<Map<String, Object>> processorsCofnigList, String stageId) {
-    super(metricRegistry, stageId);
+  public DatasetProcessStage(List<Map<String, Object>> processorsCofnigList, String stageId) {
+    super(stageId);
     processorList = createProcessorList(processorsCofnigList);
   }
 

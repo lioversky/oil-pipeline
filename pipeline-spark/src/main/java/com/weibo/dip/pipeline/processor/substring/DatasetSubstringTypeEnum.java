@@ -2,8 +2,6 @@ package com.weibo.dip.pipeline.processor.substring;
 
 import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;
-import com.weibo.dip.pipeline.processor.replace.DatasetReplaceTypeEnum;
-import com.weibo.dip.pipeline.processor.replace.DatasetReplacer;
 import java.util.Map;
 
 /**
@@ -14,25 +12,25 @@ public enum DatasetSubstringTypeEnum implements TypeEnum {
   Trim {
     @Override
     public DatasetSubstringer getDatasetSubstringer(Map<String, Object> params) {
-      return new TrimProcessor(params);
+      return new TrimDatasetSubstringer(params);
     }
   },
   SubstringLR {
     @Override
     public DatasetSubstringer getDatasetSubstringer(Map<String, Object> params) {
-      return new SubstringLRProcessor(params);
+      return new LRDatasetSubstringer(params);
     }
   },
   Substring {
     @Override
     public DatasetSubstringer getDatasetSubstringer(Map<String, Object> params) {
-      return new SubstringProcessor(params);
+      return new FixedDatasetSubstringer(params);
     }
   },
   SubstringIndex {
     @Override
     public DatasetSubstringer getDatasetSubstringer(Map<String, Object> params) {
-      return new SubstringIndexProcessor(params);
+      return new IndexDatasetSubstringer(params);
     }
   };
   private static final Map<String, DatasetSubstringTypeEnum> types =

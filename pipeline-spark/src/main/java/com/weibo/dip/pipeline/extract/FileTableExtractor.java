@@ -1,6 +1,5 @@
 package com.weibo.dip.pipeline.extract;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.sql.DataFrameReader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
 import org.apache.spark.sql.Row;
@@ -24,7 +22,7 @@ import org.apache.spark.sql.types.StructType;
  * 文件内容提取器
  * Create by hongxun on 2018/7/25
  */
-public abstract class FileTableExtractor implements Serializable {
+public abstract class FileTableExtractor extends TableExtractor {
 
   protected String fileType;
   protected String tableName;
@@ -34,6 +32,7 @@ public abstract class FileTableExtractor implements Serializable {
 
 
   public FileTableExtractor(Map<String, Object> params) {
+    super(params);
     this.tableName = (String) params.get("tableName");
     //如果从文件中读取，映射成表
 
@@ -65,9 +64,6 @@ public abstract class FileTableExtractor implements Serializable {
     }
   }
 
-  public abstract Dataset extract(SparkSession spark);
-
-
   public static void cacheTable(SparkSession spark, List<Map<String, Object>> tables)
       throws Exception {
     FileTableExtractor extractor = null;
@@ -82,7 +78,6 @@ public abstract class FileTableExtractor implements Serializable {
       extractor.cacheTable(spark);
     }
   }
-
 
 }
 

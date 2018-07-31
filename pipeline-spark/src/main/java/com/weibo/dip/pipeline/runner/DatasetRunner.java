@@ -1,8 +1,8 @@
 package com.weibo.dip.pipeline.runner;
 
 import com.codahale.metrics.MetricRegistry;
-import com.weibo.dip.pipeline.extract.DatasetExtractorTypeEnum;
 import com.weibo.dip.pipeline.extract.DatasetExtractor;
+import com.weibo.dip.pipeline.extract.DatasetExtractorTypeEnum;
 import com.weibo.dip.pipeline.stage.DatasetAggregateStage;
 import com.weibo.dip.pipeline.stage.DatasetProcessStage;
 import com.weibo.dip.pipeline.stage.Stage;
@@ -66,15 +66,7 @@ public abstract class DatasetRunner extends Runner {
    * @param dataset 数据集
    * @return 抽取结果数据集
    */
-  protected Dataset extract(Dataset dataset) {
-    if (extractor == null) {
-      return dataset;
-    }
-    if ("kafka".equals(sourceFormat)) {
-      dataset = dataset.selectExpr("CAST(value AS STRING) as _value_");
-    }
-    return extractor.extract(dataset);
-  }
+  protected abstract Dataset extract(Dataset dataset);
 
   /**
    *
@@ -118,7 +110,7 @@ public abstract class DatasetRunner extends Runner {
    * @return 数据集
    */
   private Dataset agg(Dataset dataset) throws Exception {
-    DatasetAggregateStage aggregateStage = new DatasetAggregateStage(new MetricRegistry(),
+    DatasetAggregateStage aggregateStage = new DatasetAggregateStage(
         aggConfig, Stage.createStageId("DatasetAggregateStage"));
     return aggregateStage.processStage(dataset);
   }
@@ -148,13 +140,13 @@ public abstract class DatasetRunner extends Runner {
    * @throws Exception 异常信息
    */
   @SuppressWarnings({"unchecked"})
-  private Dataset processStage(Dataset dataset, List<Map<String, Object>> stagesConfigList)
+  static Dataset processStage(Dataset dataset, List<Map<String, Object>> stagesConfigList)
       throws Exception {
     Map<String, Object> stageConfigMap = stagesConfigList.get(0);
     List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
         .get("processors");
-    DatasetProcessStage processStage = new DatasetProcessStage(new MetricRegistry(),
-        processorConfigList, Stage.createStageId("DatasetProcessStage"));
+    DatasetProcessStage processStage = new DatasetProcessStage(processorConfigList,
+        Stage.createStageId("DatasetProcessStage"));
     return processStage.processStage(dataset);
   }
 

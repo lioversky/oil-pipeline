@@ -61,6 +61,22 @@ public class StructuredStreamingRunner extends DatasetRunner {
   }
 
   /**
+   * 抽取数据
+   *
+   * @param dataset 数据集
+   * @return 抽取结果数据集
+   */
+  protected Dataset extract(Dataset dataset) {
+    if (extractor == null) {
+      return dataset;
+    }
+    if ("kafka".equals(sourceFormat)) {
+      dataset = dataset.selectExpr("CAST(value AS STRING) as _value_");
+    }
+    return extractor.extract(dataset);
+  }
+
+  /**
    * structured streaming sink
    *
    * @param dataset 数据

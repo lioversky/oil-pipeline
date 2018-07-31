@@ -1,7 +1,6 @@
 package com.weibo.dip.pipeline.job;
 
 import com.codahale.metrics.Counter;
-import com.codahale.metrics.MetricRegistry;
 import com.weibo.dip.pipeline.metrics.MetricSystem;
 import com.weibo.dip.pipeline.stage.Stage;
 import java.util.List;
@@ -17,32 +16,32 @@ public class PipelineJob extends Job {
    */
   private List<Stage> stageList;
 
-  private MetricRegistry metricRegistry;
+//  private MetricRegistry metricRegistry;
   /**
    * 记录出错数据量
    */
-  private Counter errorCounter = new Counter();
+//  private Counter errorCounter = new Counter();
   /**
    * 记录处理成空的数据量
    */
-  private Counter nullCounter = new Counter();
+//  private Counter nullCounter = new Counter();
+
   /**
    * 记录数据总量
    */
-  private Counter dataCounter = new Counter();
-
+//  private Counter dataCounter = new Counter();
   public PipelineJob(Map<String, Object> configMap) {
     try {
       @SuppressWarnings({"unchecked"})
       List<Map<String, Object>> stagesConfigList = (List<Map<String, Object>>) configMap
           .get("stages");
-      MetricSystem metricSystem = MetricSystem.getMetricSystem();
-      metricRegistry = metricSystem.getMetricRegistry();
-      stageList = Stage.createStage(stagesConfigList, metricSystem.getMetricRegistry());
+//      MetricSystem metricSystem = MetricSystem.getMetricSystem();
+//      metricRegistry = metricSystem.getMetricRegistry();
+      stageList = Stage.createStage(stagesConfigList);
 
-      metricRegistry.register("data-counter", dataCounter);
-      metricRegistry.register("error-counter", errorCounter);
-      metricRegistry.register("null-counter", nullCounter);
+//      metricRegistry.register("data-counter", dataCounter);
+//      metricRegistry.register("error-counter", errorCounter);
+//      metricRegistry.register("null-counter", nullCounter);
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -59,16 +58,16 @@ public class PipelineJob extends Job {
    */
   @Override
   public Map<String, Object> processJob(Map<String, Object> data) throws Exception {
-    dataCounter.inc();
+    getCounter("data-counter").inc();
     for (Stage stage : stageList) {
       try {
         data = (Map<String, Object>) stage.processStage(data);
         if (data == null) {
-          nullCounter.inc();
+          getCounter("null-counter").inc();
           break;
         }
       } catch (Exception e) {
-        errorCounter.inc();
+        getCounter("error-counter").inc();
         e.printStackTrace();
       }
     }
@@ -79,12 +78,8 @@ public class PipelineJob extends Job {
 
   }
 
-
-  public MetricRegistry getMetricRegistry() {
-    return metricRegistry;
-  }
-
-  public void setMetricRegistry(MetricRegistry metricRegistry) {
-    this.metricRegistry = metricRegistry;
+  private Counter getCounter(String counterName) {
+    MetricSystem metricSystem = MetricSystem.getMetricSystem();
+    return metricSystem.getMetricRegistry().counter(counterName);
   }
 }
