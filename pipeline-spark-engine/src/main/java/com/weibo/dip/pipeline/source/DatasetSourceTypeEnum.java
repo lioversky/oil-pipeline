@@ -17,7 +17,7 @@ public enum DatasetSourceTypeEnum implements TypeEnum {
   Kafka {
     @Override
     public DatasetSource getDatasetSource(Map<String, Object> params) {
-      return new DatasetKafkaDelegate(params);
+      return new DatasetKafkaSourceDelegate(params);
     }
   };
   private static final Map<String, DatasetSourceTypeEnum> types =

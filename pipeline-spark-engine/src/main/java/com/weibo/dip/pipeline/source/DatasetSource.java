@@ -11,7 +11,7 @@ import org.apache.spark.sql.SparkSession;
 /**
  * kafka 不同版本的source代理
  */
-class DatasetKafkaDelegate extends DatasetSource {
+class DatasetKafkaSourceDelegate extends DatasetSource {
 
   /**
    * 实际的对应版本的datasetSource
@@ -22,7 +22,7 @@ class DatasetKafkaDelegate extends DatasetSource {
    */
   private DatasetKafkaSourceProvider kafkaSourceProvider = DatasetKafkaSourceProvider.newInstance();
 
-  public DatasetKafkaDelegate(Map<String, Object> params) {
+  public DatasetKafkaSourceDelegate(Map<String, Object> params) {
     super(params);
     try {
       datasetSource = kafkaSourceProvider.createDataSource(params);

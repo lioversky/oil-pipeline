@@ -19,7 +19,7 @@
     <module>pipeline-stage</module>
     <module>pipeline-extract</module>
     <module>pipeline-job</module>
-    <module>pipeline-spark</module>
+    <module>pipeline-spark-engine</module>
     <module>pipeline-kafka-0-8</module>
     <module>pipeline-kafka-0-10</module>
     <module>pipeline-kafka</module>

@@ -12,7 +12,7 @@ public enum DatasetSinkTypeEnum implements TypeEnum {
   Kafka {
     @Override
     public DatasetDataSink getDatasetSink(Map<String, Object> params) {
-      return new KafkaDatasetSink(params);
+      return new KafkaDatasetSinkDelegate(params);
     }
   },
   File {},

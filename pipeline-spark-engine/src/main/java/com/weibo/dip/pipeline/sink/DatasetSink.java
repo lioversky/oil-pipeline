@@ -48,9 +48,9 @@ class HdfsDatasetSink extends DatasetSink {
 /**
  * 输出到kafka的sink
  */
-class KafkaDatasetSink extends DatasetSink {
+class KafkaDatasetSinkDelegate extends DatasetSink {
 
-  public KafkaDatasetSink(Map<String, Object> params) {
+  public KafkaDatasetSinkDelegate(Map<String, Object> params) {
     super(params);
   }
 

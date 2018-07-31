@@ -25,7 +25,7 @@ class StreamingHdfsTimeDataSource extends StreamingDataSource {
 /**
  * Create by hongxun on 2018/7/5
  */
-class StreamingKafkaDelegate extends StreamingDataSource {
+class StreamingKafkaSourceDelegate extends StreamingDataSource {
 
   /**
    * 实际的对应版本的kafka Source
@@ -37,7 +37,7 @@ class StreamingKafkaDelegate extends StreamingDataSource {
   private StreamingKafkaSourceProvider streamingKafkaSourceProvider = StreamingKafkaSourceProvider
       .newInstance();
 
-  public StreamingKafkaDelegate(Map<String, Object> map) {
+  public StreamingKafkaSourceDelegate(Map<String, Object> map) {
     super(map);
 
     try {
