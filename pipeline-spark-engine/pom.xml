@@ -36,7 +36,7 @@
     </dependency>
     <dependency>
       <groupId>oil-pipeline</groupId>
-      <artifactId>pipeline-kafka</artifactId>
+      <artifactId>pipeline-spark-kafka</artifactId>
       <version>${parent.version}</version>
     </dependency>
     <dependency>
@@ -65,7 +65,7 @@
     <!-- kafka source-->
     <dependency>
       <groupId>oil-pipeline</groupId>
-      <artifactId>pipeline-kafka-0-10</artifactId>
+      <artifactId>pipeline-spark-kafka-0-10</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>

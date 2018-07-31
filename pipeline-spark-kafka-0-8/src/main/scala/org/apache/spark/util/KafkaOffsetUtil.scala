@@ -144,6 +144,11 @@ object KafkaOffsetUtil {
     if (kafkaPartitionsE.isLeft) throw new SparkException("get kafka partition failed:")
     val kafkaPartitions = kafkaPartitionsE.right.get
 
+    val leaderOffset = kc.getLatestLeaderOffsets(kafkaPartitions)
+    if(leaderOffset.isLeft){
+      throw new SparkException("get offset error")
+    }
+
     val leaderLatestOffsets = kc.getLatestLeaderOffsets(kafkaPartitions).right.get
     //    val leaderEarliestOffsets = kc.getEarliestLeaderOffsets(kafkaPartitions).right.get
 
