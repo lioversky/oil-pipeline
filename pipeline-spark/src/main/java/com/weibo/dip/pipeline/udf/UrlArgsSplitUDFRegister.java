@@ -7,6 +7,7 @@ import org.apache.spark.sql.types.DataTypes;
 
 /**
  * url参数提取udf
+ * udf参数：字段值
  * Create by hongxun on 2018/7/10
  */
 public class UrlArgsSplitUDFRegister extends UDFRegister {

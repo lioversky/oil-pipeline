@@ -6,6 +6,7 @@ import org.apache.spark.sql.types.DataTypes;
 
 /**
  * 左右定长截取子串udf
+ * udf参数：字段值，左边截取长度，右边截取长度
  * Create by hongxun on 2018/7/10
  */
 

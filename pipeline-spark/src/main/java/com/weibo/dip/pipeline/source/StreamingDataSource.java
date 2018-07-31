@@ -6,10 +6,12 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
 
 /**
+ * 按batch time读取对应时间段的文件，生成DStream
  * Create by hongxun on 2018/7/5
  */
 class StreamingHdfsTimeDataSource extends StreamingDataSource {
 
+  // todo: HdfsTime Dstream
   public StreamingHdfsTimeDataSource(Map map) {
     super(map);
   }
@@ -23,18 +25,26 @@ class StreamingHdfsTimeDataSource extends StreamingDataSource {
 /**
  * Create by hongxun on 2018/7/5
  */
-class StreamingKafkaDataSource extends StreamingDataSource {
+class StreamingKafkaDelegate extends StreamingDataSource {
 
+  /**
+   * 实际的对应版本的kafka Source
+   */
   private StreamingDataSource kafkaSource;
-  private StreamingKafkaSourceProvider streamingKafkaSourceProvider = StreamingKafkaSourceProvider.newInstance();
+  /**
+   * kafka source生成器，当未加载到Provider时返回空
+   */
+  private StreamingKafkaSourceProvider streamingKafkaSourceProvider = StreamingKafkaSourceProvider
+      .newInstance();
 
-  public StreamingKafkaDataSource(Map<String, Object> map) {
+  public StreamingKafkaDelegate(Map<String, Object> map) {
     super(map);
 
     try {
       kafkaSource = streamingKafkaSourceProvider.createDataSource(map);
     } catch (Exception e) {
-      e.printStackTrace();
+      // todo: exception
+      throw new RuntimeException(e);
     }
   }
 

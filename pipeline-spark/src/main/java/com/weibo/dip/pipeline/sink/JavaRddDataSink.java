@@ -7,6 +7,7 @@ import org.apache.spark.api.java.function.VoidFunction;
 import org.apache.spark.sql.Row;
 
 /**
+ * 对rdd结构数据的输出抽象类
  * Create by hongxun on 2018/7/26
  */
 public abstract class JavaRddDataSink extends RddDataSink {
@@ -18,7 +19,9 @@ public abstract class JavaRddDataSink extends RddDataSink {
   public abstract void write(JavaRDD<Row> rdd);
 }
 
-
+/**
+ * 写出到kafka
+ */
 class KafkaRddDataSink extends JavaRddDataSink {
 
   public KafkaRddDataSink(Map<String, Object> params) {
@@ -31,6 +34,9 @@ class KafkaRddDataSink extends JavaRddDataSink {
   }
 }
 
+/**
+ * 写出到标准输入输出中
+ */
 class ConsoleRddDataSink extends JavaRddDataSink {
 
   public ConsoleRddDataSink(Map<String, Object> params) {

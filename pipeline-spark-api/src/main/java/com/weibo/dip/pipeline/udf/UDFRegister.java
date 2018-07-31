@@ -13,12 +13,26 @@ import org.apache.spark.sql.types.DataType;
  */
 public abstract class UDFRegister {
 
+  /**
+   * 要创建的udf的名称，实例类要赋值
+   */
   protected String udfName;
+  /**
+   * 加载所有实现类
+   */
   private static ServiceLoader<UDFRegister> registerServiceLoader = ServiceLoader
       .load(UDFRegister.class);
 
+  /**
+   * udf的具体实现的抽象方法
+   * @param sparkSession sparkSession
+   */
   public abstract void register(SparkSession sparkSession);
 
+  /**
+   * 注册 所有实现类的udf，此方法暂时由外部调用
+   * @param sparkSession
+   */
   public static void registerAllUDF(SparkSession sparkSession) {
     for (UDFRegister register : registerServiceLoader) {
       register.register(sparkSession);

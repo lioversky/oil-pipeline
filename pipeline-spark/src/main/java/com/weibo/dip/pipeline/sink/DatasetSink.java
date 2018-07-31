@@ -3,12 +3,20 @@ package com.weibo.dip.pipeline.sink;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
 
+/**
+ * Dataset的输出实现
+ * Create by hongxun on 2018/7/26
+ */
+
 public abstract class DatasetSink extends DatasetDataSink {
 
   protected String sinkFormat;
   protected String sinkMode;
   protected Map<String, String> sinkOptions;
-
+  /**
+   * dataset与rdd写出相同时，调用rdd的write，不同写出时此为空
+   */
+  protected JavaRddDataSink rddDataSink;
   public DatasetSink(Map<String, Object> params) {
     super(params);
     sinkFormat = (String) params.get("format");
@@ -16,7 +24,10 @@ public abstract class DatasetSink extends DatasetDataSink {
     sinkOptions = (Map<String, String>) params.get("options");
   }
 }
-
+// todo: sink write
+/**
+ * 输出到hdfs的sink
+ */
 class HdfsDatasetSink extends DatasetSink {
 
   public HdfsDatasetSink(Map<String, Object> params) {
@@ -34,6 +45,9 @@ class HdfsDatasetSink extends DatasetSink {
   }
 }
 
+/**
+ * 输出到kafka的sink
+ */
 class KafkaDatasetSink extends DatasetSink {
 
   public KafkaDatasetSink(Map<String, Object> params) {
@@ -46,6 +60,9 @@ class KafkaDatasetSink extends DatasetSink {
   }
 }
 
+/**
+ * 输出到标准输入输出的sink，
+ */
 class ConsoleDatasetSink extends DatasetSink {
 
   private boolean truncate = true;

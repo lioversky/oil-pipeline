@@ -12,6 +12,7 @@ import org.apache.spark.streaming.kafka010.KafkaUtils;
 import org.apache.spark.streaming.kafka010.LocationStrategies;
 
 /**
+ * 生成Dstream，stream中只包message
  * Create by hongxun on 2018/7/5
  */
 public class StreamingKafka010DataSource extends StreamingDataSource {

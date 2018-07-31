@@ -18,7 +18,7 @@ public enum StreamingDataSourceTypeEnum implements TypeEnum {
   Kafka {
     @Override
     public StreamingDataSource getStreamingDataSource(Map<String, Object> params) {
-      return new StreamingKafkaDataSource(params);
+      return new StreamingKafkaDelegate(params);
     }
   };
 

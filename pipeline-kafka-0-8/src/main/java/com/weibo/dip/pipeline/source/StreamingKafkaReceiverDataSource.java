@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 import scala.Tuple2;
 
 /**
+ * 0.8.2版本kafka Receiver Source
  * Create by hongxun on 2018/7/5
  */
 public class StreamingKafkaReceiverDataSource extends StreamingDataSource {

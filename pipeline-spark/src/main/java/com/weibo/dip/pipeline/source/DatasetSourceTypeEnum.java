@@ -8,21 +8,21 @@ import java.util.Map;
  * Create by hongxun on 2018/7/30
  */
 public enum DatasetSourceTypeEnum implements TypeEnum {
-  File{
+  File {
     @Override
     public DatasetSource getDatasetSource(Map<String, Object> params) {
-      return super.getDatasetSource(params);
+      return new DatasetFileSource(params);
     }
   },
   Kafka {
     @Override
     public DatasetSource getDatasetSource(Map<String, Object> params) {
-      return new DatasetKafkaDataSource(params);
+      return new DatasetKafkaDelegate(params);
     }
   };
   private static final Map<String, DatasetSourceTypeEnum> types =
       new ImmutableMap.Builder<String, DatasetSourceTypeEnum>()
-
+          .put("file", File)
           .put("kafka", Kafka)
           .build();
 
