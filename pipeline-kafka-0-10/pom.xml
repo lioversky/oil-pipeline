@@ -22,5 +22,6 @@
       <artifactId>kafka-clients</artifactId>
       <version>${kafka_010.version}</version>
     </dependency>
+
   </dependencies>
 </project>

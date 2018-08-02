@@ -9,8 +9,19 @@ import java.util.Map;
 public class Kafka010SinkProvider extends KafkaSinkProvider {
 
   protected String version = "0.10";
+
   @Override
   public KafkaDataSink createDataSink(Map<String, Object> params) {
-    return new Kafka010DataSyncSink(params);
+    String sync = (String) params.get("sync");
+    if (sync == null || "true".equals(sync)) {
+      return new Kafka010DataSyncSink(params);
+    } else {
+      return new Kafka010DataAsyncSink(params);
+    }
+  }
+
+  @Override
+  public double getVersion() {
+    return 0.10;
   }
 }

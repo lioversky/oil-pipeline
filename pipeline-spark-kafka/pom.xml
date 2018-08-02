@@ -14,8 +14,13 @@
     <dependency>
       <groupId>oil-pipeline</groupId>
       <artifactId>pipeline-spark-api</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>${parent.version}</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>oil-pipeline</groupId>
+      <artifactId>pipeline-kafka</artifactId>
+      <version>${parent.version}</version>
     </dependency>
   </dependencies>
 

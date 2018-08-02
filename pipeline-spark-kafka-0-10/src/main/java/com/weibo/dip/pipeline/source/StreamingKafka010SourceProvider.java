@@ -8,10 +8,15 @@ import java.util.Map;
  */
 public class StreamingKafka010SourceProvider extends StreamingKafkaSourceProvider {
 
-  protected String version = "0.10.0";
+  public String version = "0.10";
 
   @Override
   public StreamingDataSource createDataSource(Map<String, Object> params) {
     return new StreamingKafka010DataSource(params);
+  }
+
+  @Override
+  public double getVersion() {
+    return 0.10;
   }
 }

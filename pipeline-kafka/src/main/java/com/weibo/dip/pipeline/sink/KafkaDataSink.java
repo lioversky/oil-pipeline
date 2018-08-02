@@ -9,7 +9,12 @@ import java.util.Map;
  */
 public abstract class KafkaDataSink extends Sink<String> {
 
+  protected String topic;
+  protected Map<String, Object> kafkaParams;
+
   public KafkaDataSink(Map<String, Object> params) {
+    topic = (String) params.get("topic");
+    kafkaParams = (Map<String, Object>) params.get("options");
   }
 
   public abstract void write(String topic, String msg);

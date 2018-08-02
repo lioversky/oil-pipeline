@@ -18,5 +18,9 @@
       <artifactId>pipeline-api</artifactId>
       <version>${parent.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
   </dependencies>
 </project>

@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.sink;
 
+import com.weibo.dip.pipeline.util.AsyncKafkaProducerUtil;
 import java.util.Map;
 
 /**
@@ -15,12 +16,17 @@ public class Kafka010DataAsyncSink extends KafkaDataSink {
 
   @Override
   public void write(String s) {
-
+    write(topic, s);
   }
 
   @Override
   public void write(String topic, String msg) {
-
+    try {
+      AsyncKafkaProducerUtil.addMessage(topic, msg, kafkaParams);
+    } catch (InterruptedException e) {
+      //记录错误信息
+      e.printStackTrace();
+    }
   }
 
   @Override

@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.source;
 
+import com.weibo.dip.pipeline.provider.KafkaProvider;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,12 +10,7 @@ import java.util.ServiceLoader;
  * kafka 不同版本的source生成器，由各版本分别继承生成source
  * Create by hongxun on 2018/8/1
  */
-public abstract class KafkaSourceProvider implements Serializable {
-
-  /**
-   * 记录版本号，每个实现类都要赋值
-   */
-  protected String version;
+public abstract class KafkaSourceProvider extends KafkaProvider {
 
   /**
    * 创建source的抽象方法
@@ -39,9 +35,9 @@ public abstract class KafkaSourceProvider implements Serializable {
     Iterator<KafkaSourceProvider> iterator = providerServiceLoader.iterator();
     while (iterator.hasNext()) {
       KafkaSourceProvider provider = iterator.next();
-      if (Double.parseDouble(provider.version) > maxVersion) {
+      if (provider.getVersion() > maxVersion) {
         maxProvider = provider;
-        maxVersion = Double.parseDouble(provider.version);
+        maxVersion = provider.getVersion();
       }
     }
     return maxProvider;

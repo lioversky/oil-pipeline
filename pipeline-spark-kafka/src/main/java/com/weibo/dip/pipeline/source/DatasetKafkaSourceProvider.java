@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.source;
 
+import com.weibo.dip.pipeline.provider.KafkaProvider;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
@@ -9,12 +10,7 @@ import java.util.ServiceLoader;
  * kafka 不同版本Dataset的source生成器，由各版本分别继承生成source
  * Create by hongxun on 2018/7/30
  */
-public abstract class DatasetKafkaSourceProvider implements Serializable {
-
-  /**
-   * 记录版本号，每个实现类都要赋值
-   */
-  protected String version = "0.7";
+public abstract class DatasetKafkaSourceProvider extends KafkaProvider {
 
   /**
    * 加载所有service的类
@@ -33,9 +29,9 @@ public abstract class DatasetKafkaSourceProvider implements Serializable {
     Iterator<DatasetKafkaSourceProvider> iterator = providerServiceLoader.iterator();
     while (iterator.hasNext()) {
       DatasetKafkaSourceProvider provider = iterator.next();
-      if (Double.parseDouble(provider.version) > maxVersion) {
+      if (provider.getVersion() > maxVersion) {
         maxProvider = provider;
-        maxVersion = Double.parseDouble(provider.version);
+        maxVersion = provider.getVersion();
       }
     }
     return maxProvider;

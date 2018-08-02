@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 同步发送kafka工具类
  * Created by hongxun on 16/6/7.
  */
 public class KafkaProducerUtil {
@@ -21,8 +22,9 @@ public class KafkaProducerUtil {
 
   private static Producer<String, String> createProducer(Map<String, Object> config) {
     Producer<String, String> producer = null;
-    if (producerPool.get(config) == null) {
-      synchronized (lock) {
+
+    synchronized (lock) {
+      if (producerPool.get(config) == null) {
         producer = producerPool.get(config);
         if (producer == null) {
           producer = new KafkaProducer(config);
@@ -30,9 +32,10 @@ public class KafkaProducerUtil {
 
         }
         return producer;
+
+      } else {
+        return producerPool.get(config);
       }
-    } else {
-      return producerPool.get(config);
     }
   }
 

@@ -13,4 +13,9 @@ public class Kafka08SinkProvider extends KafkaSinkProvider {
   public KafkaDataSink createDataSink(Map<String, Object> params) {
     return new Kafka08DataSyncSink(params);
   }
+
+  @Override
+  public double getVersion() {
+    return 0.8;
+  }
 }

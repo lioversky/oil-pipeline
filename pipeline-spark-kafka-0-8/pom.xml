@@ -35,6 +35,7 @@
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka_2.11</artifactId>
+      <version>${kafka_080.version}</version>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>

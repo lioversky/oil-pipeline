@@ -17,8 +17,6 @@ public class Kafka010DataSyncSink extends KafkaDataSink {
 
   public Kafka010DataSyncSink(Map<String, Object> params) {
     super(params);
-    topic = (String) params.get("topic");
-    kafkaParams = (Map<String, Object>) params.get("options");
   }
 
   @Override
