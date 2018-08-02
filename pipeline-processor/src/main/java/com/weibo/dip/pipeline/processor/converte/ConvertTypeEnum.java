@@ -54,6 +54,23 @@ public enum ConvertTypeEnum implements TypeEnum {
     public Convertor getConverter(Map<String, Object> params) {
       return new UrlArgsConvertor(params);
     }
+  }, Base64Encode {
+    @Override
+    public Convertor getConverter(Map<String, Object> params) {
+      return new Base64EncodeConvertor(params);
+    }
+  },
+  Base64Decode {
+    @Override
+    public Convertor getConverter(Map<String, Object> params) {
+      return new Base64DecodeConvertor(params);
+    }
+  },
+  MD5 {
+    @Override
+    public Convertor getConverter(Map<String, Object> params) {
+      return new MD5Convertor(params);
+    }
   };
 
   private static final Map<String, ConvertTypeEnum> types =
@@ -66,6 +83,9 @@ public enum ConvertTypeEnum implements TypeEnum {
           .put("converte_touppercase", ToUpperCase)
           .put("converte_strtoarray", StrToArray)
           .put("converte_urlargs", UrlArgsConverter)
+          .put("converte_base64encode", Base64Encode)
+          .put("converte_base64decode", Base64Decode)
+          .put("converte_md5", MD5)
           .build();
 
   public Convertor getConverter(Map<String, Object> params) {

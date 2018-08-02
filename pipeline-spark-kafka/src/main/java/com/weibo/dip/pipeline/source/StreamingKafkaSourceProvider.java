@@ -25,13 +25,18 @@ public abstract class StreamingKafkaSourceProvider implements Serializable {
    * 获取最大版本的provider实例
    */
   public static StreamingKafkaSourceProvider newInstance() {
-    // todo: 获取KafkaSourceProvider，取版本最大
+    double maxVersion = 0;
+    StreamingKafkaSourceProvider maxProvider = null;
+
     Iterator<StreamingKafkaSourceProvider> iterator = providerServiceLoader.iterator();
-    if (iterator.hasNext()) {
-      return iterator.next();
-    } else {
-      return null;
+    while (iterator.hasNext()) {
+      StreamingKafkaSourceProvider provider = iterator.next();
+      if (Double.parseDouble(provider.version) > maxVersion) {
+        maxProvider = provider;
+        maxVersion = Double.parseDouble(provider.version);
+      }
     }
+    return maxProvider;
   }
 
   /**
@@ -41,5 +46,5 @@ public abstract class StreamingKafkaSourceProvider implements Serializable {
    * @return 对应的streaming KafkaSource
    * @throws Exception 异常
    */
-  public abstract StreamingDataSource createDataSource(Map<String, Object> params) ;
+  public abstract StreamingDataSource createDataSource(Map<String, Object> params);
 }

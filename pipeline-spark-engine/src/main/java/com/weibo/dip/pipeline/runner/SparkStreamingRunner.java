@@ -7,6 +7,7 @@ import com.weibo.dip.pipeline.extract.FileTableExtractor;
 import com.weibo.dip.pipeline.job.PipelineJob;
 import com.weibo.dip.pipeline.sink.DatasetDataSink;
 import com.weibo.dip.pipeline.sink.DatasetSinkTypeEnum;
+import com.weibo.dip.pipeline.sink.JavaRddDataSinkTypeEnum;
 import com.weibo.dip.pipeline.sink.RddDataSink;
 import com.weibo.dip.pipeline.source.StreamingDataSource;
 import com.weibo.dip.pipeline.source.StreamingDataSourceTypeEnum;
@@ -85,6 +86,7 @@ public class SparkStreamingRunner extends Runner {
       sinkOptions = (Map<String, String>) sinkConfig.get("options");
 
       datasetSink = DatasetSinkTypeEnum.getDatasetSinkByMap(sinkConfig);
+      rddSink = JavaRddDataSinkTypeEnum.getRddDataSinkByMap(sinkConfig);
 
       String checkpointDirectory = (String) configs.get("checkpointDirectory");
       if (checkpointDirectory == null) {

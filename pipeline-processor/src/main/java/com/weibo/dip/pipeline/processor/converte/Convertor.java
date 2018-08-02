@@ -3,18 +3,20 @@ package com.weibo.dip.pipeline.processor.converte;
 import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.configuration.Configuration;
 import com.weibo.dip.pipeline.exception.AttrCanNotBeNullException;
+import com.weibo.dip.util.MD5Util;
 import com.weibo.dip.util.NumberUtil;
 import com.weibo.dip.util.StringUtil;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Create by hongxun on 2018/7/1
  */
-abstract class Convertor extends Configuration {
+abstract class Convertor<T> extends Configuration {
 
   public Convertor(Map<String, Object> params) {
     if (params != null) {
@@ -22,7 +24,7 @@ abstract class Convertor extends Configuration {
     }
   }
 
-  public abstract Object converte(Object data);
+  public abstract T converte(T data);
 
 }
 
@@ -194,5 +196,47 @@ class IntervalConvertor extends Convertor {
   @Override
   public Object converte(Object data) {
     return null;
+  }
+}
+
+/**
+ * base64转码器
+ */
+class Base64EncodeConvertor extends Convertor<byte[]> {
+
+  public Base64EncodeConvertor(Map<String, Object> params) {
+    super(params);
+  }
+
+  @Override
+  public byte[] converte(byte[] value) {
+    return Base64.encodeBase64(value);
+  }
+}
+
+/**
+ * base64解码器
+ */
+class Base64DecodeConvertor extends Convertor<byte[]> {
+
+  public Base64DecodeConvertor(Map<String, Object> params) {
+    super(params);
+  }
+
+  @Override
+  public byte[] converte(byte[] value) {
+    return Base64.decodeBase64(value);
+  }
+}
+
+class MD5Convertor extends Convertor<String> {
+
+  public MD5Convertor(Map<String, Object> params) {
+    super(params);
+  }
+
+  @Override
+  public String converte(String data) {
+    return MD5Util.md5(data);
   }
 }

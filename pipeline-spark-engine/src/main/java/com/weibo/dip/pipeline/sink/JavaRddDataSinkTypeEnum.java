@@ -21,13 +21,20 @@ public enum JavaRddDataSinkTypeEnum implements TypeEnum {
       return new ConsoleRddDataSink(params);
     }
   },
-  File {};
+  File {},
+  Distribution {
+    @Override
+    public JavaRddDataSink getRddDataSink(Map<String, Object> params) {
+      return new DistributeKafkaRddDataSink(params);
+    }
+  };
 
   private static final Map<String, JavaRddDataSinkTypeEnum> types =
       new ImmutableMap.Builder<String, JavaRddDataSinkTypeEnum>()
           .put("sink_kafka", Kafka)
           .put("sink_File", File)
           .put("sink_console", Console)
+          .put("sink_distribution", Distribution)
           .build();
 
   public JavaRddDataSink getRddDataSink(Map<String, Object> params) {

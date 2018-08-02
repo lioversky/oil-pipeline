@@ -14,7 +14,7 @@ public abstract class DatasetKafkaSourceProvider implements Serializable {
   /**
    * 记录版本号，每个实现类都要赋值
    */
-  protected String version;
+  protected String version = "0.7";
 
   /**
    * 加载所有service的类
@@ -27,13 +27,18 @@ public abstract class DatasetKafkaSourceProvider implements Serializable {
    * 获取最大版本的provider实例
    */
   public static DatasetKafkaSourceProvider newInstance() {
-    // todo: 获取KafkaSourceProvider，取版本最大
+    double maxVersion = 0;
+    DatasetKafkaSourceProvider maxProvider = null;
+
     Iterator<DatasetKafkaSourceProvider> iterator = providerServiceLoader.iterator();
-    if (iterator.hasNext()) {
-      return iterator.next();
-    } else {
-      return null;
+    while (iterator.hasNext()) {
+      DatasetKafkaSourceProvider provider = iterator.next();
+      if (Double.parseDouble(provider.version) > maxVersion) {
+        maxProvider = provider;
+        maxVersion = Double.parseDouble(provider.version);
+      }
     }
+    return maxProvider;
   }
 
   /**

@@ -17,6 +17,7 @@ public abstract class DatasetSink extends DatasetDataSink {
    * dataset与rdd写出相同时，调用rdd的write，不同写出时此为空
    */
   protected JavaRddDataSink rddDataSink;
+
   public DatasetSink(Map<String, Object> params) {
     super(params);
     sinkFormat = (String) params.get("format");
@@ -25,6 +26,7 @@ public abstract class DatasetSink extends DatasetDataSink {
   }
 }
 // todo: sink write
+
 /**
  * 输出到hdfs的sink
  */
@@ -43,6 +45,11 @@ class HdfsDatasetSink extends DatasetSink {
         .options(sinkOptions)
         .save();
   }
+
+  @Override
+  public void stop() {
+
+  }
 }
 
 /**
@@ -50,13 +57,25 @@ class HdfsDatasetSink extends DatasetSink {
  */
 class KafkaDatasetSinkDelegate extends DatasetSink {
 
+  private KafkaDataSink dataSink;
+  private KafkaSinkProvider provider = KafkaSinkProvider.newInstance();
+
   public KafkaDatasetSinkDelegate(Map<String, Object> params) {
     super(params);
+//    dataSink = provider.createDataSink(params);
+    rddDataSink = JavaRddDataSinkTypeEnum.getRddDataSinkByMap(params);
   }
 
   @Override
   public void write(Dataset dataset) {
+    rddDataSink.write(dataset.javaRDD());
+  }
 
+  @Override
+  public void stop() {
+    if (dataSink != null) {
+      dataSink.stop();
+    }
   }
 }
 
@@ -78,11 +97,19 @@ class ConsoleDatasetSink extends DatasetSink {
         Integer.parseInt(sinkOptions.get("numRows"));
       }
     }
-
+    rddDataSink = JavaRddDataSinkTypeEnum.getRddDataSinkByMap(params);
   }
 
   @Override
   public void write(Dataset dataset) {
-    dataset.show(numRows, truncate);
+//    dataset.show(numRows, truncate);
+    rddDataSink.write(dataset.javaRDD());
+  }
+
+  @Override
+  public void stop() {
+    if (rddDataSink != null) {
+      rddDataSink.stop();
+    }
   }
 }

@@ -8,5 +8,14 @@ package com.weibo.dip.pipeline;
 
 public abstract class Sink<T> extends Step {
 
+  /**
+   * 写出数据
+   * @param t 类型由各实现类指定
+   */
   public abstract void write(T t);
+
+  /**
+   * 关闭资源方法，如无资源关闭，空实现
+   */
+  public abstract void stop();
 }
