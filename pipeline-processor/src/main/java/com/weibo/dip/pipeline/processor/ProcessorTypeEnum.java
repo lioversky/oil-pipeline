@@ -4,14 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;
 import com.weibo.dip.pipeline.processor.add.FieldAddProcessor;
 import com.weibo.dip.pipeline.processor.add.FieldAddTypeEnum;
-import com.weibo.dip.pipeline.processor.base64.Base64Processor;
-import com.weibo.dip.pipeline.processor.base64.Base64TypeEnum;
 import com.weibo.dip.pipeline.processor.converte.ConvertProcessor;
 import com.weibo.dip.pipeline.processor.converte.ConvertTypeEnum;
 import com.weibo.dip.pipeline.processor.filter.ExprFilterProcessor;
 import com.weibo.dip.pipeline.processor.flatten.FlattenProcessor;
 import com.weibo.dip.pipeline.processor.flatten.FlattenerTypeEnum;
-import com.weibo.dip.pipeline.processor.md5.MD5EncodeProcessor;
 import com.weibo.dip.pipeline.processor.merge.FieldMergeProcessor;
 import com.weibo.dip.pipeline.processor.merge.FieldMergeTypeEnum;
 import com.weibo.dip.pipeline.processor.remove.FieldRemoveProcessor;
@@ -89,31 +86,6 @@ public enum ProcessorTypeEnum implements TypeEnum {
       FlattenerTypeEnum flattenerTypeEnum = FlattenerTypeEnum.getType(subType);
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
       return new FlattenProcessor(subParams, flattenerTypeEnum.getFlattener(subParams));
-    }
-  },
-  /**
-   * base64转码
-   */
-  Base64 {
-    @SuppressWarnings({"unchecked"})
-    @Override
-    public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-      String subType = (String) params.get("subType");
-      Base64TypeEnum base64TypeEnum = Base64TypeEnum.getType(subType);
-      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new Base64Processor(subParams, base64TypeEnum.getBase64er(subParams));
-    }
-  },
-
-  /**
-   * md5转码
-   */
-  MD5 {
-    @SuppressWarnings({"unchecked"})
-    @Override
-    public Processor getProcessor(Map<String, Object> params) throws RuntimeException {
-      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
-      return new MD5EncodeProcessor(subParams);
     }
   },
   /**
@@ -200,8 +172,6 @@ public enum ProcessorTypeEnum implements TypeEnum {
           .put("processor_converte", TypeConverte)
           .put("processor_filter", Filter)
           .put("processor_nestingflat", Flatten)
-          .put("processor_base64", Base64)
-          .put("processor_md5", MD5)
           .put("processor_fieldsplit", FieldSplit)
           .put("processor_fieldmerge", FieldMerge)
           .put("processor_fieldremove", FieldRemove)
