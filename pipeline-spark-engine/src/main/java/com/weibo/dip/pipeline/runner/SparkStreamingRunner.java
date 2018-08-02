@@ -1,8 +1,8 @@
 package com.weibo.dip.pipeline.runner;
 
 import com.google.common.collect.Lists;
-import com.weibo.dip.pipeline.extract.ExtractorTypeEnum;
 import com.weibo.dip.pipeline.extract.Extractor;
+import com.weibo.dip.pipeline.extract.ExtractorTypeEnum;
 import com.weibo.dip.pipeline.extract.FileTableExtractor;
 import com.weibo.dip.pipeline.job.PipelineJob;
 import com.weibo.dip.pipeline.sink.DatasetDataSink;
@@ -35,8 +35,6 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
  */
 public class SparkStreamingRunner extends Runner {
 
-  //  spark执行类型
-  private String engineType;
   private String sourceFormat;
   private Map<String, String> sourceOptions;
   protected List<Map<String, Object>> tables;
@@ -66,7 +64,6 @@ public class SparkStreamingRunner extends Runner {
   public SparkStreamingRunner(Map<String, Object> configs) {
     try {
       //source配置
-      engineType = (String) configs.get("engineType");
       Map<String, Object> sourceConfig = (Map<String, Object>) configs.get("sourceConfig");
       sourceFormat = (String) sourceConfig.get("format");
       sourceOptions = (Map<String, String>) sourceConfig.get("options");

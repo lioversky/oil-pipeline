@@ -12,12 +12,11 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.json.MetricsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
+import com.weibo.dip.pipeline.sink.PipelineKafkaProducer;
 import java.util.Map;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,7 @@ public class KafkaReporter extends ScheduledReporter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaReporter.class);
 
-  private KafkaProducer producer;
+  private PipelineKafkaProducer producer;
   private final Clock clock;
   private ObjectMapper objectMapper;
   private String topic;
@@ -60,7 +59,8 @@ public class KafkaReporter extends ScheduledReporter {
     this.kafkaConfig.put("acks", "0");
     //    在无法连接kafka时不会阻塞
     this.kafkaConfig.put("metadata.fetch.timeout.ms", "1000");
-    producer = new KafkaProducer(this.kafkaConfig);
+    //todo:创建实例
+    //    producer = new KafkaProducer(this.kafkaConfig);
   }
 
   /**
@@ -129,15 +129,15 @@ public class KafkaReporter extends ScheduledReporter {
     }
     if (json != null) {
       try {
-        if (producer == null) {
-          producer = new KafkaProducer(this.kafkaConfig);
-        }
-        producer.send(new ProducerRecord<String, String>(topic, json));
+//        if (producer == null) {
+//          producer = new KafkaProducer(this.kafkaConfig);
+//        }
+        producer.send(topic, json);
 
       } catch (Exception e) {
         LOGGER.warn("Unable to report to Kafka", e);
         try {
-          producer.close();
+          producer.stop();
         } catch (Exception e1) {
           LOGGER.warn("Error closing Kafka", e1);
         } finally {
@@ -152,7 +152,7 @@ public class KafkaReporter extends ScheduledReporter {
     try {
       super.stop();
     } finally {
-      producer.close();
+      producer.stop();
     }
 
   }

@@ -23,6 +23,16 @@
       <version>${parent.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-sql-kafka-${kafka010.version}_${scala.binary.version}</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.kafka</groupId>
+          <artifactId>kafka-clients</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
       <version>${kafka_010.version}</version>
@@ -36,10 +46,6 @@
           <artifactId>kafka_2.11</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-sql-kafka-${kafka010.version}_${scala.binary.version}</artifactId>
     </dependency>
   </dependencies>
 
