@@ -47,8 +47,7 @@ public class SubStringProcessorTest {
 
     Map<String, Object> params = ImmutableMap
         .of("fieldNotExistError", true, "subType", "substring_trim", "fieldName", fieldName);
-    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    Processor<Map<String,Object>> p = Processor.createProcessor(test_type, params);
 
     Map<String, Object> result = p.process(data);
 

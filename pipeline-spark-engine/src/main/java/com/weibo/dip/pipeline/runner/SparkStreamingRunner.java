@@ -42,7 +42,7 @@ public class SparkStreamingRunner extends Runner {
   private Extractor extractor;
 
   private Map<String, Object> preConfig;
-  private String[] preOutputColumns ;
+  private String[] preOutputColumns;
   private Map<String, Object> aggConfig;
   private Map<String, Object> proConfig;
 
@@ -62,9 +62,9 @@ public class SparkStreamingRunner extends Runner {
    */
   @SuppressWarnings({"unchecked"})
   public SparkStreamingRunner(Map<String, Object> configs) {
+    super(configs);
     try {
       //source配置
-      Map<String, Object> sourceConfig = (Map<String, Object>) configs.get("sourceConfig");
       sourceFormat = (String) sourceConfig.get("format");
       sourceOptions = (Map<String, String>) sourceConfig.get("options");
       tables = (List<Map<String, Object>>) sourceConfig.get("tables");
@@ -73,11 +73,11 @@ public class SparkStreamingRunner extends Runner {
       Map<String, Object> extractConfig = (Map<String, Object>) sourceConfig.get("extractor");
       extractor = ExtractorTypeEnum.getType(extractConfig);
       //process配置
-      Map<String, Object> processConfig = (Map<String, Object>) configs.get("processConfig");
+
       preConfig = (Map<String, Object>) processConfig.get("pre");
       aggConfig = (Map<String, Object>) processConfig.get("agg");
       proConfig = (Map<String, Object>) processConfig.get("pro");
-      Map<String, Object> sinkConfig = (Map<String, Object>) configs.get("sinkConfig");
+      //sink配置
       sinkFormat = (String) sinkConfig.get("format");
       sinkMode = (String) sinkConfig.get("mode");
       sinkOptions = (Map<String, String>) sinkConfig.get("options");
@@ -103,7 +103,8 @@ public class SparkStreamingRunner extends Runner {
 
   public void start() throws Exception {
 
-    SparkSession spark = SparkSession.builder().config(javaStreamingContext.sparkContext().getConf()).getOrCreate();
+    SparkSession spark = SparkSession.builder()
+        .config(javaStreamingContext.sparkContext().getConf()).getOrCreate();
     //其它依赖数据源
     if (tables != null) {
       FileTableExtractor.cacheTable(spark, tables);

@@ -32,8 +32,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> params = ImmutableMap
         .of("params", ImmutableMap.of("sourceField", "copy", "targetField", "copy1"), "subType",
             "fieldadd_copy");
-    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
 
     try {
       Map<String, Object> result = p.process(data);
@@ -55,8 +54,7 @@ public class FieldAddProcessorTest {
         .of("params", ImmutableMap.of("sourceField", "copy", "targetField", "copy1"), "subType",
             "fieldadd_copy",
             "overwriteIfFieldExist", false);
-    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
 
     try {
       Map<String, Object> result = p.process(data);
@@ -79,8 +77,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> params = ImmutableMap
         .of("subType", "fieldadd_datestr", "params",
             ImmutableMap.of("targetField", targetField, "dateFormat", dateFormat));
-    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
 
     try {
       Map<String, Object> result = p.process(data);
@@ -99,8 +96,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy", "copydata"));
     Map<String, Object> params = ImmutableMap
         .of("targetField", targetField, "subType", "fieldadd_unixtimestamp");
-    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
 
     try {
       Map<String, Object> result = p.process(data);
@@ -121,8 +117,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy", "copydata"));
     Map<String, Object> params = ImmutableMap
         .of("targetField", targetField, "subType", "fieldadd_timestamp");
-    Processor<Map<String,Object>> p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
 
     try {
       Map<String, Object> result = p.process(data);
@@ -142,7 +137,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("field", "aaabbbccc"));
     try {
 
-      Processor<Map<String,Object>> p = processorList.get(0);
+      Processor<Map<String, Object>> p = processorList.get(0);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("fieldcopy"));
       Assert.assertEquals("aaabbbccc", data.get("fieldcopy"));
@@ -157,7 +152,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("field", "aaabbbccc"));
     try {
 
-      Processor<Map<String,Object>> p = processorList.get(1);
+      Processor<Map<String, Object>> p = processorList.get(1);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("datetime"));
       Assert.assertEquals(8, data.get("datetime").toString().length());
@@ -173,7 +168,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("field", "aaabbbccc"));
     try {
 
-      Processor<Map<String,Object>> p = processorList.get(2);
+      Processor<Map<String, Object>> p = processorList.get(2);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("timestamp"));
       Assert.assertEquals(13, data.get("timestamp").toString().length());
@@ -189,7 +184,7 @@ public class FieldAddProcessorTest {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("field", "aaabbbccc"));
     try {
 
-      Processor<Map<String,Object>> p = processorList.get(3);
+      Processor<Map<String, Object>> p = processorList.get(3);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("unixtimestamp"));
       Assert.assertEquals(10, data.get("unixtimestamp").toString().length());

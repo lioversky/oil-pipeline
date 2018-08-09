@@ -17,7 +17,7 @@ public class PipelineMain {
     try {
       Map<String, Object> config = GsonUtil
           .loadJsonFromFile(jsonFile, GsonUtil.GsonType.OBJECT_MAP_TYPE);
-      String engineType = (String) config.get("engineType");
+      String engineType = (String) config.remove("engineType");
       Constructor<Runner> constructor = (Constructor<Runner>) Class.forName(engineType)
           .getConstructor(Map.class);
       Runner runner = constructor.newInstance((Map<String, Object>) config);

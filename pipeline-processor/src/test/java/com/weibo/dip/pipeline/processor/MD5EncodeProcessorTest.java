@@ -14,8 +14,7 @@ public class MD5EncodeProcessorTest {
 
   public void testMD5() {
     Map<String, Object> params = ImmutableMap.of("fieldName", "md5");
-    Processor<Map<String,Object>> md5 = ProcessorTypeEnum.getType("processor_md5")
-        .getProcessor(params);
+    Processor<Map<String,Object>> md5 = Processor.createProcessor("", params);
 
     try {
       Map<String, Object> result = md5.process(data);

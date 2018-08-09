@@ -13,7 +13,7 @@ import org.joda.time.DateTime;
  * 增加固定值
  * 增加各类型时间
  */
-public class FieldAddProcessor extends StructMapProcessor {
+public abstract class FieldAddProcessor extends StructMapProcessor {
 
   /**
    * 当目标列存在时是否覆盖
@@ -24,15 +24,9 @@ public class FieldAddProcessor extends StructMapProcessor {
    * 目标列名
    */
   private String targetField;
-  /**
-   * 处理类
-   */
-  private FieldAdder fieldAdder;
 
-  public FieldAddProcessor(Map<String, Object> params,
-      FieldAdder fieldAdder) {
+  public FieldAddProcessor(Map<String, Object> params) {
     super(params);
-    this.fieldAdder = fieldAdder;
     overwriteIfFieldExist =
         params.containsKey("overwriteIfFieldExist") && (boolean) params
             .get("overwriteIfFieldExist");
@@ -46,7 +40,7 @@ public class FieldAddProcessor extends StructMapProcessor {
     if (data.containsKey(targetField) && !overwriteIfFieldExist) {
       throw new FieldExistException(targetField);
     }
-    Object result = fieldAdder.fieldAdd(data);
+    Object result = fieldAdd(data);
     if (result != null) {
       data.put(targetField, result);
     }
@@ -59,6 +53,8 @@ public class FieldAddProcessor extends StructMapProcessor {
     configs.put("overwriteIfFieldExist", overwriteIfFieldExist);
     configs.put("targetField", targetField);
   }
+
+  abstract Object fieldAdd(Map<String, Object> data);
 }
 
 

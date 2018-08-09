@@ -8,17 +8,17 @@ import org.apache.spark.sql.Dataset;
  * 转换处理器
  * Create by hongxun on 2018/7/19
  */
-public class DatasetConvertProcessor extends FieldDatasetProcessor {
+public abstract class DatasetConvertProcessor extends FieldDatasetProcessor {
 
-  private DatasetConvertor convertor;
 
-  public DatasetConvertProcessor(Map<String, Object> params, DatasetConvertor convertor) {
+  public DatasetConvertProcessor(Map<String, Object> params) {
     super(params);
-    this.convertor = convertor;
   }
 
   @Override
   public Dataset fieldProcess(Dataset data) {
-    return convertor.convert(fieldName,data);
+    return convert(fieldName, data);
   }
+
+  abstract Dataset convert(String fieldName, Dataset dataset);
 }

@@ -1,12 +1,10 @@
 package com.weibo.dip.pipeline.stage;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.weibo.dip.pipeline.processor.Processor;
-import com.weibo.dip.pipeline.processor.ProcessorTypeEnum;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -17,6 +15,8 @@ import org.slf4j.LoggerFactory;
  * Create by hongxun on 2018/06/28
  */
 public abstract class PipelineStage extends Stage<Map<String, Object>> {
+
+  private static final String engine = "*";
 
   private static final Logger LOGGER = LoggerFactory.getLogger(PipelineStage.class);
 
@@ -65,16 +65,17 @@ public abstract class PipelineStage extends Stage<Map<String, Object>> {
 
     for (Map<String, Object> params : processorsCofnigList) {
       String processorType = (String) params.get("processorType");
-      String subType = Strings.nullToEmpty((String) params.get("subType"));
-      LOGGER.info(String.format("%s create processor: %s(%s)", stageId, processorType, subType));
-      Processor p = ProcessorTypeEnum.getType(processorType)
-          .getProcessor(params);
+      LOGGER.info(String.format("%s create processor: %s", stageId, processorType));
+      Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      Processor p = Processor.createProcessor(engine, processorType, subParams);
+
       if (p == null) {
-        throw new RuntimeException(String.format("Processor type %s not exist!!!", processorType));
+        throw new RuntimeException(
+            String.format("Processor type %s not exist!!!", processorType));
       }
       processorList.add(p);
-
     }
+
     return processorList;
   }
 }

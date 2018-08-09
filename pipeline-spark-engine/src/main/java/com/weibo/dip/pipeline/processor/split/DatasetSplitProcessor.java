@@ -8,17 +8,15 @@ import org.apache.spark.sql.Dataset;
 /**
  * Create by hongxun on 2018/7/19
  */
-public class DatasetSplitProcessor extends FieldDatasetProcessor {
+public abstract class DatasetSplitProcessor extends FieldDatasetProcessor {
 
-  private DatasetSpliter spliter;
 
-  public DatasetSplitProcessor(Map<String, Object> params, DatasetSpliter datasetSpliter) {
+  public DatasetSplitProcessor(Map<String, Object> params) {
     super(params);
-    spliter = datasetSpliter;
   }
-
+  abstract Dataset split(String fieldName, Dataset dataset);
   @Override
   public Dataset fieldProcess(Dataset data) {
-    return spliter.split(fieldName, data);
+    return split(fieldName, data);
   }
 }

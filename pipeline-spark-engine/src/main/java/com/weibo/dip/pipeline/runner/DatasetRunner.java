@@ -18,9 +18,8 @@ import org.apache.spark.sql.SparkSession;
 public abstract class DatasetRunner extends Runner {
 
   protected SparkSession sparkSession;
-  //  spark执行类型
-  protected String engineType;
-  protected Map<String, Object> sourceConfig;
+
+
   protected String sourceFormat;
   protected Map<String, String> sourceOptions;
   protected List<Map<String, Object>> tables;
@@ -29,7 +28,7 @@ public abstract class DatasetRunner extends Runner {
   protected Map<String, Object> aggConfig;
   protected Map<String, Object> proConfig;
 
-  protected Map<String, Object> sinkConfig;
+
   protected String sinkFormat;
   protected String sinkMode;
   protected Map<String, String> sinkOptions;
@@ -37,9 +36,8 @@ public abstract class DatasetRunner extends Runner {
   protected DatasetExtractor extractor;
 
   public DatasetRunner(Map<String, Object> configs) {
-    //source配置
-    engineType = (String) configs.get("engineType");
-    sourceConfig = (Map<String, Object>) configs.get("sourceConfig");
+    super(configs);
+
     sourceFormat = (String) sourceConfig.get("format");
     sourceOptions = (Map<String, String>) sourceConfig.get("options");
     tables = (List<Map<String, Object>>) sourceConfig.get("tables");
@@ -49,12 +47,11 @@ public abstract class DatasetRunner extends Runner {
     }
 
     //process配置
-    Map<String, Object> processConfig = (Map<String, Object>) configs.get("processConfig");
     preConfig = (Map<String, Object>) processConfig.get("pre");
     aggConfig = (Map<String, Object>) processConfig.get("agg");
     proConfig = (Map<String, Object>) processConfig.get("pro");
     //sink配置
-    sinkConfig = (Map<String, Object>) configs.get("sinkConfig");
+
     sinkFormat = (String) sinkConfig.get("format");
     sinkMode = (String) sinkConfig.get("mode");
     sinkOptions = (Map<String, String>) sinkConfig.get("options");

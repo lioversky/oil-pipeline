@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
  * 列拆分处理器.
  * Create by hongxun on 2018/6/29
  */
-public class FieldSplitProcessor extends StructMapProcessor {
+public abstract class FieldSplitProcessor extends StructMapProcessor {
 
 
   /**
@@ -27,12 +27,9 @@ public class FieldSplitProcessor extends StructMapProcessor {
   private String fieldName;
   protected boolean fieldNotExistError;
   private boolean overwriteIfFieldExist;
-  private Splitter splitter;
 
-  public FieldSplitProcessor(Map<String, Object> params,
-      Splitter splitter) {
+  public FieldSplitProcessor(Map<String, Object> params) {
     super(params);
-    this.splitter = splitter;
     String targetField = (String) params.get("targetFields");
 
     if (targetField.contains("|")) {
@@ -54,6 +51,8 @@ public class FieldSplitProcessor extends StructMapProcessor {
     fieldName = (String) params.get("fieldName");
 
   }
+
+  abstract Object split(Object value) throws Exception;
 
   /**
    * 分割成多列.
@@ -81,7 +80,7 @@ public class FieldSplitProcessor extends StructMapProcessor {
       Object value = data.get(fieldName);
       if (value != null) {
         //  数据处理
-        Object splitValue = splitter.split(value);
+        Object splitValue = split(value);
         if (splitValue != null) {
           //数组处理
           if (splitValue instanceof Object[]) {
