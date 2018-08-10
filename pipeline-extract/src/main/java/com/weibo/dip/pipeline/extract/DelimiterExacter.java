@@ -1,0 +1,44 @@
+package com.weibo.dip.pipeline.extract;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Create by hongxun on 2018/8/9
+ */
+public class DelimiterExacter extends StructMapExtractor {
+
+  private String split;
+
+
+  public DelimiterExacter(Map<String, Object> jsonMap) {
+    super(jsonMap);
+    this.columns = ((ArrayList<String>) jsonMap.get("columns")).toArray(new String[0]);
+    this.split = (String) jsonMap.get("split");
+  }
+
+  @Override
+  public List<Map<String, Object>> extract(String line) {
+
+    List<Map<String, Object>> records = null;
+
+    String[] record = line.split(split, -1);
+
+    if (record.length == columns.length) {
+
+      records = new ArrayList<>();
+
+      Map<String, Object> recordMap = new HashMap<>();
+
+      for (int index = 0; index < columns.length; index++) {
+        recordMap.put(columns[index], record[index]);
+      }
+      records.add(recordMap);
+    }
+
+    return records;
+  }
+
+}

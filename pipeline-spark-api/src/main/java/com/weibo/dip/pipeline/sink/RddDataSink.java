@@ -1,9 +1,7 @@
 package com.weibo.dip.pipeline.sink;
 
-import com.weibo.dip.pipeline.Sink;
 import java.util.Map;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.Row;
 
 /**

@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.sink;
+package com.weibo.dip.pipeline.parse;
 
 import com.weibo.dip.util.GsonUtil;
 import java.io.Serializable;

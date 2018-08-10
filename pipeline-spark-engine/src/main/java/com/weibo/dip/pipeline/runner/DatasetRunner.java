@@ -3,6 +3,7 @@ package com.weibo.dip.pipeline.runner;
 import com.codahale.metrics.MetricRegistry;
 import com.weibo.dip.pipeline.extract.DatasetExtractor;
 import com.weibo.dip.pipeline.extract.DatasetExtractorTypeEnum;
+import com.weibo.dip.pipeline.extract.Extractor;
 import com.weibo.dip.pipeline.stage.DatasetAggregateStage;
 import com.weibo.dip.pipeline.stage.DatasetProcessStage;
 import com.weibo.dip.pipeline.stage.Stage;
@@ -17,6 +18,7 @@ import org.apache.spark.sql.SparkSession;
  */
 public abstract class DatasetRunner extends Runner {
 
+  private String engine = "dataset";
   protected SparkSession sparkSession;
 
 
@@ -43,7 +45,7 @@ public abstract class DatasetRunner extends Runner {
     tables = (List<Map<String, Object>>) sourceConfig.get("tables");
     Map<String, Object> extractConfig = (Map<String, Object>) sourceConfig.get("extractor");
     if (extractConfig != null) {
-      extractor = DatasetExtractorTypeEnum.getType(extractConfig);
+      extractor = (DatasetExtractor) Extractor.createExtractor(engine, extractConfig);
     }
 
     //process配置

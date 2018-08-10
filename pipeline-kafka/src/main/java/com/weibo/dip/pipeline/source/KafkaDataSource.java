@@ -1,6 +1,5 @@
 package com.weibo.dip.pipeline.source;
 
-import com.weibo.dip.pipeline.Source;
 import java.util.Map;
 
 /**

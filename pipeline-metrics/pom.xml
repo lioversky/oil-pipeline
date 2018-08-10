@@ -9,18 +9,16 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>pipeline-monitor</artifactId>
+  <artifactId>pipeline-metrics</artifactId>
 
   <dependencies>
     <dependency>
-      <groupId>oil-pipeline</groupId>
-      <artifactId>pipeline-api</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <groupId>io.dropwizard.metrics</groupId>
+      <artifactId>metrics-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
+      <groupId>io.dropwizard.metrics</groupId>
+      <artifactId>metrics-json</artifactId>
     </dependency>
   </dependencies>
 </project>

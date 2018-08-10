@@ -39,4 +39,9 @@ public class StreamingKafka010DataSource extends StreamingDataSource {
         );
     return stream.map(record -> record.value());
   }
+
+  @Override
+  public void stop() {
+
+  }
 }

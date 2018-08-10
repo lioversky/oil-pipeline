@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.extract;
+package com.weibo.dip.pipeline.register;
 
 import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;

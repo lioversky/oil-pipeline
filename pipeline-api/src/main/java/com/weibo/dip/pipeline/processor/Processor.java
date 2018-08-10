@@ -1,12 +1,15 @@
 package com.weibo.dip.pipeline.processor;
 
 import com.weibo.dip.pipeline.configuration.Configuration;
-import com.weibo.dip.pipeline.exception.PipelineException;
-import com.weibo.dip.util.PropertiesUtil;
+import com.weibo.dip.pipeline.util.PropertiesUtil;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -14,33 +17,11 @@ import java.util.regex.Pattern;
  */
 public abstract class Processor<T> extends Configuration {
 
-  private static Map<String, Properties> engineMap;
-  private static Set<String> engineSet;
-  private final static String DEFAULT_PREFIX = "*";
-  private final static Pattern ENGINE_REGEX_PATTERN = Pattern.compile("^(\\*|[a-zA-Z]+)\\.(.+)");
+  private final static String PROPERTIES_NAME = "processors.properties";
 
-  static {
-    Properties properties = PropertiesUtil.load("processors.properties");
-    engineMap = PropertiesUtil.subProperties(properties,
-        ENGINE_REGEX_PATTERN);
-    engineSet = engineMap.keySet();
-    //将默认*的内容附加到所有的engine中
-    if (engineMap.containsKey(DEFAULT_PREFIX)) {
-      Properties defaultSubProperties = engineMap.get(DEFAULT_PREFIX);
-      for (Map.Entry<String, Properties> entry : engineMap.entrySet()) {
-        if (DEFAULT_PREFIX.equals(entry.getKey())) {
-          continue;
-        } else {
-          for (Map.Entry<Object, Object> defaultEntry : defaultSubProperties.entrySet()) {
-            if (!entry.getValue().containsKey(defaultEntry.getKey())) {
-              entry.getValue().put(defaultEntry.getKey(), defaultEntry.getValue());
-            }
-          }
-        }
-      }
-    }
+  private final static String DEFAULT_PREFIX = PropertiesUtil.DEFAULT_PREFIX;
 
-  }
+  private static Map<String, Properties> engineMap = PropertiesUtil.initEngineMap(PROPERTIES_NAME);
 
   /**
    * 按照engine，typeName获取对应的Processor类名
@@ -52,17 +33,7 @@ public abstract class Processor<T> extends Configuration {
    * @return Processor类名
    */
   public static String getProcessorClassName(String engine, String typeName) {
-    if (engineMap.containsKey(engine)) {
-      Properties typeProperties = engineMap.get(engine);
-      if (typeProperties.containsKey(typeName)) {
-        return typeProperties.getProperty(typeName);
-      }
-    } else {
-      if (engineMap.containsKey(DEFAULT_PREFIX)) {
-        return engineMap.get(DEFAULT_PREFIX).getProperty(typeName);
-      }
-    }
-    return null;
+    return PropertiesUtil.getClassName(engineMap, engine, typeName);
   }
 
   /**
@@ -110,6 +81,7 @@ public abstract class Processor<T> extends Configuration {
     }
     return createProcessor(params, className);
   }
+
 
   public Processor() {
   }

@@ -1,6 +1,5 @@
 package com.weibo.dip.pipeline.sink;
 
-import com.weibo.dip.pipeline.Sink;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
 

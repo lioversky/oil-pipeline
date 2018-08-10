@@ -5,13 +5,11 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.SparkSession;
 
 /**
+ * kafka 不同版本的source代理
  * Create by hongxun on 2018/7/30
  */
 
-/**
- * kafka 不同版本的source代理
- */
-class DatasetKafkaSourceDelegate extends DatasetSource {
+public class DatasetKafkaSourceDelegate extends DatasetSource {
 
   /**
    * 实际的对应版本的datasetSource
@@ -36,32 +34,10 @@ class DatasetKafkaSourceDelegate extends DatasetSource {
   public Dataset createSource(SparkSession sparkSession) {
     return datasetSource.createSource(sparkSession);
   }
-}
-
-/**
- * 调用 sparkSession的 read,生成Dataset
- */
-class DatasetFileSource extends DatasetSource {
-
-  /**
-   * 输入源类型
-   */
-  protected String sourceFormat;
-  /**
-   * 源配置
-   */
-  protected Map<String, String> sourceOptions;
-
-  public DatasetFileSource(Map<String, Object> params) {
-    super(params);
-  }
 
   @Override
-  public Dataset createSource(SparkSession sparkSession) {
-    return sparkSession
-        .read()
-        .format(sourceFormat)
-        .options(sourceOptions).load();
-
+  public void stop() {
+    datasetSource.stop();
   }
 }
+

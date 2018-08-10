@@ -1,10 +1,10 @@
 package com.weibo.dip.pipeline.runner;
 
-import com.weibo.dip.pipeline.extract.FileTableExtractor;
+import com.weibo.dip.pipeline.register.FileTableExtractor;
 import com.weibo.dip.pipeline.sink.DatasetDataSink;
-import com.weibo.dip.pipeline.sink.DatasetSinkTypeEnum;
+import com.weibo.dip.pipeline.sink.Sink;
 import com.weibo.dip.pipeline.source.DatasetSource;
-import com.weibo.dip.pipeline.source.DatasetSourceTypeEnum;
+import com.weibo.dip.pipeline.source.Source;
 import com.weibo.dip.pipeline.udf.UDFRegister;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
@@ -24,8 +24,8 @@ public class SparkRunner extends DatasetRunner {
   @SuppressWarnings({"unchecked"})
   public SparkRunner(Map<String, Object> configs) {
     super(configs);
-    datasetSource = DatasetSourceTypeEnum.getType(sourceFormat, sourceConfig);
-    datasetSink = DatasetSinkTypeEnum.getDatasetSinkByMap(sinkConfig);
+    datasetSource = (DatasetSource) Source.createSource(sourceFormat, sourceConfig);
+    datasetSink = (DatasetDataSink) Sink.createSink(sinkFormat,sinkConfig);
   }
 
   @Override

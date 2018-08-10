@@ -74,4 +74,9 @@ public class DatasetKafka010DataSource extends DatasetSource {
     //返回dataset
     return sparkSession.createDataFrame(stringJavaRDD, schema);
   }
+
+  @Override
+  public void stop() {
+
+  }
 }

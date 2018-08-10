@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.sink;
+package com.weibo.dip.pipeline.parse;
 
 import com.google.common.collect.ImmutableMap;
 import com.weibo.dip.pipeline.enums.TypeEnum;
@@ -7,21 +7,21 @@ import java.util.Map;
 /**
  * Create by hongxun on 2018/8/1
  */
-public enum  RowParserTypeEnum implements TypeEnum {
+public enum RowParserTypeEnum implements TypeEnum {
 
-  Delimiter{
+  Delimiter {
     @Override
     public RowParser getRowParser(Map<String, Object> params) {
       return new DelimiterParser(params);
     }
   },
-  JsonStr{
+  JsonStr {
     @Override
     public RowParser getRowParser(Map<String, Object> params) {
       return new JsonStrParser(params);
     }
   },
-  Summon{
+  Summon {
     @Override
     public RowParser getRowParser(Map<String, Object> params) {
       return new SummonParser(params);

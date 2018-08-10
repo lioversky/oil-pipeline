@@ -2,15 +2,14 @@ package com.weibo.dip.pipeline.runner;
 
 import com.google.common.collect.Lists;
 import com.weibo.dip.pipeline.extract.Extractor;
-import com.weibo.dip.pipeline.extract.ExtractorTypeEnum;
-import com.weibo.dip.pipeline.extract.FileTableExtractor;
+import com.weibo.dip.pipeline.extract.StructMapExtractor;
+import com.weibo.dip.pipeline.register.FileTableExtractor;
 import com.weibo.dip.pipeline.job.PipelineJob;
 import com.weibo.dip.pipeline.sink.DatasetDataSink;
-import com.weibo.dip.pipeline.sink.DatasetSinkTypeEnum;
-import com.weibo.dip.pipeline.sink.JavaRddDataSinkTypeEnum;
 import com.weibo.dip.pipeline.sink.RddDataSink;
+import com.weibo.dip.pipeline.sink.Sink;
+import com.weibo.dip.pipeline.source.Source;
 import com.weibo.dip.pipeline.source.StreamingDataSource;
-import com.weibo.dip.pipeline.source.StreamingDataSourceTypeEnum;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,11 +34,13 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
  */
 public class SparkStreamingRunner extends Runner {
 
+  private String engine = "streaming";
+
   private String sourceFormat;
   private Map<String, String> sourceOptions;
   protected List<Map<String, Object>> tables;
 
-  private Extractor extractor;
+  private StructMapExtractor extractor;
 
   private Map<String, Object> preConfig;
   private String[] preOutputColumns;
@@ -48,8 +49,7 @@ public class SparkStreamingRunner extends Runner {
 
   private String sinkFormat;
   private String sinkMode;
-  private RddDataSink rddSink;
-  private DatasetDataSink datasetSink;
+//  private Sink dataSink;
 
   private Map<String, String> sinkOptions;
 
@@ -68,10 +68,11 @@ public class SparkStreamingRunner extends Runner {
       sourceFormat = (String) sourceConfig.get("format");
       sourceOptions = (Map<String, String>) sourceConfig.get("options");
       tables = (List<Map<String, Object>>) sourceConfig.get("tables");
-      streamingDataSource = StreamingDataSourceTypeEnum.getType(sourceFormat, sourceConfig);
+      streamingDataSource = (StreamingDataSource) Source
+          .createSource(engine, sourceFormat, sourceConfig);
 
       Map<String, Object> extractConfig = (Map<String, Object>) sourceConfig.get("extractor");
-      extractor = ExtractorTypeEnum.getType(extractConfig);
+      extractor = (StructMapExtractor) Extractor.createExtractor(engine, extractConfig);
       //process配置
 
       preConfig = (Map<String, Object>) processConfig.get("pre");
@@ -81,9 +82,6 @@ public class SparkStreamingRunner extends Runner {
       sinkFormat = (String) sinkConfig.get("format");
       sinkMode = (String) sinkConfig.get("mode");
       sinkOptions = (Map<String, String>) sinkConfig.get("options");
-
-      datasetSink = DatasetSinkTypeEnum.getDatasetSinkByMap(sinkConfig);
-      rddSink = JavaRddDataSinkTypeEnum.getRddDataSinkByMap(sinkConfig);
 
       String checkpointDirectory = (String) configs.get("checkpointDirectory");
       if (checkpointDirectory == null) {
@@ -99,7 +97,6 @@ public class SparkStreamingRunner extends Runner {
     }
 
   }
-
 
   public void start() throws Exception {
 
@@ -144,6 +141,9 @@ public class SparkStreamingRunner extends Runner {
       fields.add(field);
     }
     if (aggConfig.containsKey("tempTableName")) {
+      DatasetDataSink dataSink = (DatasetDataSink) Sink
+          .createSink("dataset", sinkFormat, sinkConfig);
+
       String tempTableName = (String) aggConfig.get("tempTableName");
       String sql = (String) aggConfig.get("sql");
       StructType schema = DataTypes.createStructType(fields);
@@ -154,10 +154,9 @@ public class SparkStreamingRunner extends Runner {
         if (proConfig != null) {
           dataset = pro(dataset);
         }
-        write(dataset);
+        write(dataset, dataSink);
       });
     }
-
 
   }
 
@@ -182,7 +181,7 @@ public class SparkStreamingRunner extends Runner {
     preOutputColumns = ((List<String>) preConfig.get("output")).toArray(new String[0]);
     PipelineJob job = new PipelineJob(preConfig);
 
-    Extractor sourceExtractor = extractor;
+    StructMapExtractor sourceExtractor = extractor;
     FlatMapFunction<String, Row> processFunction = new FlatMapFunction<String, Row>() {
       @Override
       public Iterator<Row> call(String s) throws Exception {
@@ -206,12 +205,13 @@ public class SparkStreamingRunner extends Runner {
   }
 
 
-  private void write(Dataset dataset) {
-    datasetSink.write(dataset);
+  private void write(Dataset dataset, DatasetDataSink dataSink) {
+    dataSink.write(dataset);
   }
 
   private void write(JavaDStream dstream) {
-    ((JavaDStream<Row>) dstream).foreachRDD(rdd -> rddSink.write(rdd));
+    RddDataSink dataSink = (RddDataSink) Sink.createSink(engine, sinkFormat, sinkConfig);
+    ((JavaDStream<Row>) dstream).foreachRDD(rdd -> dataSink.write(rdd));
   }
 
   private JavaStreamingContext createContext(Map<String, Object> jsonMap) throws Exception {

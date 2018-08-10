@@ -27,6 +27,7 @@
     <module>pipeline-kafka</module>
     <module>pipeline-kafka-0-8</module>
     <module>pipeline-kafka-0-10</module>
+    <module>pipeline-metrics</module>
   </modules>
 
   <properties>

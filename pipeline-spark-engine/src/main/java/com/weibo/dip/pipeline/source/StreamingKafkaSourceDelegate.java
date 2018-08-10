@@ -4,28 +4,10 @@ import java.util.Map;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaStreamingContext;
 
-
-/**
- * 按batch time读取对应时间段的文件，生成DStream
- * Create by hongxun on 2018/7/5
- */
-class StreamingHdfsTimeDataSource extends StreamingDataSource {
-
-  // todo: HdfsTime Dstream
-  public StreamingHdfsTimeDataSource(Map map) {
-    super(map);
-  }
-
-  @Override
-  public JavaDStream createSource(JavaStreamingContext streamingContext) {
-    return null;
-  }
-}
-
 /**
  * Create by hongxun on 2018/7/5
  */
-class StreamingKafkaSourceDelegate extends StreamingDataSource {
+public class StreamingKafkaSourceDelegate extends StreamingDataSource {
 
   /**
    * 实际的对应版本的kafka Source
@@ -51,5 +33,10 @@ class StreamingKafkaSourceDelegate extends StreamingDataSource {
   public JavaDStream createSource(JavaStreamingContext streamingContext) {
 
     return kafkaSource.createSource(streamingContext);
+  }
+
+  @Override
+  public void stop() {
+    kafkaSource.stop();
   }
 }
