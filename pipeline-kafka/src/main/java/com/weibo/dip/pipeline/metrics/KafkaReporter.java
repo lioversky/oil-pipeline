@@ -12,7 +12,9 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.json.MetricsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
-import com.weibo.dip.pipeline.sink.PipelineKafkaProducer;
+import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
+import com.weibo.dip.pipeline.util.KafkaProducerUtil;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.SortedMap;
@@ -28,12 +30,11 @@ public class KafkaReporter extends ScheduledReporter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaReporter.class);
 
-  private PipelineKafkaProducer producer;
   private final Clock clock;
   private ObjectMapper objectMapper;
   private String topic;
   private String business;
-  private Properties kafkaConfig;
+  private Map<String, Object> kafkaConfig;
 
   public static Builder forRegistry(MetricRegistry registry) {
     return new Builder(registry);
@@ -50,7 +51,7 @@ public class KafkaReporter extends ScheduledReporter {
     this.topic = (String) kafkaConfig.remove("topic");
     this.business = (String) kafkaConfig.remove("business");
 
-    this.kafkaConfig = new Properties();
+    this.kafkaConfig = new HashMap<>();
     this.kafkaConfig.put("bootstrap.servers", kafkaConfig.getProperty("servers"));
     this.kafkaConfig
         .put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -132,17 +133,10 @@ public class KafkaReporter extends ScheduledReporter {
 //        if (producer == null) {
 //          producer = new KafkaProducer(this.kafkaConfig);
 //        }
-        producer.send(topic, json);
+        KafkaProducerUtil.getProducer(kafkaConfig).send(topic, json);
 
       } catch (Exception e) {
         LOGGER.warn("Unable to report to Kafka", e);
-        try {
-          producer.stop();
-        } catch (Exception e1) {
-          LOGGER.warn("Error closing Kafka", e1);
-        } finally {
-          producer = null;
-        }
       }
     }
   }
@@ -152,7 +146,7 @@ public class KafkaReporter extends ScheduledReporter {
     try {
       super.stop();
     } finally {
-      producer.stop();
+
     }
 
   }

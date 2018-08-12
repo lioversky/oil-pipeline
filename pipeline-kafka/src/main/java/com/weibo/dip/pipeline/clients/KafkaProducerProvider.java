@@ -1,7 +1,7 @@
-package com.weibo.dip.pipeline.sink;
+package com.weibo.dip.pipeline.clients;
 
 import com.weibo.dip.pipeline.provider.KafkaProvider;
-import java.io.Serializable;
+import com.weibo.dip.pipeline.sink.KafkaDataSink;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -10,31 +10,31 @@ import java.util.ServiceLoader;
  * kafka 不同版本的sink生成器，由各版本分别继承生成source
  * Create by hongxun on 2018/8/1
  */
-public abstract class KafkaSinkProvider extends KafkaProvider {
+public abstract class KafkaProducerProvider extends KafkaProvider {
 
   /**
    * 创建sink的抽象方法
    *
    * @param params 配置参数
    */
-  public abstract KafkaDataSink createDataSink(Map<String, Object> params);
+  public abstract PipelineKafkaProducer createProducer(Map<String, Object> params);
 
   /**
    * 加载所有service的类
    */
-  private static ServiceLoader<KafkaSinkProvider> providerServiceLoader = ServiceLoader
-      .load(KafkaSinkProvider.class);
+  private static ServiceLoader<KafkaProducerProvider> producerServiceLoader = ServiceLoader
+      .load(KafkaProducerProvider.class);
 
   /**
    * 获取最大版本的provider实例
    */
-  public static synchronized KafkaSinkProvider newInstance() {
+  public static synchronized KafkaProducerProvider newInstance() {
     double maxVersion = 0;
-    KafkaSinkProvider maxProvider = null;
+    KafkaProducerProvider maxProvider = null;
 
-    Iterator<KafkaSinkProvider> iterator = providerServiceLoader.iterator();
+    Iterator<KafkaProducerProvider> iterator = producerServiceLoader.iterator();
     while (iterator.hasNext()) {
-      KafkaSinkProvider provider = iterator.next();
+      KafkaProducerProvider provider = iterator.next();
       if (provider.getVersion() > maxVersion) {
         maxProvider = provider;
         maxVersion = provider.getVersion();

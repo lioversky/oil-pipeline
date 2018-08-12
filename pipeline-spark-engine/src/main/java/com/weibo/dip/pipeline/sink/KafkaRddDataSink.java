@@ -12,11 +12,15 @@ import org.apache.spark.sql.Row;
 public class KafkaRddDataSink extends JavaRddDataSink {
 
   protected KafkaDataSink kafkaDataSink;
-  private KafkaSinkProvider provider = KafkaSinkProvider.newInstance();
 
   public KafkaRddDataSink(Map<String, Object> params) {
     super(params);
-    kafkaDataSink = provider.createDataSink(params);
+    String sync = (String) params.get("sync");
+    if (sync == null || "true".equals(sync)) {
+      kafkaDataSink = new KafkaDataSyncSink(params);
+    } else {
+      kafkaDataSink = new KafkaDataAsyncSink(params);
+    }
   }
 
   @Override

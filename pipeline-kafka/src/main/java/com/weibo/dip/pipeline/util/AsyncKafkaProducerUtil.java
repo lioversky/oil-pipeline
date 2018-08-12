@@ -1,6 +1,8 @@
 package com.weibo.dip.pipeline.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.weibo.dip.pipeline.clients.KafkaProducerProvider;
+import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
 import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -9,11 +11,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
-import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +22,10 @@ public class AsyncKafkaProducerUtil {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AsyncKafkaProducerUtil.class);
   private static BlockingQueue<TopicAndMsg> queue = new LinkedBlockingQueue<>(500000);
-  private static Map<String, Producer<String, String>> topicProducerMap = new HashMap<String, Producer<String, String>>();
-  private static Map<Map<String, Object>, Producer<String, String>> producerPool = new HashMap<>();
+  private static Map<String, PipelineKafkaProducer<String, String>> topicProducerMap = new HashMap<>();
+  private static Map<Map<String, Object>, PipelineKafkaProducer<String, String>> producerPool = new HashMap<>();
   private static Object lock = new Object();
+  private static KafkaProducerProvider producerProvider = KafkaProducerProvider.newInstance();
 
   static {
     ExecutorService pool = Executors.newFixedThreadPool(
@@ -43,9 +41,9 @@ public class AsyncKafkaProducerUtil {
     synchronized (lock) {
       if (topicProducerMap.get(_topic) == null) {
 
-        Producer<String, String> producer = producerPool.get(config);
+        PipelineKafkaProducer<String, String> producer = producerPool.get(config);
         if (producer == null) {
-          producer = new KafkaProducer(config);
+          producer = producerProvider.createProducer(config);
           producerPool.put(config, producer);
         }
         topicProducerMap.put(_topic, producer);
@@ -53,7 +51,7 @@ public class AsyncKafkaProducerUtil {
     }
   }
 
-  public static Producer<String, String> getProducer(String topic) {
+  public static PipelineKafkaProducer<String, String> getProducer(String topic) {
     return topicProducerMap.get(topic);
   }
 
@@ -100,29 +98,15 @@ public class AsyncKafkaProducerUtil {
         try {
           TopicAndMsg topicAndMsg = queue.take();
           if (topicAndMsg != null) {
-            Producer p = getProducer(topicAndMsg.topic);
+            PipelineKafkaProducer p = getProducer(topicAndMsg.topic);
             if (p != null) {
-              p.send(new ProducerRecord<String, String>(topicAndMsg.topic, topicAndMsg.msg),
-                  new Callback() {
-                    //todo:回调函数中记录成功率
-                    @Override
-                    public void onCompletion(RecordMetadata metadata, Exception exception) {
-                      if (metadata != null) {
-                        String topicMetricsName = "async_sendto_kafka_" + topicAndMsg.topic;
-                        MetricsSystem.getCounter(topicMetricsName).inc();
-                        LOGGER.info(
-                            "async offset: " + metadata.offset() + ", partition: " + metadata
-                                .partition()
-                                + ", message: " + topicAndMsg.msg);
-                      } else {
-                        String errorMetricsName = "async_sendto_kafka_error_" + topicAndMsg.topic;
-                        MetricsSystem.getCounter(errorMetricsName).inc();
-                        LOGGER.error(
-                            String.format("Send kafka to topic: %s error!", topicAndMsg.topic),
-                            exception);
-                      }
-                    }
-                  });
+              p.send(topicAndMsg.topic, topicAndMsg.msg, (success, exception) -> {
+                if (success) {
+                  MetricsSystem.getCounter("kafka_send_async_" + topicAndMsg.topic).inc();
+                } else {
+                  MetricsSystem.getCounter("kafka_send_async_" + topicAndMsg.topic).inc();
+                }
+              });
             }
           }
         } catch (Exception e) {

@@ -1,10 +1,10 @@
 package com.weibo.dip.pipeline.util;
 
 
+import com.weibo.dip.pipeline.clients.KafkaProducerProvider;
+import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,19 +15,19 @@ import org.slf4j.LoggerFactory;
 public class KafkaProducerUtil {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducerUtil.class);
-  private static Map<Map<String, Object>, Producer<String, String>> producerPool = new HashMap<>();
+  private static Map<Map<String, Object>, PipelineKafkaProducer<String, String>> producerPool = new HashMap<>();
 
   private static Object lock = new Object();
+  private static KafkaProducerProvider producerProvider = KafkaProducerProvider.newInstance();
 
-
-  private static Producer<String, String> createProducer(Map<String, Object> config) {
-    Producer<String, String> producer = null;
+  private static PipelineKafkaProducer<String, String> createProducer(Map<String, Object> config) {
+    PipelineKafkaProducer<String, String> producer = null;
 
     synchronized (lock) {
       if (producerPool.get(config) == null) {
         producer = producerPool.get(config);
         if (producer == null) {
-          producer = new KafkaProducer(config);
+          producer = producerProvider.createProducer(config);
           producerPool.put(config, producer);
 
         }
@@ -40,11 +40,16 @@ public class KafkaProducerUtil {
   }
 
 
-  public static Producer<String, String> getProducer(Map<String, Object> config) {
+  public static PipelineKafkaProducer<String, String> getProducer(Map<String, Object> config) {
     if (!producerPool.containsKey(config)) {
       return createProducer(config);
     }
     return producerPool.get(config);
   }
 
+  public static void closeProducer(Map<String, Object> config) {
+    if (producerPool.containsKey(config)) {
+      producerPool.remove(config).stop();
+    }
+  }
 }
