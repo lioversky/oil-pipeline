@@ -35,7 +35,6 @@ public abstract class Stage<T> implements Serializable {
    * 递归创建stage.
    *
    * @param stagesConfigList stage配置列表
-   * @param parentRegistry 父metricRegistry，根使用MetricSystem
    * @return stage列表
    * @throws Exception stage类型不存在异常
    */

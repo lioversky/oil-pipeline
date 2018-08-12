@@ -10,6 +10,7 @@ import org.apache.spark.sql.Dataset;
 public abstract class DatasetDataSink extends Sink<Dataset> {
 
   public DatasetDataSink(Map<String, Object> params) {
+    super(params);
   }
 
   /**

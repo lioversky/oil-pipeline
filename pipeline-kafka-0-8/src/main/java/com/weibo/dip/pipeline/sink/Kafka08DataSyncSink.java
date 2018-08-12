@@ -1,11 +1,13 @@
 package com.weibo.dip.pipeline.sink;
 
+import com.weibo.dip.pipeline.metrics.MetricsSystem;
+import com.weibo.dip.pipeline.util.KafkaProducerUtil;
 import java.util.Map;
 import org.apache.kafka.clients.producer.Callback;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * kafka 0.8版本同步sink
@@ -13,15 +15,10 @@ import org.apache.kafka.clients.producer.RecordMetadata;
  */
 public class Kafka08DataSyncSink extends KafkaDataSink {
 
-  private transient Producer<String, String> producer;
-  private String topic;
-  private Map<String, Object> kafkaParams;
+  private static final Logger LOGGER = LoggerFactory.getLogger(Kafka08DataSyncSink.class);
 
   public Kafka08DataSyncSink(Map<String, Object> params) {
     super(params);
-    topic = (String) params.get("topic");
-    kafkaParams = (Map<String, Object>) params.get("options");
-    producer = new KafkaProducer(kafkaParams);
   }
 
   @Override
@@ -31,16 +28,21 @@ public class Kafka08DataSyncSink extends KafkaDataSink {
 
   @Override
   public void write(String _topic, String msg) {
-    producer.send(new ProducerRecord<>(_topic, msg),
+    KafkaProducerUtil.getProducer(kafkaParams).send(new ProducerRecord<>(_topic, msg),
         new Callback() {
           @Override
           public void onCompletion(RecordMetadata metadata, Exception exception) {
             if (metadata != null) {
-              System.out.println(
+              String topicMetricsName = metricsName + "_" + _topic;
+              MetricsSystem.getCounter(topicMetricsName).inc();
+              LOGGER.info(
                   "offset: " + metadata.offset() + ", partition: " + metadata.partition()
                       + ", message: " + msg);
             } else {
-              exception.printStackTrace();
+              String errorMetricsName = metricsName + "_error_" + _topic;
+              MetricsSystem.getCounter(errorMetricsName).inc();
+              LOGGER.error(String.format("Send kafka to topic: %s error!", _topic), exception);
+
             }
           }
         });
@@ -48,8 +50,6 @@ public class Kafka08DataSyncSink extends KafkaDataSink {
 
   @Override
   public void stop() {
-    if (producer != null) {
-      producer.close();
-    }
+    //todo: 什么时候stop掉producer
   }
 }

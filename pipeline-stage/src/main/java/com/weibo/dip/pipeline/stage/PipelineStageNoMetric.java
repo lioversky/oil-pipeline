@@ -1,7 +1,7 @@
 package com.weibo.dip.pipeline.stage;
 
 import com.codahale.metrics.Timer;
-import com.weibo.dip.pipeline.metrics.MetricSystem;
+import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public class PipelineStageNoMetric extends PipelineStage {
 
   @Override
   public Timer getStageTimer() {
-    return MetricSystem.getMetricSystem().getMetricRegistry()
+    return MetricsSystem.getMetricSystem().getMetricRegistry()
         .timer(String.format("%s_timer", stageId));
   }
 }

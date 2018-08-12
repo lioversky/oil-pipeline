@@ -1,6 +1,7 @@
 package com.weibo.dip.pipeline.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +101,6 @@ public class AsyncKafkaProducerUtil {
           TopicAndMsg topicAndMsg = queue.take();
           if (topicAndMsg != null) {
             Producer p = getProducer(topicAndMsg.topic);
-
             if (p != null) {
               p.send(new ProducerRecord<String, String>(topicAndMsg.topic, topicAndMsg.msg),
                   new Callback() {
@@ -108,11 +108,18 @@ public class AsyncKafkaProducerUtil {
                     @Override
                     public void onCompletion(RecordMetadata metadata, Exception exception) {
                       if (metadata != null) {
-                        System.out.println(
-                            "async offset: " + metadata.offset() + ", partition: " + metadata.partition()
+                        String topicMetricsName = "async_sendto_kafka_" + topicAndMsg.topic;
+                        MetricsSystem.getCounter(topicMetricsName).inc();
+                        LOGGER.info(
+                            "async offset: " + metadata.offset() + ", partition: " + metadata
+                                .partition()
                                 + ", message: " + topicAndMsg.msg);
                       } else {
-                        exception.printStackTrace();
+                        String errorMetricsName = "async_sendto_kafka_error_" + topicAndMsg.topic;
+                        MetricsSystem.getCounter(errorMetricsName).inc();
+                        LOGGER.error(
+                            String.format("Send kafka to topic: %s error!", topicAndMsg.topic),
+                            exception);
                       }
                     }
                   });

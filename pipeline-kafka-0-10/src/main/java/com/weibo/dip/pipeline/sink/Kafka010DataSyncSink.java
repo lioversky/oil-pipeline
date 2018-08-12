@@ -1,10 +1,13 @@
 package com.weibo.dip.pipeline.sink;
 
+import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import com.weibo.dip.pipeline.util.KafkaProducerUtil;
 import java.util.Map;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * kafka 0.10版本同步sink
@@ -12,8 +15,7 @@ import org.apache.kafka.clients.producer.RecordMetadata;
  */
 public class Kafka010DataSyncSink extends KafkaDataSink {
 
-  private String topic;
-  private Map<String, Object> kafkaParams;
+  private static final Logger LOGGER = LoggerFactory.getLogger(Kafka010DataSyncSink.class);
 
   public Kafka010DataSyncSink(Map<String, Object> params) {
     super(params);
@@ -32,11 +34,15 @@ public class Kafka010DataSyncSink extends KafkaDataSink {
           @Override
           public void onCompletion(RecordMetadata metadata, Exception exception) {
             if (metadata != null) {
-              System.out.println(
+              String topicMetricsName = metricsName + "_" + _topic;
+              MetricsSystem.getCounter(topicMetricsName).inc();
+              LOGGER.info(
                   "offset: " + metadata.offset() + ", partition: " + metadata.partition()
                       + ", message: " + msg);
             } else {
-              exception.printStackTrace();
+              String errorMetricsName = metricsName + "_error_" + _topic;
+              MetricsSystem.getCounter(errorMetricsName).inc();
+              LOGGER.error(String.format("Send kafka to topic: %s error!", _topic), exception);
             }
           }
         });

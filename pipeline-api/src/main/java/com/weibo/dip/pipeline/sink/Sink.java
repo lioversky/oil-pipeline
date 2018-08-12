@@ -1,10 +1,12 @@
 package com.weibo.dip.pipeline.sink;
 
+import com.weibo.dip.pipeline.Sequence;
 import com.weibo.dip.pipeline.Step;
 import com.weibo.dip.pipeline.util.PropertiesUtil;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * sink顶层抽象类
@@ -12,8 +14,10 @@ import java.util.Properties;
  * Create by hongxun on 2018/7/6
  */
 
-public abstract class Sink<T> extends Step {
+public abstract class Sink<T> extends Step implements Sequence {
 
+  protected String metricsName;
+  private final static AtomicInteger index = new AtomicInteger();
   private final static String PROPERTIES_NAME = "sinks.properties";
 
   private final static String DEFAULT_PREFIX = PropertiesUtil.DEFAULT_PREFIX;
@@ -54,6 +58,14 @@ public abstract class Sink<T> extends Step {
     return createSink(params, className);
   }
 
+  public Sink(Map<String, Object> params) {
+    metricsName = getClass().getSimpleName() + "_" + getSequence();
+  }
+
+  @Override
+  public int getSequence() {
+    return index.incrementAndGet();
+  }
 
   /**
    * 写出数据

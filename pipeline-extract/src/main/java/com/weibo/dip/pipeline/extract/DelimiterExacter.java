@@ -22,13 +22,11 @@ public class DelimiterExacter extends StructMapExtractor {
   @Override
   public List<Map<String, Object>> extract(String line) {
 
-    List<Map<String, Object>> records = null;
+    List<Map<String, Object>> records = new ArrayList<>();
 
     String[] record = line.split(split, -1);
 
     if (record.length == columns.length) {
-
-      records = new ArrayList<>();
 
       Map<String, Object> recordMap = new HashMap<>();
 

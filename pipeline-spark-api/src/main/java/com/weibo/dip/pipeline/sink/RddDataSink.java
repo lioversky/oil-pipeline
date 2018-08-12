@@ -11,6 +11,7 @@ import org.apache.spark.sql.Row;
 public abstract class RddDataSink extends Sink<JavaRDD<Row>> {
 
   public RddDataSink(Map<String, Object> params) {
+    super(params);
   }
 
   /**
