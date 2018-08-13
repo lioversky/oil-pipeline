@@ -7,6 +7,10 @@ import com.codahale.metrics.Meter;
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Timer;
+import com.weibo.dip.pipeline.util.PropertiesUtil;
+import java.lang.reflect.Constructor;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,14 +19,29 @@ import java.util.concurrent.TimeUnit;
 public class MetricsSystem {
 
   private final static MetricRegistry metricRegistry = new MetricRegistry();
-  private static final ConsoleReporter reporter =
-      ConsoleReporter.forRegistry(metricRegistry)
-          .convertRatesTo(TimeUnit.SECONDS)
-          .convertDurationsTo(TimeUnit.MILLISECONDS)
-          .build();
+
+
+  private final static String PROPERTIES_NAME = "metrics.properties";
+
+
+  private static Map<String, Properties> sinkMap = PropertiesUtil.initEngineMap(PROPERTIES_NAME);
+
 
   static {
-    reporter.start(1, TimeUnit.SECONDS);
+    for (Map.Entry<String, Properties> entry : sinkMap.entrySet()) {
+      Properties value = entry.getValue();
+      try {
+        if (value.containsKey("class")) {
+          String className = value.getProperty("class");
+          Constructor<MetricsSink> constructor = (Constructor<MetricsSink>) Class.forName(className)
+              .getConstructor(Properties.class);
+          MetricsSink sink = constructor.newInstance(value);
+          sink.start();
+        }
+      } catch (Exception e) {
+
+      }
+    }
   }
 
   public static MetricRegistry getMetricRegistry() {

@@ -36,7 +36,7 @@ public class PushGatewayReporter extends ScheduledReporter {
 
   public PushGatewayReporter(MetricRegistry registry, String name,
       MetricFilter filter, TimeUnit rateUnit,
-      TimeUnit durationUnit, Properties kafkaConfig, Clock clock, String gatewayUrl,
+      TimeUnit durationUnit, Clock clock, String gatewayUrl,
       String jobName) {
     super(registry, name, filter, rateUnit, durationUnit);
     this.clock = clock;
@@ -134,13 +134,12 @@ public class PushGatewayReporter extends ScheduledReporter {
     }
 
 
-    public PushGatewayReporter build(Properties config) {
+    public PushGatewayReporter build() {
       return new PushGatewayReporter(registry,
           "Prometheus-Reporter",
           filter,
           rateUnit,
           durationUnit,
-          config,
           clock, gatewayUrl, jobName);
     }
   }

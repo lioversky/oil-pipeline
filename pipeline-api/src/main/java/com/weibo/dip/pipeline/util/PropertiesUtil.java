@@ -57,7 +57,7 @@ public class PropertiesUtil {
   }
 
   public final static String DEFAULT_PREFIX = "*";
-  public final static Pattern ENGINE_REGEX_PATTERN = Pattern.compile("^(\\*|[a-zA-Z]+)\\.(.+)");
+  public final static Pattern ENGINE_REGEX_PATTERN = Pattern.compile("^(\\*|[a-zA-Z_]+)\\.(.+)");
 
   public static Map<String, Properties> initEngineMap(String propertiesName) {
 
