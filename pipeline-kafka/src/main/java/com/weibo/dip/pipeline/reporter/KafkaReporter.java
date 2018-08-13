@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.metrics;
+package com.weibo.dip.pipeline.reporter;
 
 import com.codahale.metrics.Clock;
 import com.codahale.metrics.Counter;

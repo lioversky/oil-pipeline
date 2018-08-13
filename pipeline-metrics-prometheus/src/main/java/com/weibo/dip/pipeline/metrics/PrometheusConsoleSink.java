@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Prometheus控制台输出Sink实现类
  * Create by hongxun on 2018/8/13
  */
 public class PrometheusConsoleSink extends MetricsSink {

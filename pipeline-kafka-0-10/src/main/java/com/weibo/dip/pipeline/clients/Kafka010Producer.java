@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * kafka 0.10版本producer
  * Create by hongxun on 2018/8/12
  */
 public class Kafka010Producer extends PipelineKafkaProducer<String, String> {

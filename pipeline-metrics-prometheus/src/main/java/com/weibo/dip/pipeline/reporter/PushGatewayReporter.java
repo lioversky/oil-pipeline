@@ -13,13 +13,13 @@ import com.weibo.dip.pipeline.util.PrometheusUtil;
 import io.prometheus.client.exporter.PushGateway;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Properties;
 import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Prometheus PushGateway Reporter实现类
  * Create by hongxun on 2018/8/12
  */
 public class PushGatewayReporter extends ScheduledReporter {
@@ -50,6 +50,7 @@ public class PushGatewayReporter extends ScheduledReporter {
       SortedMap<String, Histogram> histograms, SortedMap<String, Meter> meters,
       SortedMap<String, Timer> timers) {
     try {
+      //将Metric注册到MetricRegistry，再转换成Prometheus结构
       MetricRegistry registry = new MetricRegistry();
       if (!gauges.isEmpty()) {
         for (Map.Entry<String, Gauge> entry : gauges.entrySet()) {
@@ -76,7 +77,7 @@ public class PushGatewayReporter extends ScheduledReporter {
           registry.register(entry.getKey(), entry.getValue());
         }
       }
-
+      //调用pushGateway
       pushGateway.pushAdd(PrometheusUtil.dropwizardToPrometheus(registry), jobName);
     } catch (IOException e) {
       e.printStackTrace();
@@ -136,7 +137,7 @@ public class PushGatewayReporter extends ScheduledReporter {
 
     public PushGatewayReporter build() {
       return new PushGatewayReporter(registry,
-          "Prometheus-Reporter",
+          "Prometheus-PushGateway-Reporter",
           filter,
           rateUnit,
           durationUnit,

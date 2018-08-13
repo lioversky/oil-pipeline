@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Dropwizard Metrics Sink实现类
  * Create by hongxun on 2018/8/13
  */
 public class DropwizardConsoleSink extends MetricsSink {

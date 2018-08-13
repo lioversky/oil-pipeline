@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * 各版本KafkaProducer抽象类
  * Create by hongxun on 2018/8/2
  */
 public abstract class PipelineKafkaProducer<K,V> implements Serializable {

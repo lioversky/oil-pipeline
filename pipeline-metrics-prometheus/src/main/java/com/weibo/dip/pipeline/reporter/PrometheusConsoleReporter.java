@@ -1,7 +1,6 @@
 package com.weibo.dip.pipeline.reporter;
 
 import com.codahale.metrics.Clock;
-import com.codahale.metrics.ConsoleReporter;
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Histogram;
@@ -10,17 +9,16 @@ import com.codahale.metrics.MetricFilter;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ScheduledReporter;
 import com.codahale.metrics.Timer;
-import com.weibo.dip.pipeline.reporter.PushGatewayReporter.Builder;
 import com.weibo.dip.pipeline.util.PrometheusUtil;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.Properties;
 import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Prometheus控制台Reporter实现类
  * Create by hongxun on 2018/8/13
  */
 public class PrometheusConsoleReporter extends ScheduledReporter {
@@ -133,7 +131,7 @@ public class PrometheusConsoleReporter extends ScheduledReporter {
 
     public PrometheusConsoleReporter build() {
       return new PrometheusConsoleReporter(registry,
-          "Prometheus-Reporter",
+          "Prometheus-Console-Reporter",
           filter,
           rateUnit,
           durationUnit,

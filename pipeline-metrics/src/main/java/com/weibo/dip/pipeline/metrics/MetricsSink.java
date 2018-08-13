@@ -5,11 +5,18 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * metrics输出抽象类
  * Create by hongxun on 2018/8/13
  */
 public abstract class MetricsSink {
 
+  /**
+   * metrics reporter，由子类生成具体实例
+   */
   protected ScheduledReporter reporter;
+  /**
+   * 周期和时长
+   */
   private final static int SUMMON_DEFAULT_PERIOD = 10;
   private final static String SUMMON_DEFAULT_UNIT = "SECONDS";
 
@@ -20,6 +27,9 @@ public abstract class MetricsSink {
   protected int pollPeriod;
   protected TimeUnit pollUnit;
 
+  /**
+   * 构造方法中获取周期和时长或默认参数
+   */
   public MetricsSink(Properties properties) {
     if (properties.containsKey(SUMMON_KEY_PERIOD)) {
       pollPeriod = Integer.parseInt(properties.getProperty(SUMMON_KEY_PERIOD));
@@ -34,8 +44,14 @@ public abstract class MetricsSink {
     }
   }
 
+  /**
+   * 由子类实现，start reporter
+   */
   public abstract void start();
 
+  /**
+   * 此方法供停止时有未report的数据
+   */
   public void report() {
     if (reporter != null) {
       reporter.report();
