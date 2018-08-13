@@ -23,7 +23,7 @@ public class FileUtil {
     return null;
   }
 
-  public static void cacheFile(String fileName, String split) throws IOException {
+  public static void cacheFile(String fileName, String split) {
     InputStream resourceAsStream = FileUtil.class.getClassLoader().getResourceAsStream(fileName);
 
     BufferedReader reader = null;
@@ -42,9 +42,15 @@ public class FileUtil {
         }
       }
 
+    } catch (IOException e) {
+      // todo :exception
     } finally {
       if (reader != null) {
-        reader.close();
+        try {
+          reader.close();
+        } catch (IOException e) {
+
+        }
       }
     }
 
