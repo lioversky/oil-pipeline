@@ -1,8 +1,7 @@
 {
   "processors": [
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_str",
+      "processorType": "merge_str",
       "params": {
         "targetField": "merge",
         "overwriteIfFieldExist": true,
@@ -11,8 +10,7 @@
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_list",
+      "processorType": "merge_list",
       "params": {
         "targetField": "merge",
         "overwriteIfFieldExist": true,
@@ -21,8 +19,7 @@
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_list",
+      "processorType": "merge_list",
       "params": {
         "targetField": "merge",
         "overwriteIfFieldExist": true,
@@ -31,8 +28,7 @@
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_set",
+      "processorType": "merge_set",
       "params": {
         "targetField": "merge",
         "overwriteIfFieldExist": true,
@@ -40,8 +36,7 @@
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_map",
+      "processorType": "merge_map",
       "params": {
         "targetField": "merge",
         "overwriteIfFieldExist": true,

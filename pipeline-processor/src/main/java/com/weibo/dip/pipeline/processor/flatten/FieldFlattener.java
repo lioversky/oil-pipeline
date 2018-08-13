@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * 展开当前字段
  */
-class FieldFlattener extends FlattenProcessor {
+public class FieldFlattener extends FlattenProcessor {
 
   private String fieldName;
 

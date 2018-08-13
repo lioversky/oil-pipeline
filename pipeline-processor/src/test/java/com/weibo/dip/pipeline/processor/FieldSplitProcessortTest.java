@@ -51,12 +51,11 @@ public class FieldSplitProcessortTest {
   public void testRegex() {
     String fieldName = "split";
     HashMap<String, Object> data = Maps
-        .newHashMap(ImmutableMap.of(fieldName, ""));
+        .newHashMap(ImmutableMap.of(fieldName, "a1b2c3"));
     try {
 
       Processor<Map<String,Object>> p1 = processorList.get(3);
-      Map<String, Object> result = p1
-          .process(data);
+      Map<String, Object> result = p1.process(data);
       Assert.assertTrue(result.containsKey("a") && "a".equals(result.get("a")));
       Assert.assertEquals(4, result.size());
 

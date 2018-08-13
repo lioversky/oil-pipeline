@@ -15,7 +15,8 @@ public class JsonTestUtil {
         .get("processors");
     List<Processor> processorList = Lists.newArrayList();
     for (Map<String, Object> params : processorsCofnigList) {
-      Processor p = Processor.createProcessor("", params);
+      Processor p = Processor.createProcessor((String) params.get("processorType"),
+          (Map<String, Object>) params.get("params"));
 
       processorList.add(p);
     }

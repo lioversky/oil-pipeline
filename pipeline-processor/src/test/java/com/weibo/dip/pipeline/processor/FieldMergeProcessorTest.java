@@ -22,40 +22,6 @@ public class FieldMergeProcessorTest {
       Assert.fail("create processorList error!!!");
     }
   }
-  /*@Test
-  public void testMerge() {
-    String fields = "a,b,c";
-    String fieldName = "c";
-    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aaa", "b", "bbb", "c", "ccc"));
-
-    Map<String, Object> params = ImmutableMap
-        .of("overwriteIfFieldExist", true, "fields", fields, "splitStr", "", "toFieldName",
-            fieldName);
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
-    try {
-      Map<String, Object> result = p.process(data);
-      System.out.println(result);
-      Assert.assertEquals("aaabbbccc", result.get(fieldName));
-    } catch (Exception e) {
-      Assert.fail();
-    }
-  }
-
-  @Test(expected = FieldExistException.class)
-  public void testMergeOvewriteError() throws Exception {
-    String fields = "a,b,c";
-    String fieldName = "c";
-    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aaa", "b", "bbb", "c", "ccc"));
-
-    Map<String, Object> params = ImmutableMap
-        .of("overwriteIfFieldExist", false, "fields", fields, "splitStr", "", "toFieldName",
-            fieldName);
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
-    Map<String, Object> result = p.process(data);
-    Assert.fail();
-  }*/
 
   private String jsonFile = "src/test/resources/sample_pipeline_fieldmerge.json";
 

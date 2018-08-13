@@ -1,63 +1,8 @@
 {
   "processors": [
+
     {
-      "processorType": "processor_replace",
-      "subType": "replace_str_date",
-      "params": {
-        "fieldName": "str_to_date",
-        "fieldNotExistError": false,
-        "source": "yyyy-MM-dd HH:mm:ss"
-      }
-    },
-    {
-      "processorType": "processor_replace",
-      "subType": "replace_str_timestamp",
-      "params": {
-        "fieldName": "replace_str_timestamp",
-        "fieldNotExistError": false,
-        "source": "yyyy-MM-dd HH:mm:ss"
-      }
-    },
-    {
-      "processorType": "processor_replace",
-      "subType": "replace_str_unix",
-      "params": {
-        "fieldName": "replace_str_unix",
-        "fieldNotExistError": false,
-        "source": "yyyy-MM-dd HH:mm:ss"
-      }
-    },
-    {
-      "processorType": "processor_replace",
-      "subType": "replace_str_str",
-      "params": {
-        "fieldName": "replace_str_str",
-        "fieldNotExistError": false,
-        "source": "yyyy-MM-dd HH:mm:ss",
-        "target": "yyyyMMdd HH:mm:ss"
-      }
-    },
-    {
-      "processorType": "processor_replace",
-      "subType": "replace_unix_str",
-      "params": {
-        "fieldName": "replace_unix_str",
-        "fieldNotExistError": false,
-        "target": "yyyy-MM-dd HH:mm:ss"
-      }
-    },
-    {
-      "processorType": "processor_replace",
-      "subType": "replace_timestamp_str",
-      "params": {
-        "fieldName": "replace_timestamp_str",
-        "fieldNotExistError": false,
-        "target": "yyyy-MM-dd HH:mm:ss"
-      }
-    },
-    {
-      "processorType": "processor_replace",
-      "subType": "replace_regex",
+      "processorType": "replace_regex",
       "params": {
         "fieldName": "replace_regex",
         "fieldNotExistError": false,
@@ -66,13 +11,12 @@
       }
     },
     {
-      "processorType": "processor_replace",
-      "subType": "replace_replace_str",
+      "processorType": "replace_filekv",
       "params": {
-        "fieldName": "replace_replace_str",
+        "fieldName":"replace_filekv",
+        "fileName": "test.csv",
         "fieldNotExistError": false,
-        "source": "123456",
-        "target": ""
+        "splitStr": ","
       }
     }
   ]

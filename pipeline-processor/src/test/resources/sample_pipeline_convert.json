@@ -1,18 +1,23 @@
 {
   "processors": [
     {
-      "processorType": "processor_base64",
-      "subType": "base64_encode",
+      "processorType": "convert_base64encode",
       "params": {
         "fieldName": "base64",
         "fieldNotExistError": false
       }
     },
     {
-      "processorType": "processor_base64",
-      "subType": "base64_decode",
+      "processorType": "convert_base64decode",
       "params": {
         "fieldName": "base64",
+        "fieldNotExistError": false
+      }
+    },
+    {
+      "processorType": "convert_md5",
+      "params": {
+        "fieldName": "md5",
         "fieldNotExistError": false
       }
     }

@@ -10,7 +10,18 @@ import org.apache.spark.sql.SparkSession;
  */
 public abstract class DatasetSource extends Source {
 
+  /**
+   * 输入源类型
+   */
+  protected String sourceFormat;
+  /**
+   * 源配置
+   */
+  protected Map<String, String> sourceOptions;
+
   public DatasetSource(Map<String, Object> params) {
+    sourceFormat = (String) params.get("format");
+    sourceOptions = (Map<String, String>) params.get("options");
   }
 
   public abstract Dataset createSource(SparkSession sparkSession);

@@ -9,15 +9,6 @@ import org.apache.spark.sql.SparkSession;
  */
 public class DatasetFileSource extends DatasetSource {
 
-  /**
-   * 输入源类型
-   */
-  protected String sourceFormat;
-  /**
-   * 源配置
-   */
-  protected Map<String, String> sourceOptions;
-
   public DatasetFileSource(Map<String, Object> params) {
     super(params);
   }

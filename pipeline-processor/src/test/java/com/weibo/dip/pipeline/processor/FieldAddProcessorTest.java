@@ -19,13 +19,17 @@ public class FieldAddProcessorTest {
     try {
       processorList = JsonTestUtil.getProcessors(jsonFile);
     } catch (Exception e) {
+      e.printStackTrace();
       Assert.fail("create processorList error!!!");
     }
   }
+/*
 
-  /**
+  */
+/**
    * 测试复制
-   */
+   *//*
+
   @Test
   public void testCopyFieldNotExist() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy", "copydata"));
@@ -44,9 +48,11 @@ public class FieldAddProcessorTest {
   }
 
 
-  /**
+  */
+/**
    * 测试复制，目标列存在抛异常
-   */
+   *//*
+
   @Test(expected = FieldExistException.class)
   public void testCopyFieldExist() throws Exception {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy", "copydata", "copy1", ""));
@@ -65,70 +71,7 @@ public class FieldAddProcessorTest {
     }
   }
 
-
-  /**
-   * 增加当前时间字符串
-   */
-  @Test
-  public void testAddCurDateStr() {
-    String targetField = "datestr";
-    String dateFormat = "yyyyMMdd HH:mm:ss";
-    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy", "copydata"));
-    Map<String, Object> params = ImmutableMap
-        .of("subType", "fieldadd_datestr", "params",
-            ImmutableMap.of("targetField", targetField, "dateFormat", dateFormat));
-    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
-
-    try {
-      Map<String, Object> result = p.process(data);
-      Assert.assertTrue(result.containsKey(targetField));
-      Assert.assertEquals(dateFormat.length(), result.get(targetField).toString().length());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * 增加当前时间unix时间戳
-   */
-  public void testAddCurUnixStr() {
-    String targetField = "datestr";
-    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy", "copydata"));
-    Map<String, Object> params = ImmutableMap
-        .of("targetField", targetField, "subType", "fieldadd_unixtimestamp");
-    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
-
-    try {
-      Map<String, Object> result = p.process(data);
-      System.out.println(result);
-      Assert.assertTrue(result.containsKey(targetField));
-      Assert.assertTrue(result.get(targetField) instanceof Number);
-      Assert.assertEquals(10, result.get(targetField).toString().length());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * 增加当前时间戳
-   */
-  public void testAddCurTimestampStr() {
-    String targetField = "datestr";
-    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy", "copydata"));
-    Map<String, Object> params = ImmutableMap
-        .of("targetField", targetField, "subType", "fieldadd_timestamp");
-    Processor<Map<String, Object>> p = Processor.createProcessor(test_type, params);
-
-    try {
-      Map<String, Object> result = p.process(data);
-      System.out.println(result);
-      Assert.assertTrue(result.containsKey(targetField));
-      Assert.assertTrue(result.get(targetField) instanceof Number);
-      Assert.assertEquals(13, result.get(targetField).toString().length());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+*/
 
   private String jsonFile = "src/test/resources/sample_pipeline_fieldadd.json";
 

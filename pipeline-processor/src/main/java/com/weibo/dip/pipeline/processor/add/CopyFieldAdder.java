@@ -18,7 +18,7 @@ public class CopyFieldAdder extends FieldAddProcessor {
     super(params);
     sourceField = (String) params.get("sourceField");
     if (Strings.isNullOrEmpty(sourceField)) {
-      throw new AttrCanNotBeNullException("Fieldcopy sourceField can not be null!!!");
+      throw new AttrCanNotBeNullException("Fieldcopy sourceField can not be null !!!");
     }
   }
 

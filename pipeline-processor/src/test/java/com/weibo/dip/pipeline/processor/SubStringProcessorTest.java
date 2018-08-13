@@ -57,7 +57,7 @@ public class SubStringProcessorTest {
 
   @Test
   public void testFixedSubStringer() {
-    String fieldName = "substring_fixed";
+    String fieldName = "substring_fixedlr";
 
     try {
       Processor<Map<String,Object>> p1 = processorList.get(1);
@@ -73,8 +73,8 @@ public class SubStringProcessorTest {
 
 
   @Test
-  public void testMatchSubStringer() {
-    String fieldName = "substring_match";
+  public void testFixedLen() {
+    String fieldName = "substring_fixedlen";
     try {
 
       Processor<Map<String,Object>> p1 = processorList.get(2);
@@ -87,11 +87,16 @@ public class SubStringProcessorTest {
   }
 
   @Test
-  public void testRegex(){
-    Pattern pattern = Pattern.compile("^([1-9]\\d{2})$");
-    Matcher matcher = pattern.matcher("200");
-    if(matcher.find()){
-      System.out.println(matcher.group(1));
+  public void testDelimindex(){
+    String fieldName = "substring_delimindex";
+    try {
+
+      Processor<Map<String,Object>> p1 = processorList.get(3);
+      Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "a,b,c")));
+      Assert.assertEquals("a,b", result.get(fieldName));
+
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
   }

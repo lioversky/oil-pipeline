@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 展开所有字段
  */
-class AllFlattener extends FlattenProcessor {
+public class AllFlattener extends FlattenProcessor {
 
   public AllFlattener(Map<String, Object> params) {
     super(params);

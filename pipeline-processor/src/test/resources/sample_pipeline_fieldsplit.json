@@ -1,8 +1,7 @@
 {
   "processors": [
     {
-      "processorType": "processor_fieldsplit",
-      "subType": "split_delimiter",
+      "processorType": "split_delimiter",
       "params": {
         "targetFields": "a,b,c",
         "overwriteIfFieldExist": true,
@@ -12,8 +11,7 @@
       }
     },
     {
-      "processorType": "processor_fieldsplit",
-      "subType": "split_list",
+      "processorType": "split_list",
       "params": {
         "targetFields": "a,b,c",
         "overwriteIfFieldExist": true,
@@ -22,8 +20,7 @@
       }
     },
     {
-      "processorType": "processor_fieldsplit",
-      "subType": "split_array",
+      "processorType": "split_array",
       "params": {
         "targetFields": "a,b,c",
         "overwriteIfFieldExist": true,
@@ -32,19 +29,17 @@
       }
     },
     {
-      "processorType": "processor_fieldsplit",
-      "subType": "split_regex",
+      "processorType": "split_regex",
       "params": {
         "targetFields": "a,b,c",
         "overwriteIfFieldExist": true,
         "fieldNotExistError": false,
-        "regex": "//d",
+        "regex":"(\\w+)\\d(\\w+)\\d(\\w+)",
         "fieldName": "split"
       }
     },
     {
-      "processorType": "processor_fieldsplit",
-      "subType": "split_json",
+      "processorType": "split_json",
       "params": {
         "targetFields": "map",
         "overwriteIfFieldExist": true,
@@ -53,8 +48,7 @@
       }
     },
     {
-      "processorType": "processor_fieldsplit",
-      "subType": "split_delimiter",
+      "processorType": "split_delimiter",
       "params": {
         "targetFields": "a,b,c|a,b,c,d",
         "overwriteIfFieldExist": true,

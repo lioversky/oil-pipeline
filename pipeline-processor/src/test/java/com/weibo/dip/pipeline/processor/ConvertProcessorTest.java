@@ -8,24 +8,26 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MD5EncodeProcessorTest {
+public class ConvertProcessorTest {
 
-  Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("md5", "1111"));
+  private String jsonFile = "src/test/resources/sample_pipeline_convert.json";
 
-  public void testMD5() {
-    Map<String, Object> params = ImmutableMap.of("fieldName", "md5");
-    Processor<Map<String,Object>> md5 = Processor.createProcessor("", params);
-
+  @Test
+  public void testBase64FromJson() {
+    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("base64", "base64data"));
     try {
-      Map<String, Object> result = md5.process(data);
-      Assert.assertEquals(MD5Util.md5("1111"), result.get("md5"));
+      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
+      for (Processor<Map<String,Object>> p : processorList) {
+        data = p.process(data);
+      }
+      Assert.assertTrue(data.containsKey("base64"));
+      Assert.assertEquals("base64data",  data.get("base64"));
     } catch (Exception e) {
       e.printStackTrace();
+      Assert.fail();
     }
   }
-
-  private String jsonFile = "src/test/resources/sample_pipeline_md5.json";
 
   @Test
   public void testJsonMd5() {
@@ -33,10 +35,11 @@ public class MD5EncodeProcessorTest {
     try {
       List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      Processor<Map<String,Object>> p = processorList.get(0);
+      Processor<Map<String,Object>> p = processorList.get(2);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("md5"));
       Assert.assertNotEquals("mmmmddddd5555", data.get("md5"));
+      Assert.assertEquals(MD5Util.md5("mmmmddddd5555"), data.get("md5"));
 
     } catch (Exception e) {
       Assert.fail();
