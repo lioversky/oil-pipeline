@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.clients;
 
+import com.weibo.dip.pipeline.provider.KafkaProducerProvider;
 import java.util.Map;
 
 /**

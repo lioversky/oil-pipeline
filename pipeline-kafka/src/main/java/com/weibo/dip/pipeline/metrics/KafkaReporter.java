@@ -12,7 +12,6 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.json.MetricsModule;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
-import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
 import com.weibo.dip.pipeline.util.KafkaProducerUtil;
 import java.util.HashMap;
 import java.util.Map;

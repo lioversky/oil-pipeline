@@ -1,7 +1,6 @@
-package com.weibo.dip.pipeline.source;
+package com.weibo.dip.pipeline.provider;
 
-import com.weibo.dip.pipeline.provider.KafkaProvider;
-import java.io.Serializable;
+import com.weibo.dip.pipeline.source.KafkaDataSource;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;

@@ -1,7 +1,7 @@
 package com.weibo.dip.pipeline.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.weibo.dip.pipeline.clients.KafkaProducerProvider;
+import com.weibo.dip.pipeline.provider.KafkaProducerProvider;
 import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
 import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import java.io.Serializable;

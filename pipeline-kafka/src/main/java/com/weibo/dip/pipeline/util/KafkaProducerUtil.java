@@ -1,7 +1,7 @@
 package com.weibo.dip.pipeline.util;
 
 
-import com.weibo.dip.pipeline.clients.KafkaProducerProvider;
+import com.weibo.dip.pipeline.provider.KafkaProducerProvider;
 import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
 import java.util.HashMap;
 import java.util.Map;

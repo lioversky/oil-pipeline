@@ -14,7 +14,6 @@
     <module>pipeline-processor</module>
     <module>pipeline-sink</module>
     <module>pipeline-source</module>
-    <module>pipeline-monitor</module>
     <module>pipeline-util</module>
     <module>pipeline-stage</module>
     <module>pipeline-extract</module>
@@ -28,6 +27,7 @@
     <module>pipeline-kafka-0-8</module>
     <module>pipeline-kafka-0-10</module>
     <module>pipeline-metrics</module>
+    <module>pipeline-metrics-prometheus</module>
   </modules>
 
   <properties>
@@ -52,7 +52,7 @@
     <curator.version>2.11.0</curator.version>
     <hadoop.version>2.5.0-cdh5.3.2</hadoop.version>
     <zookeeper.version>3.4.5</zookeeper.version>
-    <prometheus.client>0.4.0</prometheus.client>
+    <prometheus.client>0.5.0</prometheus.client>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -171,6 +171,19 @@
         <artifactId>spark-streaming-kafka-${kafka010.version}_${scala.binary.version}</artifactId>
         <version>${spark.version}</version>
       </dependency>
+
+      <!-- prometheus -->
+      <dependency>
+        <groupId>io.prometheus</groupId>
+        <artifactId>simpleclient_pushgateway</artifactId>
+        <version>${prometheus.client}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.prometheus</groupId>
+        <artifactId>simpleclient_dropwizard</artifactId>
+        <version>${prometheus.client}</version>
+      </dependency>
+
       <!-- end spark-->
       <!-- start kafka-->
       <!--<dependency>
