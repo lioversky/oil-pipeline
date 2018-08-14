@@ -1,50 +1,45 @@
 {
   "processors": [
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_str",
-      "targetField": "merge",
-      "overwriteIfFieldExist": true,
+      "processorType": "merge_str",
       "params": {
+        "targetField": "merge",
+        "overwriteIfFieldExist": true,
         "fields": "a,b,c",
         "splitStr": ","
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_list",
-      "targetField": "merge",
-      "overwriteIfFieldExist": true,
+      "processorType": "merge_list",
       "params": {
+        "targetField": "merge",
+        "overwriteIfFieldExist": true,
         "fields": "a,b,c",
         "keepIfNull": false
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_list",
-      "targetField": "merge",
-      "overwriteIfFieldExist": true,
+      "processorType": "merge_list",
       "params": {
+        "targetField": "merge",
+        "overwriteIfFieldExist": true,
         "fields": "a,b,c",
         "keepIfNull": true
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_set",
-      "targetField": "merge",
-      "overwriteIfFieldExist": true,
+      "processorType": "merge_set",
       "params": {
+        "targetField": "merge",
+        "overwriteIfFieldExist": true,
         "fields": "a,b,c"
       }
     },
     {
-      "processorType": "processor_fieldmerge",
-      "subType": "merge_map",
-      "targetField": "merge",
-      "overwriteIfFieldExist": true,
+      "processorType": "merge_map",
       "params": {
+        "targetField": "merge",
+        "overwriteIfFieldExist": true,
         "fields": "a,b,c"
       }
     }

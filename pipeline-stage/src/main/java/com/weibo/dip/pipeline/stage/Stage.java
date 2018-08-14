@@ -1,10 +1,12 @@
 package com.weibo.dip.pipeline.stage;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -13,32 +15,27 @@ import java.util.Map;
  * 异常数据处理
  * Create by hongxun on 2018/06/28
  */
-public abstract class Stage implements Serializable {
+public abstract class Stage<T> implements Serializable {
 
-
-  protected MetricRegistry metricRegistry;
+  private static final Logger LOGGER = LoggerFactory.getLogger(Stage.class);
 
 
   protected String stageId;
 
-  public Stage(MetricRegistry metricRegistry, String stageId) {
-    this.metricRegistry = metricRegistry;
+  public Stage(String stageId) {
+
     this.stageId = stageId;
   }
 
-  public abstract Map<String, Object> processStage(Map<String, Object> data) throws Exception;
+  /**
+   * 数据处理抽象方法.
+   * 只有过滤的才会返回null，处理错误都抛异常
+   * @param data
+   * @return
+   * @throws Exception
+   */
+  public abstract T processStage(T data) throws Exception;
 
-  public MetricRegistry getMetricRegistry() {
-    return metricRegistry;
-  }
-
-  public void setMetricRegistry(MetricRegistry metricRegistry) {
-    this.metricRegistry = metricRegistry;
-  }
-
-  public void sendErrorMessage() {
-
-  }
 
   /**
    * 递归创建stage.
@@ -51,24 +48,34 @@ public abstract class Stage implements Serializable {
   public static List<Stage> createStage(List<Map<String, Object>> stagesConfigList)
       throws Exception {
     List<Stage> result = Lists.newArrayList();
+
     for (Map<String, Object> stageConfigMap : stagesConfigList) {
       String stageType = (String) stageConfigMap.get("type");
-      //创建casewhenStage
+      String stageId = createStageId(stageType);
+      //按类型创建stage
       if ("casewhen".equals(stageType)) {
         List<Map<String, Object>> subStagesList = (List<Map<String, Object>>) stageConfigMap
-            .get("subStagesList");
-        result.add(new CaseWhenStage(subStagesList, createStageId(stageType)));
+            .get("subStages");
+        result.add(new CaseWhenStage(subStagesList, stageId));
       } else if ("pipeline".equals(stageType)) {
         List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
             .get("processors");
-        result.add(new PipelineStage(processorConfigList, createStageId(stageType)));
+        result.add(new PipelineStage(processorConfigList, stageId));
       }
     }
     return result;
   }
 
-  private static String createStageId(String stageType) {
-    return stageType;
+  private static AtomicInteger index = new AtomicInteger();
+
+  /**
+   * 生成stageId
+   *
+   * @param stageType stage类型
+   * @return stageId
+   */
+  public static String createStageId(String stageType) {
+    return String.format("%s-%d", stageType, index.incrementAndGet());
   }
 
 }

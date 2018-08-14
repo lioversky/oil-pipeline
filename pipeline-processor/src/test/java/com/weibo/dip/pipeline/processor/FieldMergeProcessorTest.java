@@ -6,46 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class FieldMergeProcessorTest {
 
   private String test_type = "processor_fieldmerge";
+  private List<Processor> processorList;
 
-  /*@Test
-  public void testMerge() {
-    String fields = "a,b,c";
-    String fieldName = "c";
-    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aaa", "b", "bbb", "c", "ccc"));
-
-    Map<String, Object> params = ImmutableMap
-        .of("overwriteIfFieldExist", true, "fields", fields, "splitStr", "", "toFieldName",
-            fieldName);
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+  @Before
+  public void before() {
     try {
-      Map<String, Object> result = p.process(data);
-      System.out.println(result);
-      Assert.assertEquals("aaabbbccc", result.get(fieldName));
+      processorList = JsonTestUtil.getProcessors(jsonFile);
     } catch (Exception e) {
-      Assert.fail();
+      Assert.fail("create processorList error!!!");
     }
   }
-
-  @Test(expected = FieldExistException.class)
-  public void testMergeOvewriteError() throws Exception {
-    String fields = "a,b,c";
-    String fieldName = "c";
-    Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aaa", "b", "bbb", "c", "ccc"));
-
-    Map<String, Object> params = ImmutableMap
-        .of("overwriteIfFieldExist", false, "fields", fields, "splitStr", "", "toFieldName",
-            fieldName);
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
-    Map<String, Object> result = p.process(data);
-    Assert.fail();
-  }*/
 
   private String jsonFile = "src/test/resources/sample_pipeline_fieldmerge.json";
 
@@ -53,9 +29,8 @@ public class FieldMergeProcessorTest {
   public void testJsonMergeStr() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      Processor p = processorList.get(0);
+      Processor<Map<String,Object>> p = processorList.get(0);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge"));
       Assert.assertEquals("aa,bb,cc", data.get("merge"));
@@ -69,9 +44,8 @@ public class FieldMergeProcessorTest {
   public void testJsonMergeList() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      Processor p = processorList.get(1);
+      Processor<Map<String,Object>> p = processorList.get(1);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof List);
       Assert.assertEquals("aa", ((List) data.get("merge")).get(0));
@@ -90,9 +64,8 @@ public class FieldMergeProcessorTest {
   public void testJsonMergeListKeepNull() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      Processor p = processorList.get(2);
+      Processor<Map<String,Object>> p = processorList.get(2);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof List);
       Assert.assertEquals("aa", ((List) data.get("merge")).get(0));
@@ -108,9 +81,8 @@ public class FieldMergeProcessorTest {
   public void testJsonMergeSet() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      Processor p = processorList.get(3);
+      Processor<Map<String,Object>> p = processorList.get(3);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof Set);
       Assert.assertEquals(3, ((Set) data.get("merge")).size());
@@ -124,9 +96,8 @@ public class FieldMergeProcessorTest {
   public void testJsonMergeMap() {
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("a", "aa", "b", "bb", "c", "cc"));
     try {
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
 
-      Processor p = processorList.get(4);
+      Processor<Map<String,Object>> p = processorList.get(4);
       data = p.process(data);
       Assert.assertTrue(data.containsKey("merge") && data.get("merge") instanceof Map);
       Assert.assertEquals(3, ((Map<String, Object>) data.get("merge")).size());

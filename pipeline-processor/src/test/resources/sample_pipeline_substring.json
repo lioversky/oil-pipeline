@@ -1,29 +1,37 @@
 {
   "processors": [
     {
-      "processorType": "processor_substring",
-      "subType": "substring_trim",
-      "fieldName": "substring_trim",
-      "fieldNotExistError": false
-    },
-    {
-      "processorType": "processor_substring",
-      "subType": "substring_fixed",
-      "fieldName": "substring_fixed",
-      "fieldNotExistError": false,
+      "processorType": "substring_trim",
       "params": {
-        "begin": 4,
-        "end": 4
+        "fieldName": "substring_trim",
+        "fieldNotExistError": false
       }
     },
     {
-      "processorType": "processor_substring",
-      "subType": "substring_match",
-      "fieldName": "substring_match",
-      "fieldNotExistError": false,
+      "processorType": "substring_fixedlr",
       "params": {
-        "beginStr": "111_",
-        "endStr": "_111"
+        "fieldName": "substring_fixedlr",
+        "fieldNotExistError": false,
+        "left": 4,
+        "right": 4
+      }
+    },
+    {
+      "processorType": "substring_fixedlen",
+      "params": {
+        "fieldName": "substring_fixedlen",
+        "fieldNotExistError": false,
+        "start": 4,
+        "length": 5
+      }
+    },
+    {
+      "processorType": "substring_delimindex",
+      "params": {
+        "fieldName": "substring_delimindex",
+        "fieldNotExistError": false,
+        "delimit": ",",
+        "count": 2
       }
     }
   ]

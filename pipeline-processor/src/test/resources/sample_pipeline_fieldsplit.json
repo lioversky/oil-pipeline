@@ -1,0 +1,61 @@
+{
+  "processors": [
+    {
+      "processorType": "split_delimiter",
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split",
+        "splitStr": ","
+      }
+    },
+    {
+      "processorType": "split_list",
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split"
+      }
+    },
+    {
+      "processorType": "split_array",
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split"
+      }
+    },
+    {
+      "processorType": "split_regex",
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "regex":"(\\w+)\\d(\\w+)\\d(\\w+)",
+        "fieldName": "split"
+      }
+    },
+    {
+      "processorType": "split_json",
+      "params": {
+        "targetFields": "map",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split"
+      }
+    },
+    {
+      "processorType": "split_delimiter",
+      "params": {
+        "targetFields": "a,b,c|a,b,c,d",
+        "overwriteIfFieldExist": true,
+        "fieldNotExistError": false,
+        "fieldName": "split",
+        "splitStr": ","
+      }
+    }
+  ]
+}

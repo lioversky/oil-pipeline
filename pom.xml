@@ -9,14 +9,25 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>pipeline-common</module>
+    <module>pipeline-api</module>
     <module>pipeline-engine</module>
     <module>pipeline-processor</module>
     <module>pipeline-sink</module>
     <module>pipeline-source</module>
-    <module>pipeline-monitor</module>
     <module>pipeline-util</module>
     <module>pipeline-stage</module>
+    <module>pipeline-extract</module>
+    <module>pipeline-job</module>
+    <module>pipeline-spark-engine</module>
+    <module>pipeline-spark-kafka</module>
+    <module>pipeline-spark-kafka-0-8</module>
+    <module>pipeline-spark-kafka-0-10</module>
+    <module>pipeline-spark-api</module>
+    <module>pipeline-kafka</module>
+    <module>pipeline-kafka-0-8</module>
+    <module>pipeline-kafka-0-10</module>
+    <module>pipeline-metrics</module>
+    <module>pipeline-metrics-prometheus</module>
   </modules>
 
   <properties>
@@ -27,14 +38,22 @@
     <commons.codec.version>1.10</commons.codec.version>
     <joda.time.version>2.9.5</joda.time.version>
     <metrics.version>3.2.3</metrics.version>
-
+    <log4j.version>1.2.17</log4j.version>
+    <spark.version>2.2.1</spark.version>
+    <scala.version>2.11.5</scala.version>
+    <scala.binary.version>2.11</scala.binary.version>
+    <kafka08.version>0-8</kafka08.version>
+    <kafka010.version>0-10</kafka010.version>
+    <kafka_010.version>0.10.2.1</kafka_010.version>
+    <kafka_080.version>0.8.2.1</kafka_080.version>
     <scala.version>2.11.5</scala.version>
     <scala.binary.version>2.11</scala.binary.version>
     <spark.version>2.2.1</spark.version>
     <curator.version>2.11.0</curator.version>
     <hadoop.version>2.5.0-cdh5.3.2</hadoop.version>
     <zookeeper.version>3.4.5</zookeeper.version>
-    <prometheus.client>0.4.0</prometheus.client>
+    <prometheus.client>0.5.0</prometheus.client>
+    <zookeeper.version>3.4.6</zookeeper.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
@@ -92,7 +111,108 @@
         <artifactId>metrics-core</artifactId>
         <version>${metrics.version}</version>
       </dependency>
+      <dependency>
+        <groupId>io.dropwizard.metrics</groupId>
+        <artifactId>metrics-json</artifactId>
+        <version>${metrics.version}</version>
+      </dependency>
       <!-- end metrics-->
+      <!-- start log4j-->
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.7.22</version>
+      </dependency>
+      <!-- end log4j-->
+      <!-- start spark-->
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql-kafka-${kafka010.version}_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming-kafka-${kafka08.version}_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming-kafka-${kafka010.version}_${scala.binary.version}</artifactId>
+        <version>${spark.version}</version>
+      </dependency>
+      <!-- end spark-->
+      <!-- prometheus -->
+      <dependency>
+        <groupId>io.prometheus</groupId>
+        <artifactId>simpleclient_pushgateway</artifactId>
+        <version>${prometheus.client}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.prometheus</groupId>
+        <artifactId>simpleclient_dropwizard</artifactId>
+        <version>${prometheus.client}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>net.jpountz.lz4</groupId>
+        <artifactId>lz4</artifactId>
+        <version>1.3.0</version>
+      </dependency>
+
+      <!-- start zookeeper-->
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>${zookeeper.version}</version>
+      </dependency>
+
+      <!--<dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka_${scala.binary.version}</artifactId>
+        <version>${kafka_010.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>${kafka_010.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka_${scala.binary.version}</artifactId>
+        <version>${kafka_080.version}</version>
+      </dependency>-->
     </dependencies>
   </dependencyManagement>
 

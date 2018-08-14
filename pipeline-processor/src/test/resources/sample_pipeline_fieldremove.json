@@ -1,22 +1,19 @@
 {
   "processors": [
     {
-      "processorType": "processor_fieldremove",
-      "subType": "remove_remove",
+      "processorType": "select_remove",
       "params": {
         "fields": "a,b"
       }
     },
     {
-      "processorType": "processor_fieldremove",
-      "subType": "remove_keep",
+      "processorType": "select_keep",
       "params": {
         "fields": "a,b"
       }
     },
     {
-      "processorType": "processor_fieldremove",
-      "subType": "remove_remove_null",
+      "processorType": "select_removenull",
       "params": {
         "fields": "a,b"
       }

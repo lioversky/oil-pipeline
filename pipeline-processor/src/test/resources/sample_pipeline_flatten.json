@@ -1,0 +1,22 @@
+{
+  "processors": [
+    {
+      "processorType": "flatten_all",
+      "params": {
+        "targetFields": "a,b,c",
+        "overwriteIfFieldExist": true,
+        "keepParentName": false,
+        "fieldName": "split",
+        "splitStr": ","
+      }
+    },
+    {
+      "processorType": "flatten_field",
+      "params": {
+        "overwriteIfFieldExist": true,
+        "keepParentName": false,
+        "fieldName": "flatten"
+      }
+    }
+  ]
+}

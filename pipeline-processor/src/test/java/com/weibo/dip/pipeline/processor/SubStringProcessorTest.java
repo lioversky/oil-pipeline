@@ -5,31 +5,34 @@ import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.exception.FieldNotExistException;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SubStringProcessorTest {
 
   private String test_type = "processor_substring";
   private String jsonFile = "src/test/resources/sample_pipeline_substring.json";
+  private List<Processor> processorList;
+
+  @Before
+  public void before() {
+    try {
+      processorList = JsonTestUtil.getProcessors(jsonFile);
+    } catch (Exception e) {
+      Assert.fail("create processorList error!!!");
+    }
+  }
 
   @Test
   public void testTrimFieldExist() {
     String fieldName = "substring_trim";
 
-    Map<String, Object> params = ImmutableMap
-        .of("fieldNotExistError", false, "subType", "substring_trim", "fieldName", fieldName);
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
-
     try {
-      Map<String, Object> result = p
-          .process(Maps.newHashMap(ImmutableMap.of(fieldName, " trimdata ")));
-      Assert.assertEquals("trimdata", result.get(fieldName));
-
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
-      Processor p1 = processorList.get(0);
-      result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, " trimdata ")));
+      Processor<Map<String,Object>> p1 = processorList.get(0);
+      Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, " trimdata ")));
       Assert.assertEquals("trimdata", result.get(fieldName));
 
     } catch (Exception e) {
@@ -37,15 +40,14 @@ public class SubStringProcessorTest {
     }
   }
 
-  @Test(expected = FieldNotExistException.class)
+//  @Test(expected = FieldNotExistException.class)
   public void testTrimFieldNotExist() throws Exception {
     String fieldName = "trim";
     Map<String, Object> data = Maps.newHashMap(ImmutableMap.of("copy1", "copydata"));
 
     Map<String, Object> params = ImmutableMap
         .of("fieldNotExistError", true, "subType", "substring_trim", "fieldName", fieldName);
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    Processor<Map<String,Object>> p = Processor.createProcessor(test_type, params);
 
     Map<String, Object> result = p.process(data);
 
@@ -55,25 +57,11 @@ public class SubStringProcessorTest {
 
   @Test
   public void testFixedSubStringer() {
-    String fieldName = "substring_fixed";
-
-    Map<String, Object> params = ImmutableMap
-        .of("fieldNotExistError", false, "subType", "substring_fixed", "fieldName", fieldName,
-            "params",
-            ImmutableMap.of(
-                "begin", 4, "end", 4));
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
+    String fieldName = "substring_fixedlr";
 
     try {
-      Map<String, Object> result = p
-          .process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_fixed_111")));
-      System.out.println(result);
-      Assert.assertEquals("fixed", result.get(fieldName));
-
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
-      Processor p1 = processorList.get(1);
-      result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_fixed_111")));
+      Processor<Map<String,Object>> p1 = processorList.get(1);
+      Map<String,Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_fixed_111")));
       System.out.println(result);
       Assert.assertEquals("fixed", result.get(fieldName));
 
@@ -85,25 +73,12 @@ public class SubStringProcessorTest {
 
 
   @Test
-  public void testMatchSubStringer() {
-    String fieldName = "substring_match";
-
-    Map<String, Object> params = ImmutableMap
-        .of("fieldNotExistError", false, "subType", "substring_match", "fieldName", fieldName,
-            "params",
-            ImmutableMap.of("beginStr", "111_", "endStr", "_111"));
-    Processor p = ProcessorTypeEnum.getType(test_type)
-        .getProcessor(params);
-
+  public void testFixedLen() {
+    String fieldName = "substring_fixedlen";
     try {
-      Map<String, Object> result = p
-          .process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_match_111")));
-      System.out.println(result);
-      Assert.assertEquals("match", result.get(fieldName));
 
-      List<Processor> processorList = JsonTestUtil.getProcessors(jsonFile);
-      Processor p1 = processorList.get(2);
-      result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_match_111")));
+      Processor<Map<String,Object>> p1 = processorList.get(2);
+      Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "111_match_111")));
       Assert.assertEquals("match", result.get(fieldName));
 
     } catch (Exception e) {
@@ -111,5 +86,19 @@ public class SubStringProcessorTest {
     }
   }
 
+  @Test
+  public void testDelimindex(){
+    String fieldName = "substring_delimindex";
+    try {
+
+      Processor<Map<String,Object>> p1 = processorList.get(3);
+      Map<String, Object> result = p1.process(Maps.newHashMap(ImmutableMap.of(fieldName, "a,b,c")));
+      Assert.assertEquals("a,b", result.get(fieldName));
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+  }
 
 }

@@ -1,34 +1,34 @@
 {
   "processors": [
     {
-      "processorType": "processor_fieldadd",
-      "subType": "fieldadd_copy",
-      "targetField": "fieldcopy",
-      "overwriteIfFieldExist": true,
+      "processorType": "fieldadd_copy",
       "params": {
+        "targetField": "fieldcopy",
+        "overwriteIfFieldExist": true,
         "sourceField": "field"
       }
     },
     {
-      "processorType": "processor_fieldadd",
-      "subType": "fieldadd_datestr",
-      "targetField": "datetime",
-      "overwriteIfFieldExist": true,
+      "processorType": "fieldadd_datestr",
       "params": {
+        "targetField": "datetime",
+        "overwriteIfFieldExist": true,
         "dateFormat": "yyyyMMdd"
       }
     },
     {
-      "processorType": "processor_fieldadd",
-      "subType": "fieldadd_timestamp",
-      "targetField": "timestamp",
-      "overwriteIfFieldExist": true
+      "processorType": "fieldadd_timestamp",
+      "params": {
+        "targetField": "timestamp",
+        "overwriteIfFieldExist": true
+      }
     },
     {
-      "processorType": "processor_fieldadd",
-      "subType": "fieldadd_unixtimestamp",
-      "targetField": "unixtimestamp",
-      "overwriteIfFieldExist": true
+      "processorType": "fieldadd_unixtimestamp",
+      "params": {
+        "targetField": "unixtimestamp",
+        "overwriteIfFieldExist": true
+      }
     }
   ]
 }
