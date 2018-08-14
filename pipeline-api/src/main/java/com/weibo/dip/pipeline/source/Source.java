@@ -13,9 +13,9 @@ import java.util.Properties;
 
 public abstract class Source extends Step {
 
-  private final static String PROPERTIES_NAME = "sources.properties";
+  private static final String PROPERTIES_NAME = "sources.properties";
 
-  private final static String DEFAULT_PREFIX = PropertiesUtil.DEFAULT_PREFIX;
+  private static final String DEFAULT_PREFIX = PropertiesUtil.DEFAULT_PREFIX;
 
   private static Map<String, Properties> engineMap = PropertiesUtil.initEngineMap(PROPERTIES_NAME);
 

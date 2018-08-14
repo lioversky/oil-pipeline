@@ -11,6 +11,11 @@ public class SparkTableExtractor extends FileTableExtractor {
 
   private String sql;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public SparkTableExtractor(Map<String, Object> params) {
     super(params);
     this.sql = (String) params.get("sql");

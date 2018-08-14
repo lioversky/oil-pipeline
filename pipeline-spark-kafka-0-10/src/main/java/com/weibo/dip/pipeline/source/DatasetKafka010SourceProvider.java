@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class DatasetKafka010SourceProvider extends DatasetKafkaSourceProvider {
 
-  protected String version = "0.10";
+
   @Override
   public DatasetSource createDataSource(Map<String, Object> params) {
     return new DatasetKafka010DataSource(params);

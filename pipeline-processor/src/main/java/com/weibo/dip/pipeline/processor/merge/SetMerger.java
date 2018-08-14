@@ -9,6 +9,10 @@ import java.util.Set;
  */
 public class SetMerger extends FieldMergeProcessor {
 
+  /**
+   * 构造函数
+   * @param params 参数
+   */
   public SetMerger(Map<String, Object> params) {
     super(params);
   }

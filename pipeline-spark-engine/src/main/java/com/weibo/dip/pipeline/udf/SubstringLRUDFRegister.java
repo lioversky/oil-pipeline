@@ -20,7 +20,9 @@ public class SubstringLRUDFRegister extends UDFRegister {
   public void register(SparkSession sparkSession) {
     sparkSession.udf()
         .register(udfName, (String value, Integer left, Integer right) ->
-                StringUtils.substring(value, left, right < 0 ? value.length() : value.length() - right),
+                StringUtils.substring(value, left, right < 0
+                    ? value.length()
+                    : value.length() - right),
             DataTypes.StringType);
   }
 }

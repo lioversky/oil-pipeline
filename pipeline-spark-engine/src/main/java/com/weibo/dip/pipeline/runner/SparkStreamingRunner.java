@@ -3,8 +3,8 @@ package com.weibo.dip.pipeline.runner;
 import com.google.common.collect.Lists;
 import com.weibo.dip.pipeline.extract.Extractor;
 import com.weibo.dip.pipeline.extract.StructMapExtractor;
-import com.weibo.dip.pipeline.register.FileTableExtractor;
 import com.weibo.dip.pipeline.job.PipelineJob;
+import com.weibo.dip.pipeline.register.FileTableExtractor;
 import com.weibo.dip.pipeline.sink.DatasetDataSink;
 import com.weibo.dip.pipeline.sink.RddDataSink;
 import com.weibo.dip.pipeline.sink.Sink;
@@ -48,8 +48,6 @@ public class SparkStreamingRunner extends Runner {
   private Map<String, Object> proConfig;
 
   private String sinkFormat;
-  private String sinkMode;
-//  private Sink dataSink;
 
   private Map<String, String> sinkOptions;
 
@@ -80,7 +78,7 @@ public class SparkStreamingRunner extends Runner {
       proConfig = (Map<String, Object>) processConfig.get("pro");
       //sink配置
       sinkFormat = (String) sinkConfig.get("format");
-      sinkMode = (String) sinkConfig.get("mode");
+      //sinkMode = (String) sinkConfig.get("mode");
       sinkOptions = (Map<String, String>) sinkConfig.get("options");
 
       String checkpointDirectory = (String) configs.get("checkpointDirectory");
@@ -98,6 +96,10 @@ public class SparkStreamingRunner extends Runner {
 
   }
 
+  /**
+   * runner的start方法实现.
+   * 创建StreamingContext实例；注册udf；cache table；创建源Dstream；process；output；
+   */
   public void start() throws Exception {
 
     SparkSession spark = SparkSession.builder()

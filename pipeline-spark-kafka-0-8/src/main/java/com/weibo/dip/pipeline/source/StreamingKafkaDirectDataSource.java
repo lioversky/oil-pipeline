@@ -100,4 +100,9 @@ public class StreamingKafkaDirectDataSource extends StreamingDataSource {
 
     return lines;
   }
+
+  @Override
+  public void stop() {
+
+  }
 }

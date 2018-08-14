@@ -55,10 +55,8 @@ public abstract class Stage<T> implements Serializable {
       } else if ("pipeline".equals(stageType)) {
         List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
             .get("processors");
-        result.add(new PipelineStageNoMetric( processorConfigList, stageId));
+        result.add(new PipelineStageNoMetric(processorConfigList, stageId));
       }
-      //注册metrics
-//      parentRegistry.register(stageId, metricRegistry);
     }
     return result;
   }

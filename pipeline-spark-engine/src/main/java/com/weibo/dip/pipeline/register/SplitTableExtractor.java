@@ -22,6 +22,11 @@ public class SplitTableExtractor extends FileTableExtractor {
   protected String[] columns;
   protected FlatMapFunction<String, Row> func;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public SplitTableExtractor(Map<String, Object> params) {
     super(params);
     columns = ((String) params.get("columns")).split(",");

@@ -35,13 +35,13 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
    */
   public CaseWhenStage(MetricRegistry registry, List<Map<String, Object>> params, String stageId)
       throws Exception {
-    super( stageId);
+    super(stageId);
     stageTimer = registry.timer(String.format("%s_timer", stageId));
     casewhenMap = create(params);
   }
 
   /**
-   * 根据配置创建Condition和subStageList
+   * 根据配置创建Condition和subStageList.
    *
    * @param params 配置
    * @return Map
@@ -66,7 +66,7 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
   }
 
   /**
-   * 执行casewhen的stage，遍历map，如果满足条件则执行，执行完跳出，否则向下判断
+   * 执行casewhen的stage，遍历map，如果满足条件则执行，执行完跳出，否则向下判断.
    *
    * @param data 待处理数据
    * @return 处理结果
@@ -84,7 +84,7 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
         Condition condition = entry.getKey();
         if (condition.conditional(data)) {
           for (Stage stage : entry.getValue()) {
-            data = (Map<String,Object>)stage.processStage(data);
+            data = (Map<String, Object>) stage.processStage(data);
           }
           break;
         }

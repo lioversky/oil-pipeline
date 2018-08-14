@@ -18,6 +18,11 @@ public abstract class DatasetSink extends DatasetDataSink {
    */
   protected JavaRddDataSink rddDataSink;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public DatasetSink(Map<String, Object> params) {
     super(params);
     sinkFormat = (String) params.get("format");

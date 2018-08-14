@@ -11,6 +11,11 @@ public abstract class StructMapExtractor extends Extractor<List<Map<String, Obje
 
   private String extractResultMetrics;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public StructMapExtractor(Map<String, Object> params) {
     super(params);
     extractResultMetrics = metricsName + "_extracted";

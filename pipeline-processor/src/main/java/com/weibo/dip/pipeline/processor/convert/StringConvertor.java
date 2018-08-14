@@ -9,6 +9,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class StringConvertor extends ConvertProcessor {
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public StringConvertor(Map<String, Object> params) {
     super(params);
   }

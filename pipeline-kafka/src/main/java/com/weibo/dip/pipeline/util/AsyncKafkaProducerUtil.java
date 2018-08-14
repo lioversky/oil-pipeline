@@ -1,9 +1,9 @@
 package com.weibo.dip.pipeline.util;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.weibo.dip.pipeline.provider.KafkaProducerProvider;
 import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
 import com.weibo.dip.pipeline.metrics.MetricsSystem;
+import com.weibo.dip.pipeline.provider.KafkaProducerProvider;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +22,10 @@ public class AsyncKafkaProducerUtil {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AsyncKafkaProducerUtil.class);
   private static BlockingQueue<TopicAndMsg> queue = new LinkedBlockingQueue<>(500000);
-  private static Map<String, PipelineKafkaProducer<String, String>> topicProducerMap = new HashMap<>();
-  private static Map<Map<String, Object>, PipelineKafkaProducer<String, String>> producerPool = new HashMap<>();
+  private static Map<String, PipelineKafkaProducer<String, String>> topicProducerMap =
+      new HashMap<>();
+  private static Map<Map<String, Object>, PipelineKafkaProducer<String, String>> producerPool =
+      new HashMap<>();
   private static Object lock = new Object();
   private static KafkaProducerProvider producerProvider = KafkaProducerProvider.newInstance();
 
@@ -37,16 +39,22 @@ public class AsyncKafkaProducerUtil {
 
   }
 
-  public static void createProducer(String _topic, Map<String, Object> config) {
+  /**
+   * 创建producer
+   *
+   * @param topic topic
+   * @param config kafka配置
+   */
+  public static void createProducer(String topic, Map<String, Object> config) {
     synchronized (lock) {
-      if (topicProducerMap.get(_topic) == null) {
+      if (topicProducerMap.get(topic) == null) {
 
         PipelineKafkaProducer<String, String> producer = producerPool.get(config);
         if (producer == null) {
           producer = producerProvider.createProducer(config);
           producerPool.put(config, producer);
         }
-        topicProducerMap.put(_topic, producer);
+        topicProducerMap.put(topic, producer);
       }
     }
   }
@@ -97,20 +105,19 @@ public class AsyncKafkaProducerUtil {
       while (true) {
         try {
           TopicAndMsg topicAndMsg = queue.take();
-          if (topicAndMsg != null) {
-            PipelineKafkaProducer p = getProducer(topicAndMsg.topic);
-            if (p != null) {
-              p.send(topicAndMsg.topic, topicAndMsg.msg, (success, exception) -> {
-                if (success) {
-                  MetricsSystem.getCounter("kafka_send_async_" + topicAndMsg.topic).inc();
-                } else {
-                  MetricsSystem.getCounter("kafka_send_async_" + topicAndMsg.topic).inc();
-                }
-              });
-            }
+          PipelineKafkaProducer p = getProducer(topicAndMsg.topic);
+          if (p != null) {
+            p.send(topicAndMsg.topic, topicAndMsg.msg, (success, exception) -> {
+              if (success) {
+                MetricsSystem.getCounter("kafka_send_async_" + topicAndMsg.topic).inc();
+              } else {
+                MetricsSystem.getCounter("kafka_send_async_error_" + topicAndMsg.topic).inc();
+                MetricsSystem.getCounter("kafka_send_async_error").inc();
+              }
+            });
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          MetricsSystem.getCounter("kafka_send_async_error").inc();
         }
       }
     }

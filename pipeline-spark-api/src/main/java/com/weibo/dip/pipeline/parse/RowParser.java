@@ -13,6 +13,10 @@ public abstract class RowParser implements Serializable {
 
   protected String[] output;
 
+  /**
+   * 构造函数
+   * @param params 参数
+   */
   public RowParser(Map<String, Object> params) {
     if (params.containsKey("output")) {
       output = ((List<String>) params.get("output")).toArray(new String[0]);

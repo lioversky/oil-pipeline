@@ -14,7 +14,9 @@ public abstract class DatasetSplitProcessor extends FieldDatasetProcessor {
   public DatasetSplitProcessor(Map<String, Object> params) {
     super(params);
   }
+
   abstract Dataset split(String fieldName, Dataset dataset);
+
   @Override
   public Dataset fieldProcess(Dataset data) {
     return split(fieldName, data);

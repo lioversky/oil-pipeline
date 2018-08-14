@@ -74,7 +74,7 @@ public class NumberUtil {
   /**
    *
    * @param obj
-   * @return
+   * @return 转换结果
    */
   public static double parseDouble(Object obj) {
     double result = 0;

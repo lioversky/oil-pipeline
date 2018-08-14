@@ -9,7 +9,7 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * sink顶层抽象类
+ * sink顶层抽象类.
  * 计划输出包括：hdfs,console,kafka,summon(es),influxdb,db,http
  * Create by hongxun on 2018/7/6
  */
@@ -17,10 +17,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class Sink<T> extends Step implements Sequence {
 
   protected String metricsName;
-  private final static AtomicInteger index = new AtomicInteger();
-  private final static String PROPERTIES_NAME = "sinks.properties";
 
-  private final static String DEFAULT_PREFIX = PropertiesUtil.DEFAULT_PREFIX;
+  private static final AtomicInteger INDEX = new AtomicInteger();
+
+  private static final String PROPERTIES_NAME = "sinks.properties";
+
+  private static final String DEFAULT_PREFIX = PropertiesUtil.DEFAULT_PREFIX;
 
   private static Map<String, Properties> engineMap = PropertiesUtil.initEngineMap(PROPERTIES_NAME);
 
@@ -64,7 +66,7 @@ public abstract class Sink<T> extends Step implements Sequence {
 
   @Override
   public int getSequence() {
-    return index.incrementAndGet();
+    return INDEX.incrementAndGet();
   }
 
   /**

@@ -1,8 +1,8 @@
 package com.weibo.dip.pipeline.util;
 
 
-import com.weibo.dip.pipeline.provider.KafkaProducerProvider;
 import com.weibo.dip.pipeline.clients.PipelineKafkaProducer;
+import com.weibo.dip.pipeline.provider.KafkaProducerProvider;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 public class KafkaProducerUtil {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducerUtil.class);
-  private static Map<Map<String, Object>, PipelineKafkaProducer<String, String>> producerPool = new HashMap<>();
+  private static Map<Map<String, Object>, PipelineKafkaProducer<String, String>> producerPool =
+      new HashMap<>();
 
   private static Object lock = new Object();
   private static KafkaProducerProvider producerProvider = KafkaProducerProvider.newInstance();

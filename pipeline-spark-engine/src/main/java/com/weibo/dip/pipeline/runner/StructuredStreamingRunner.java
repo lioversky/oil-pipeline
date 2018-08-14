@@ -22,8 +22,8 @@ public class StructuredStreamingRunner extends DatasetRunner {
   }
 
   /**
-   * 启动runner
-   * 先生成stream source
+   * runner的start方法实现.
+   * 创建SparkSession实例；注册udf；cache table；创建流式Dataset；process；output；
    */
   @Override
   public void start() throws Exception {

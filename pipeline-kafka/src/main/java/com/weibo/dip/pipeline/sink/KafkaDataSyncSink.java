@@ -26,12 +26,12 @@ public class KafkaDataSyncSink extends KafkaDataSink {
   }
 
   @Override
-  public void write(String _topic, String msg) {
-    KafkaProducerUtil.getProducer(kafkaParams).send(_topic, msg, (success, exception) -> {
+  public void write(String kafkaTopic, String msg) {
+    KafkaProducerUtil.getProducer(kafkaParams).send(kafkaTopic, msg, (success, exception) -> {
       if (success) {
-        MetricsSystem.getCounter("kafka_send_sync_" + topic).inc();
+        MetricsSystem.getCounter("kafka_send_sync_" + kafkaTopic).inc();
       } else {
-        MetricsSystem.getCounter("kafka_send_sync_" + topic).inc();
+        MetricsSystem.getCounter("kafka_send_error_sync_" + kafkaTopic).inc();
       }
     });
   }

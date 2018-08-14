@@ -72,9 +72,9 @@ public class StreamingKafkaReceiverDataSource extends StreamingDataSource {
 
   @Override
   public JavaDStream createSource(JavaStreamingContext streamingContext) {
-    JavaDStream<String> dStream = null;
+    JavaDStream<String> dstream = null;
 
-    List<JavaPairDStream<String, String>> kafkaStreams = new ArrayList<JavaPairDStream<String, String>>(
+    List<JavaPairDStream<String, String>> kafkaStreams = new ArrayList<>(
         numStreams);
 
     String realConsumerGroup = cosumerGroup;
@@ -90,7 +90,7 @@ public class StreamingKafkaReceiverDataSource extends StreamingDataSource {
           .add(KafkaUtils.createStream(streamingContext, zookeeper, realConsumerGroup, topicMap,
               StorageLevel.fromString(storageLevel)));
     }
-    dStream = streamingContext
+    dstream = streamingContext
         .union(kafkaStreams.get(0), kafkaStreams.subList(1, kafkaStreams.size()))
         .map(new Function<Tuple2<String, String>, String>() {
           public String call(Tuple2<String, String> arg0) throws Exception {
@@ -98,6 +98,11 @@ public class StreamingKafkaReceiverDataSource extends StreamingDataSource {
           }
         });
 
-    return dStream;
+    return dstream;
+  }
+
+  @Override
+  public void stop() {
+
   }
 }

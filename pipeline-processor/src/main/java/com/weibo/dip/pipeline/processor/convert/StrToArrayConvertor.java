@@ -9,6 +9,11 @@ public class StrToArrayConvertor extends ConvertProcessor {
 
   private String splitStr;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public StrToArrayConvertor(Map<String, Object> params) {
     super(params);
     splitStr = (String) params.get("splitStr");

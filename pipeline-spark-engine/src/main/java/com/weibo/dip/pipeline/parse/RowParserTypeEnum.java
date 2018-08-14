@@ -5,6 +5,7 @@ import com.weibo.dip.pipeline.enums.TypeEnum;
 import java.util.Map;
 
 /**
+ * 行解析枚举类
  * Create by hongxun on 2018/8/1
  */
 public enum RowParserTypeEnum implements TypeEnum {

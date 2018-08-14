@@ -20,6 +20,11 @@ public class StreamingKafka010DataSource extends StreamingDataSource {
   private Map<String, Object> kafkaParams;
   private List<String> topics;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public StreamingKafka010DataSource(Map params) {
     super(params);
     kafkaParams = (Map<String, Object>) params.get("options");

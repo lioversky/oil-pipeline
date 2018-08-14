@@ -11,6 +11,11 @@ public class ConsoleDatasetSink extends DatasetSink {
   private boolean truncate = true;
   private Integer numRows = 20;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public ConsoleDatasetSink(Map<String, Object> params) {
     super(params);
     if (sinkOptions != null) {
@@ -21,14 +26,11 @@ public class ConsoleDatasetSink extends DatasetSink {
         Integer.parseInt(sinkOptions.get("numRows"));
       }
     }
-    String typeName = (String) params.get("type");
-//    rddDataSink = (JavaRddDataSink) Sink.createSink("streaming", typeName, params);
   }
 
   @Override
   public void write(Dataset dataset) {
     dataset.show(numRows, truncate);
-//    rddDataSink.write(dataset.javaRDD());
   }
 
   @Override

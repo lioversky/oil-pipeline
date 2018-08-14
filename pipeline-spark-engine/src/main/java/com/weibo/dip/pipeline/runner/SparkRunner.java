@@ -21,6 +21,10 @@ public class SparkRunner extends DatasetRunner {
   private DatasetSource datasetSource;
   private DatasetDataSink datasetSink;
 
+  /**
+   * 构造函数
+   * @param configs 参数
+   */
   @SuppressWarnings({"unchecked"})
   public SparkRunner(Map<String, Object> configs) {
     super(configs);
@@ -28,6 +32,10 @@ public class SparkRunner extends DatasetRunner {
     datasetSink = (DatasetDataSink) Sink.createSink(sinkFormat,sinkConfig);
   }
 
+  /**
+   * runner的start方法实现.
+   * 创建SparkSession实例；注册udf；创建源dataset；cache table；process；output
+   */
   @Override
   public void start() throws Exception {
     //创建SparkSession

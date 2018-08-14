@@ -129,9 +129,9 @@ public class KafkaReporter extends ScheduledReporter {
     }
     if (json != null) {
       try {
-//        if (producer == null) {
-//          producer = new KafkaProducer(this.kafkaConfig);
-//        }
+        //        if (producer == null) {
+        //          producer = new KafkaProducer(this.kafkaConfig);
+        //        }
         KafkaProducerUtil.getProducer(kafkaConfig).send(topic, json);
 
       } catch (Exception e) {
@@ -142,12 +142,7 @@ public class KafkaReporter extends ScheduledReporter {
 
   @Override
   public void stop() {
-    try {
-      super.stop();
-    } finally {
-
-    }
-
+    super.stop();
   }
 
   public static class Builder {

@@ -8,11 +8,14 @@ import java.util.Map;
  */
 public class StreamingKafka082SourceProvider extends StreamingKafkaSourceProvider {
 
-  protected String version = "0.8";
-
   @Override
-  public StreamingDataSource createDataSource(Map<String, Object> params)  {
-    // todo :生成receiver或direct的source
+  public StreamingDataSource createDataSource(Map<String, Object> params) {
+    if (!params.containsKey("type") || params.get("type").equals("receiver")) {
+      return new StreamingKafkaReceiverDataSource(params);
+    } else if ("direct".equals(params.get("type"))) {
+      return new StreamingKafkaDirectDataSource(params);
+    }
+
     return null;
   }
 

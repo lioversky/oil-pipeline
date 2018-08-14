@@ -10,7 +10,11 @@ import org.apache.spark.sql.Row;
  * 写出到标准输入输出中
  */
 public class ConsoleRddDataSink extends JavaRddDataSink {
-
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public ConsoleRddDataSink(Map<String, Object> params) {
     super(params);
   }

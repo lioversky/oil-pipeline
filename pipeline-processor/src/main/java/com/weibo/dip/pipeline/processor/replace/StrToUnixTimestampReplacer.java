@@ -14,6 +14,11 @@ public class StrToUnixTimestampReplacer extends ReplaceProcessor {
 
   private DateTimeFormatter dateTimeFormat;
 
+  /**
+   * 构造函数
+   *
+   * @param params 参数
+   */
   public StrToUnixTimestampReplacer(Map<String, Object> params) {
     super(params);
     String source = (String) params.get("source");
