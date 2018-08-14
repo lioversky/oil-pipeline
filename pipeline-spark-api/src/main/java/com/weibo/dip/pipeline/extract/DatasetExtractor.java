@@ -20,7 +20,7 @@ public abstract class DatasetExtractor extends Extractor<Dataset> {
   }
 
   @Override
-  public Dataset extract(Object data) throws Exception {
+  public Dataset extract(Object data) {
     return extract((Dataset) data);
   }
 

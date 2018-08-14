@@ -1,9 +1,7 @@
 package com.weibo.dip.pipeline.processor.filter;
 
-import com.weibo.dip.pipeline.processor.Processor;
 import com.weibo.dip.pipeline.processor.StructMapProcessor;
 import java.util.Map;
-
 import org.nutz.el.El;
 import org.nutz.lang.util.Context;
 import org.nutz.lang.util.SimpleContext;

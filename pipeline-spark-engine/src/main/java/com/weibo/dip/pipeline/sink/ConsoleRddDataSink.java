@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.sink;
 
+import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import java.util.Iterator;
 import java.util.Map;
 import org.apache.spark.api.java.JavaRDD;
@@ -10,6 +11,7 @@ import org.apache.spark.sql.Row;
  * 写出到标准输入输出中
  */
 public class ConsoleRddDataSink extends JavaRddDataSink {
+
   /**
    * 构造函数
    *
@@ -26,7 +28,9 @@ public class ConsoleRddDataSink extends JavaRddDataSink {
         while (rowIterator.hasNext()) {
           Row row = rowIterator.next();
           System.out.println(parser.parseRow(row));
+          MetricsSystem.getCounter(metricsName).inc();
         }
+
       }
     });
   }

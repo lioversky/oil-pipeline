@@ -1,7 +1,7 @@
 package com.weibo.dip.pipeline.runner;
 
 import com.weibo.dip.pipeline.udf.UDFRegister;
-import com.weibo.dip.pipeline.util.DatasetUtil;
+import com.weibo.dip.pipeline.util.SparkUtil;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -35,7 +35,7 @@ public class StructuredStreamingRunner extends DatasetRunner {
     Dataset<Row> sourceDataset = loadStreamDataSet();
     //其它依赖数据源
     if (tables != null) {
-      DatasetUtil.cache(sparkSession, tables);
+      SparkUtil.cache(sparkSession, tables);
     }
     //抽取
     Dataset extractDataset = extract(sourceDataset);

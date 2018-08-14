@@ -36,7 +36,7 @@ public class StreamingKafkaDirectDataSource extends StreamingDataSource {
   public StreamingKafkaDirectDataSource(Map map) {
     super(map);
 
-    kafkaParams = (Map<String, String>) map.get("parameters");
+    kafkaParams = (Map<String, String>) map.get("options");
     topic = kafkaParams.remove("topic");
     consumerGroup = kafkaParams.remove("cosumerGroup");
 

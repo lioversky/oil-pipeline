@@ -17,9 +17,7 @@ public abstract class MultipleBaseExtractor extends StructMapExtractor {
     List<Map<String, Object>> exactersMap = (ArrayList<Map<String, Object>>) jsonMap
         .get("extractors");
     for (Map<String, Object> map : exactersMap) {
-      String extractType = (String) map.get("type");
-      // todo: MultipleBaseExtractor
-//      exacters.add(ExtractorTypeEnum.getType(extractType).getExtractor(map));
+      exacters.add((StructMapExtractor) Extractor.createExtractor(map));
     }
   }
 }

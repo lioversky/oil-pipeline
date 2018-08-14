@@ -9,6 +9,7 @@ import java.util.Map;
  */
 public abstract class Runner implements Serializable {
 
+  protected Map<String, Object> applicationConfig;
   protected Map<String, Object> sourceConfig;
   protected Map<String, Object> processConfig;
   protected Map<String, Object> sinkConfig;
@@ -19,6 +20,7 @@ public abstract class Runner implements Serializable {
    * @param params 参数
    */
   public Runner(Map<String, Object> params) {
+    applicationConfig = (Map<String, Object>) params.get("applicationConfig");
     //source配置
     sourceConfig = (Map<String, Object>) params.get("sourceConfig");
     processConfig = (Map<String, Object>) params.get("processConfig");

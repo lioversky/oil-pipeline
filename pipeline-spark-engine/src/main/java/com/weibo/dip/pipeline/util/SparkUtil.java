@@ -24,7 +24,7 @@ import org.apache.spark.sql.types.StructType;
  * dataset工具类
  * Create by hongxun on 2018/7/23
  */
-public class DatasetUtil {
+public class SparkUtil {
 
   /**
    * 切分列，一列内容切分成多列
@@ -179,4 +179,18 @@ public class DatasetUtil {
     }
   }
 
+
+  public static StructField createStructField(String name, Object value) {
+    if (value instanceof Map) {
+      return DataTypes
+          .createStructField(name,
+              DataTypes.createMapType(DataTypes.StringType, DataTypes.StringType), true);
+    } else if (value instanceof List) {
+      return DataTypes
+          .createStructField(name, DataTypes.createArrayType(DataTypes.StringType), true);
+    } else {
+      return DataTypes
+          .createStructField(name, DataTypes.StringType, true);
+    }
+  }
 }

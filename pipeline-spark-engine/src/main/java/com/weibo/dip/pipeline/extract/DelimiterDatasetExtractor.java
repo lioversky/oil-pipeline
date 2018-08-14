@@ -1,6 +1,6 @@
 package com.weibo.dip.pipeline.extract;
 
-import com.weibo.dip.pipeline.util.DatasetUtil;
+import com.weibo.dip.pipeline.util.SparkUtil;
 import java.util.ArrayList;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
@@ -16,7 +16,7 @@ public class DelimiterDatasetExtractor extends DatasetExtractor {
 
   @Override
   public Dataset extract(Dataset dataset) {
-    return DatasetUtil.splitDatasetField(dataset, fieldName, fieldName, splitStr, targetFields);
+    return SparkUtil.splitDatasetField(dataset, fieldName, fieldName, splitStr, targetFields);
   }
 
   public DelimiterDatasetExtractor(Map<String, Object> params) {

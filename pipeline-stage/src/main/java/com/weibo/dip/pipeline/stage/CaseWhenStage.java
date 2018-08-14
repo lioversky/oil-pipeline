@@ -5,6 +5,7 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.condition.Condition;
+import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,6 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
    */
   private LinkedHashMap<Condition, List<Stage>> casewhenMap;
 
-  private Timer stageTimer;
 
   /**
    * 构造函数，创建此stage内的条件可执行stage列表
@@ -33,10 +33,9 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
    * @param params 构造参数
    * @param stageId stageId唯一标识
    */
-  public CaseWhenStage(MetricRegistry registry, List<Map<String, Object>> params, String stageId)
+  public CaseWhenStage(List<Map<String, Object>> params, String stageId)
       throws Exception {
     super(stageId);
-    stageTimer = registry.timer(String.format("%s_timer", stageId));
     casewhenMap = create(params);
   }
 
@@ -77,7 +76,7 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
     if (data == null) {
       return null;
     }
-    Context context = stageTimer.time();
+    Context context = MetricsSystem.getTimer(String.format("%s_timer", stageId)).time();
     try {
       //顺序执行condition和对应的pipelinestage，但只执行condition为true的stage，执行完跳出
       for (Map.Entry<Condition, List<Stage>> entry : casewhenMap.entrySet()) {

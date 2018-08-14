@@ -1,6 +1,6 @@
 package com.weibo.dip.pipeline.processor.split;
 
-import com.weibo.dip.pipeline.util.DatasetUtil;
+import com.weibo.dip.pipeline.util.SparkUtil;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
 
@@ -21,6 +21,6 @@ public class DelimiterDatasetSplitter extends DatasetSplitProcessor {
 
   @Override
   public Dataset split(String fieldName, Dataset dataset) {
-    return DatasetUtil.splitDatasetField(dataset, fieldName, fieldName, splitStr, targetFields);
+    return SparkUtil.splitDatasetField(dataset, fieldName, fieldName, splitStr, targetFields);
   }
 }

@@ -1,6 +1,8 @@
 package com.weibo.dip.pipeline.runner;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.extract.Extractor;
 import com.weibo.dip.pipeline.extract.StructMapExtractor;
 import com.weibo.dip.pipeline.job.PipelineJob;
@@ -10,17 +12,19 @@ import com.weibo.dip.pipeline.sink.RddDataSink;
 import com.weibo.dip.pipeline.sink.Sink;
 import com.weibo.dip.pipeline.source.Source;
 import com.weibo.dip.pipeline.source.StreamingDataSource;
+import com.weibo.dip.pipeline.udf.UDFRegister;
+import com.weibo.dip.pipeline.util.SparkUtil;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import org.apache.spark.api.java.function.Function0;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
@@ -34,6 +38,7 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
  */
 public class SparkStreamingRunner extends Runner {
 
+  protected SparkSession sparkSession;
   private String engine = "streaming";
 
   private String sourceFormat;
@@ -43,7 +48,8 @@ public class SparkStreamingRunner extends Runner {
   private StructMapExtractor extractor;
 
   private Map<String, Object> preConfig;
-  private String[] preOutputColumns;
+  private PipelineJob pipelineJob;
+  private List<String> preOutputColumns;
   private Map<String, Object> aggConfig;
   private Map<String, Object> proConfig;
 
@@ -70,26 +76,20 @@ public class SparkStreamingRunner extends Runner {
           .createSource(engine, sourceFormat, sourceConfig);
 
       Map<String, Object> extractConfig = (Map<String, Object>) sourceConfig.get("extractor");
-      extractor = (StructMapExtractor) Extractor.createExtractor(engine, extractConfig);
+      if (extractConfig != null) {
+        extractor = (StructMapExtractor) Extractor.createExtractor(engine, extractConfig);
+      }
       //process配置
 
       preConfig = (Map<String, Object>) processConfig.get("pre");
+      pipelineJob = new PipelineJob(preConfig);
       aggConfig = (Map<String, Object>) processConfig.get("agg");
       proConfig = (Map<String, Object>) processConfig.get("pro");
       //sink配置
       sinkFormat = (String) sinkConfig.get("format");
       //sinkMode = (String) sinkConfig.get("mode");
-      sinkOptions = (Map<String, String>) sinkConfig.get("options");
+//      sinkOptions = (Map<String, String>) sinkConfig.get("options");
 
-      String checkpointDirectory = (String) configs.get("checkpointDirectory");
-      if (checkpointDirectory == null) {
-        javaStreamingContext = createContext(configs);
-      } else {
-        Function0<JavaStreamingContext> createContextFunc =
-            () -> createContext(configs);
-        javaStreamingContext = JavaStreamingContext
-            .getOrCreate(checkpointDirectory, createContextFunc);
-      }
     } catch (Exception e) {
       throw new RuntimeException("Create SparkStreamingRunner Error !!!", e);
     }
@@ -101,12 +101,27 @@ public class SparkStreamingRunner extends Runner {
    * 创建StreamingContext实例；注册udf；cache table；创建源Dstream；process；output；
    */
   public void start() throws Exception {
+    sparkSession = SparkSession.builder().master("local[*]")
+        .config("spark.streaming.kafka.maxRatePerPartition", 100).getOrCreate();
+    String checkpointDirectory = (String) applicationConfig.get("checkpointDirectory");
+    if (checkpointDirectory == null) {
+      javaStreamingContext = createContext(applicationConfig);
+    } else {
+      Function0<JavaStreamingContext> createContextFunc =
+          () -> createContext(applicationConfig);
+      javaStreamingContext = JavaStreamingContext
+          .getOrCreate(checkpointDirectory, createContextFunc);
+    }
 
-    SparkSession spark = SparkSession.builder()
-        .config(javaStreamingContext.sparkContext().getConf()).getOrCreate();
+//    SparkSession spark = SparkSession.builder()
+//        .config(javaStreamingContext.sparkContext().getConf()).getOrCreate();
     //其它依赖数据源
     if (tables != null) {
-      FileTableExtractor.cacheTable(spark, tables);
+      FileTableExtractor.cacheTable(sparkSession, tables);
+    }
+    //如果包含agg，注册udf
+    if (aggConfig != null) {
+      UDFRegister.registerAllUDF(sparkSession);
     }
     JavaDStream sourceDstream = streamingDataSource.createSource(javaStreamingContext);
     JavaDStream<Row> processDstream = process(sourceDstream);
@@ -135,21 +150,33 @@ public class SparkStreamingRunner extends Runner {
 
   }
 
+  /**
+   * 聚合
+   *
+   * @param dstream stream
+   */
   private void agg(JavaDStream dstream) {
-    List<StructField> fields = new ArrayList<>();
 
-    for (String fieldName : preOutputColumns) {
-      StructField field = DataTypes.createStructField(fieldName, DataTypes.StringType, true);
-      fields.add(field);
-    }
     if (aggConfig.containsKey("tempTableName")) {
       DatasetDataSink dataSink = (DatasetDataSink) Sink
           .createSink("dataset", sinkFormat, sinkConfig);
 
       String tempTableName = (String) aggConfig.get("tempTableName");
       String sql = (String) aggConfig.get("sql");
-      StructType schema = DataTypes.createStructType(fields);
+
       ((JavaDStream<Row>) dstream).foreachRDD(rdd -> {
+        //如果未配置output，使用rown的schema
+        StructType schema;
+        if (preOutputColumns != null) {
+          List<StructField> fields = new ArrayList<>();
+          for (String fieldName : preOutputColumns) {
+            StructField field = DataTypes.createStructField(fieldName, DataTypes.StringType, true);
+            fields.add(field);
+          }
+          schema = DataTypes.createStructType(fields);
+        } else {
+          schema = rdd.first().schema();
+        }
         SparkSession spark = SparkSession.builder().config(rdd.context().getConf()).getOrCreate();
         spark.createDataFrame(rdd, schema).createOrReplaceTempView(tempTableName);
         Dataset dataset = spark.sql(sql);
@@ -180,24 +207,55 @@ public class SparkStreamingRunner extends Runner {
    */
   private JavaDStream<Row> pre(JavaDStream dstream) {
 
-    preOutputColumns = ((List<String>) preConfig.get("output")).toArray(new String[0]);
-    PipelineJob job = new PipelineJob(preConfig);
+    preOutputColumns = ((List<String>) preConfig.get("output"));
+    //如果输出不为空，传递到parse中
+    if (preOutputColumns != null) {
+      Map<String, Object> parserConfig = (Map<String, Object>) sinkConfig.get("parser");
+      parserConfig.put("output", preOutputColumns);
+    }
 
     StructMapExtractor sourceExtractor = extractor;
     FlatMapFunction<String, Row> processFunction = new FlatMapFunction<String, Row>() {
       @Override
       public Iterator<Row> call(String s) throws Exception {
         List<Row> rows = Lists.newArrayList();
-        List<Map<String, Object>> extractList = sourceExtractor.extract(s);
-        for (Map<String, Object> data : extractList) {
-          Object[] values = new Object[preOutputColumns.length];
-          data = job.processJob(data);
+        //抽取数据
+        List<Map<String, Object>> extractResult;
+        if (sourceExtractor != null) {
+          extractResult = sourceExtractor.extract(s);
+        } else {
+          extractResult = Lists.newArrayList(Maps.newHashMap(ImmutableMap.of("_value_", s)));
+        }
+        //遍历数据
+        for (Map<String, Object> data : extractResult) {
+
+          data = pipelineJob.processJob(data);
+          //将dataMap转换成row
           if (data != null) {
-            for (int i = 0; i < preOutputColumns.length; i++) {
-              values[i] = data.get(preOutputColumns[i]);
+            Object[] values;
+            List<StructField> fields = new ArrayList<>();
+            //如果配置output，使用
+            if (preOutputColumns != null) {
+              values = new Object[preOutputColumns.size()];
+              for (int i = 0; i < preOutputColumns.size(); i++) {
+                values[i] = data.get(preOutputColumns.get(i));
+
+                fields.add(SparkUtil.createStructField(preOutputColumns.get(i), values[i]));
+              }
+            } else {
+              //未配置output，除了原始数据全部输出
+              data.remove("_value_");
+              List<Object> objects = new ArrayList<>();
+              for (Map.Entry<String, Object> entry : data.entrySet()) {
+                objects.add(entry.getValue());
+                fields.add(SparkUtil.createStructField(entry.getKey(), entry.getValue()));
+              }
+              values = objects.toArray(new Object[0]);
             }
+            StructType schema = DataTypes.createStructType(fields);
+            rows.add(new GenericRowWithSchema(values, schema));
           }
-          rows.add(RowFactory.create(values));
+
         }
 
         return rows.iterator();
@@ -205,6 +263,8 @@ public class SparkStreamingRunner extends Runner {
     };
     return dstream.flatMap(processFunction);
   }
+
+
 
 
   private void write(Dataset dataset, DatasetDataSink dataSink) {
@@ -216,12 +276,14 @@ public class SparkStreamingRunner extends Runner {
     ((JavaDStream<Row>) dstream).foreachRDD(rdd -> dataSink.write(rdd));
   }
 
-  private JavaStreamingContext createContext(Map<String, Object> jsonMap) throws Exception {
-    SparkConf conf = new SparkConf();
-    String appName = (String) jsonMap.get("name");
-    conf.setAppName(appName).setMaster("local[*]");
-
-    final JavaStreamingContext javaStreamingContext = new JavaStreamingContext(conf,
+  /**
+   * 创建JavaStreamingContext
+   *
+   * @param jsonMap 应用配置
+   */
+  private JavaStreamingContext createContext(Map<String, Object> jsonMap) {
+    JavaSparkContext javaSparkContext = new JavaSparkContext(sparkSession.sparkContext());
+    final JavaStreamingContext javaStreamingContext = new JavaStreamingContext(javaSparkContext,
         Durations.milliseconds(((Number) jsonMap.get("duration")).longValue()));
     String checkpointDirectory = (String) jsonMap.get("checkpointDirectory");
     if (checkpointDirectory != null) {

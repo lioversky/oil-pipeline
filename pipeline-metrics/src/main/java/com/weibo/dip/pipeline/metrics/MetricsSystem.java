@@ -42,7 +42,7 @@ public class MetricsSystem {
       String className = value.getProperty("class");
       try {
 
-        if (className == null || className.trim().length() == 0) {
+        if (className != null && className.trim().length() != 0) {
           Constructor<MetricsSink> constructor = (Constructor<MetricsSink>) Class.forName(className)
               .getConstructor(Properties.class);
           MetricsSink sink = constructor.newInstance(value);

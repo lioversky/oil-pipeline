@@ -73,7 +73,7 @@ public abstract class Extractor<T> implements Sequence {
   private static final long serialVersionUID = 1L;
   protected String[] columns;
 
-  public abstract T extract(Object data) throws Exception;
+  public abstract T extract(Object data) ;
 
   @Override
   public int getSequence() {

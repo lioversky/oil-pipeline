@@ -4,6 +4,7 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import com.weibo.dip.pipeline.processor.Processor;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * stage pipeline实现，将各procesoor串行执行.
  * Create by hongxun on 2018/06/28
  */
-public abstract class PipelineStage extends Stage<Map<String, Object>> {
+public class PipelineStage extends Stage<Map<String, Object>> {
 
   private static final String engine = "*";
 
@@ -28,17 +29,18 @@ public abstract class PipelineStage extends Stage<Map<String, Object>> {
 
   }
 
-  public abstract Timer getStageTimer();
 
   /**
    * 串行处理stage
+   * 只有过滤的才会返回null，处理错误都抛异常
+   * @param data 处理数据
    */
   @Override
   public Map<String, Object> processStage(Map<String, Object> data) throws Exception {
     if (data == null) {
       return null;
     }
-    Context context = getStageTimer().time();
+    Context context = MetricsSystem.getTimer(String.format("%s_timer", stageId)).time();
     try {
       for (Processor processor : processorList) {
         data = (Map<String, Object>) processor.process(data);

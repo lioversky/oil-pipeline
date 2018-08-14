@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 分隔符map提取器
  * Create by hongxun on 2018/8/9
  */
 public class DelimiterExacter extends StructMapExtractor {
@@ -20,7 +21,7 @@ public class DelimiterExacter extends StructMapExtractor {
   }
 
   @Override
-  public List<Map<String, Object>> extract(String line) {
+  public List<Map<String, Object>> extractLine(String line) {
 
     List<Map<String, Object>> records = new ArrayList<>();
 
@@ -29,7 +30,7 @@ public class DelimiterExacter extends StructMapExtractor {
     if (record.length == columns.length) {
 
       Map<String, Object> recordMap = new HashMap<>();
-
+      recordMap.put("_value_", line);
       for (int index = 0; index < columns.length; index++) {
         recordMap.put(columns[index], record[index]);
       }

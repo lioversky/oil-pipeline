@@ -13,11 +13,11 @@ public class PipelineMain {
 
   public static void main(String[] args) {
     String jsonFile = args[0];
-    System.out.println(new File(jsonFile).getAbsolutePath());
     try {
       Map<String, Object> config = GsonUtil
           .loadJsonFromFile(jsonFile, GsonUtil.GsonType.OBJECT_MAP_TYPE);
-      String engineType = (String) config.remove("engineType");
+      Map<String, Object> applicationConfig = (Map<String, Object>) config.get("applicationConfig");
+      String engineType = (String) applicationConfig.remove("engineType");
       Constructor<Runner> constructor = (Constructor<Runner>) Class.forName(engineType)
           .getConstructor(Map.class);
       Runner runner = constructor.newInstance((Map<String, Object>) config);

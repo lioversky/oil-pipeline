@@ -1,6 +1,6 @@
 package com.weibo.dip.pipeline.extract;
 
-import com.weibo.dip.pipeline.util.DatasetUtil;
+import com.weibo.dip.pipeline.util.SparkUtil;
 import java.util.ArrayList;
 import java.util.Map;
 import org.apache.spark.sql.Dataset;
@@ -20,6 +20,6 @@ public class RegexDatasetExtractor extends DatasetExtractor {
   }
 
   public Dataset extract(Dataset dataset) {
-    return DatasetUtil.regexSplitDatasetField(dataset, fieldName, fieldName, regex, targetFields);
+    return SparkUtil.regexSplitDatasetField(dataset, fieldName, fieldName, regex, targetFields);
   }
 }

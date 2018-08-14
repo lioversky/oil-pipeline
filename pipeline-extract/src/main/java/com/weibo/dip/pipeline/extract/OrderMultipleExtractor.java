@@ -14,14 +14,14 @@ public class OrderMultipleExtractor extends MultipleBaseExtractor {
   }
 
   @Override
-  public List<Map<String, Object>> extract(String line) {
+  public List<Map<String, Object>> extractLine(String line) {
     List<Map<String, Object>> records = null;
 
     for (StructMapExtractor exacter :
         exacters) {
       records = exacter.extract(line);
 
-      if (records != null) {
+      if (!records.isEmpty()) {
         break;
       }
 

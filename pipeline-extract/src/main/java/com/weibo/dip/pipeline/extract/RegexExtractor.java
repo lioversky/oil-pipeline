@@ -25,7 +25,7 @@ public class RegexExtractor extends StructMapExtractor {
 
 
   @Override
-  public List<Map<String, Object>> extract(String line) {
+  public List<Map<String, Object>> extractLine(String line) {
 
     List<Map<String, Object>> records = null;
 
@@ -36,7 +36,7 @@ public class RegexExtractor extends StructMapExtractor {
       records = new ArrayList<Map<String, Object>>();
 
       Map<String, Object> recordMap = new HashMap<String, Object>();
-
+      recordMap.put("_value_", line);
       for (int index = 1; index <= matcher.groupCount(); index++) {
         recordMap.put(columns[index - 1], matcher.group(index));
       }

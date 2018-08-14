@@ -1,6 +1,5 @@
 package com.weibo.dip.pipeline.stage;
 
-import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Lists;
 import java.io.Serializable;
 import java.util.List;
@@ -28,6 +27,13 @@ public abstract class Stage<T> implements Serializable {
     this.stageId = stageId;
   }
 
+  /**
+   * 数据处理抽象方法.
+   * 只有过滤的才会返回null，处理错误都抛异常
+   * @param data
+   * @return
+   * @throws Exception
+   */
   public abstract T processStage(T data) throws Exception;
 
 
@@ -45,17 +51,16 @@ public abstract class Stage<T> implements Serializable {
 
     for (Map<String, Object> stageConfigMap : stagesConfigList) {
       String stageType = (String) stageConfigMap.get("type");
-      MetricRegistry metricRegistry = new MetricRegistry();
       String stageId = createStageId(stageType);
       //按类型创建stage
       if ("casewhen".equals(stageType)) {
         List<Map<String, Object>> subStagesList = (List<Map<String, Object>>) stageConfigMap
             .get("subStages");
-        result.add(new CaseWhenStage(metricRegistry, subStagesList, stageId));
+        result.add(new CaseWhenStage(subStagesList, stageId));
       } else if ("pipeline".equals(stageType)) {
         List<Map<String, Object>> processorConfigList = (List<Map<String, Object>>) stageConfigMap
             .get("processors");
-        result.add(new PipelineStageNoMetric(processorConfigList, stageId));
+        result.add(new PipelineStage(processorConfigList, stageId));
       }
     }
     return result;

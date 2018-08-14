@@ -1,22 +1,25 @@
 package com.weibo.dip.pipeline.metrics;
 
-import com.codahale.metrics.ConsoleReporter;
+import com.codahale.metrics.Slf4jReporter;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Dropwizard Metrics Sink实现类
- * Create by hongxun on 2018/8/13
+ * Create by hongxun on 2018/8/14
  */
-public class DropwizardConsoleSink extends MetricsSink {
+public class Slf4jMetricsSink extends MetricsSink {
 
-  public DropwizardConsoleSink(Properties properties) {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger("metrics");
+
+  public Slf4jMetricsSink(Properties properties) {
     super(properties);
-    reporter = ConsoleReporter.forRegistry(MetricsSystem.getMetricRegistry())
+    reporter = Slf4jReporter.forRegistry(MetricsSystem.getMetricRegistry())
         .convertRatesTo(TimeUnit.SECONDS)
         .convertDurationsTo(TimeUnit.MILLISECONDS)
+        .outputTo(LOGGER)
         .build();
   }
 
@@ -24,5 +27,4 @@ public class DropwizardConsoleSink extends MetricsSink {
   public void start() {
     reporter.start(pollPeriod, pollUnit);
   }
-
 }
