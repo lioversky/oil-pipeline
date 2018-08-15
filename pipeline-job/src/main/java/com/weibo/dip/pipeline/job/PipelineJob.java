@@ -66,7 +66,6 @@ public class PipelineJob extends Job {
         }
       } catch (Exception e) {
         MetricsSystem.getCounter(errorCounterName).inc();
-        LOGGER.error("process data error.", e);
         sendErrorData(data.get("_value_"));
         return null;
       }
@@ -75,6 +74,6 @@ public class PipelineJob extends Job {
   }
 
   private void sendErrorData(Object line) {
-    LOGGER.error((String) line);
+    LOGGER.error("process data error: {}.", line);
   }
 }

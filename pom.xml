@@ -179,11 +179,6 @@
         <artifactId>simpleclient_pushgateway</artifactId>
         <version>${prometheus.client}</version>
       </dependency>
-      <dependency>
-        <groupId>io.prometheus</groupId>
-        <artifactId>simpleclient_dropwizard</artifactId>
-        <version>${prometheus.client}</version>
-      </dependency>
 
       <dependency>
         <groupId>net.jpountz.lz4</groupId>
