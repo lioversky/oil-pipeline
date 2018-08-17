@@ -90,7 +90,8 @@ public abstract class FieldSplitProcessor extends StructMapProcessor {
               if (targetFields != null) {
                 if (targetFields.length != values.length) {
                   throw new RuntimeException(String
-                      .format("Split value length %d is not equal to column length %d",
+                      .format("Split value: %s length %d is not equal to column length %d",
+                          value,
                           values.length,
                           targetFields.length));
                 } else {

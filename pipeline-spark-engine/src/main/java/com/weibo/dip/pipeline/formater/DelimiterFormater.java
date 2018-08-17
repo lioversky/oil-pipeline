@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.parse;
+package com.weibo.dip.pipeline.formater;
 
 import java.util.Map;
 import org.apache.spark.sql.Row;
@@ -6,12 +6,12 @@ import org.apache.spark.sql.Row;
 /**
  * row以字符分隔拼成字符串
  */
-public class DelimiterParser extends RowParser {
+public class DelimiterFormater extends RowFormater {
 
   //    消息分隔符
   private String splitStr;
 
-  public DelimiterParser(Map<String, Object> params) {
+  public DelimiterFormater(Map<String, Object> params) {
     super(params);
     splitStr = (String) params.get("splitStr");
   }

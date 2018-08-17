@@ -2,6 +2,7 @@ package com.weibo.dip.pipeline.sink;
 
 import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.function.VoidFunction;
@@ -23,7 +24,17 @@ public class ConsoleRddDataSink extends JavaRddDataSink {
 
   @Override
   public void write(JavaRDD<Row> rdd) {
-    rdd.foreachPartition(new VoidFunction<Iterator<Row>>() {
+    Long count = rdd.count();
+    List<Row> rowList = rdd.take(new Long(count > 20 ? 20 : count).intValue());
+    for (Row row : rowList) {
+      try {
+        System.out.println(parser.parseRow(row));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      MetricsSystem.getCounter(metricsName).inc(count);
+    }
+    /*rdd.foreachPartition(new VoidFunction<Iterator<Row>>() {
       public void call(Iterator<Row> rowIterator) throws Exception {
         while (rowIterator.hasNext()) {
           Row row = rowIterator.next();
@@ -32,7 +43,7 @@ public class ConsoleRddDataSink extends JavaRddDataSink {
         }
 
       }
-    });
+    });*/
   }
 
   @Override

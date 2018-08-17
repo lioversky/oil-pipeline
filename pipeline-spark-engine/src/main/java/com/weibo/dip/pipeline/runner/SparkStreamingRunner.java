@@ -49,6 +49,9 @@ public class SparkStreamingRunner extends Runner {
 
   private Map<String, Object> preConfig;
   private PipelineJob pipelineJob;
+  /**
+   * pre阶段的输出列，可以为空
+   */
   private List<String> preOutputColumns;
   private Map<String, Object> aggConfig;
   private Map<String, Object> proConfig;
@@ -91,7 +94,7 @@ public class SparkStreamingRunner extends Runner {
 //      sinkOptions = (Map<String, String>) sinkConfig.get("options");
 
     } catch (Exception e) {
-      throw new RuntimeException("Create SparkStreamingRunner Error !!!", e);
+      throw new RuntimeException("Create SparkStreamingRunner Error .", e);
     }
 
   }
@@ -101,7 +104,7 @@ public class SparkStreamingRunner extends Runner {
    * 创建StreamingContext实例；注册udf；cache table；创建源Dstream；process；output；
    */
   public void start() throws Exception {
-    sparkSession = SparkSession.builder().master("local[*]")
+    sparkSession = SparkSession.builder().master("local")
         .config("spark.streaming.kafka.maxRatePerPartition", 100).getOrCreate();
     String checkpointDirectory = (String) applicationConfig.get("checkpointDirectory");
     if (checkpointDirectory == null) {
@@ -158,14 +161,15 @@ public class SparkStreamingRunner extends Runner {
   private void agg(JavaDStream dstream) {
 
     if (aggConfig.containsKey("tempTableName")) {
+      //取dataset引擎
       DatasetDataSink dataSink = (DatasetDataSink) Sink
           .createSink("dataset", sinkFormat, sinkConfig);
-
+      //注册临时表名
       String tempTableName = (String) aggConfig.get("tempTableName");
       String sql = (String) aggConfig.get("sql");
 
       ((JavaDStream<Row>) dstream).foreachRDD(rdd -> {
-        //如果未配置output，使用rown的schema
+        //如果配置output，使用创建schema，否则使用row的schema
         StructType schema;
         if (preOutputColumns != null) {
           List<StructField> fields = new ArrayList<>();
@@ -208,11 +212,6 @@ public class SparkStreamingRunner extends Runner {
   private JavaDStream<Row> pre(JavaDStream dstream) {
 
     preOutputColumns = ((List<String>) preConfig.get("output"));
-    //如果输出不为空，传递到parse中
-    if (preOutputColumns != null) {
-      Map<String, Object> parserConfig = (Map<String, Object>) sinkConfig.get("parser");
-      parserConfig.put("output", preOutputColumns);
-    }
 
     StructMapExtractor sourceExtractor = extractor;
     FlatMapFunction<String, Row> processFunction = new FlatMapFunction<String, Row>() {
@@ -263,8 +262,6 @@ public class SparkStreamingRunner extends Runner {
     };
     return dstream.flatMap(processFunction);
   }
-
-
 
 
   private void write(Dataset dataset, DatasetDataSink dataSink) {
