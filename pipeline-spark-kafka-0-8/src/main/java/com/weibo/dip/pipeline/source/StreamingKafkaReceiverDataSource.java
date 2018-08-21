@@ -39,9 +39,9 @@ public class StreamingKafkaReceiverDataSource extends StreamingDataSource {
   public StreamingKafkaReceiverDataSource(Map map) {
     super(map);
 
-    Map<String, Object> parameters = (Map<String, Object>) map.get("parameters");
+    Map<String, Object> parameters = (Map<String, Object>) map.get("options");
 
-    zookeeper = (String) parameters.get("zookeeper");
+    zookeeper = (String) parameters.get("zookeeper.connect");
 
     cosumerGroup = (String) parameters.get("cosumerGroup");
 
@@ -55,7 +55,8 @@ public class StreamingKafkaReceiverDataSource extends StreamingDataSource {
 
     if (parameters.get("consumerGroupTimeRoll") != null) {
 
-      consumerGroupTimeRoll = (Boolean) parameters.get("consumerGroupTimeRoll");
+      consumerGroupTimeRoll = Boolean
+          .parseBoolean((String) parameters.remove("consumerGroupTimeRoll"));
     } else {
       consumerGroupTimeRoll = false;
     }

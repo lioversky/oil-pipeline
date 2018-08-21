@@ -28,6 +28,7 @@
     <module>pipeline-kafka-0-10</module>
     <module>pipeline-metrics</module>
     <module>pipeline-metrics-prometheus</module>
+    <module>pipeline-spark-carbondata</module>
   </modules>
 
   <properties>
@@ -114,6 +115,11 @@
       <dependency>
         <groupId>io.dropwizard.metrics</groupId>
         <artifactId>metrics-json</artifactId>
+        <version>${metrics.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.dropwizard.metrics</groupId>
+        <artifactId>metrics-jvm</artifactId>
         <version>${metrics.version}</version>
       </dependency>
       <!-- end metrics-->

@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.extract;
 
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +36,7 @@ public class RegexExtractor extends StructMapExtractor {
 
       records = new ArrayList<Map<String, Object>>();
 
-      Map<String, Object> recordMap = new HashMap<String, Object>();
+      Map<String, Object> recordMap = Maps.newLinkedHashMapWithExpectedSize(3);
       recordMap.put("_value_", line);
       for (int index = 1; index <= matcher.groupCount(); index++) {
         recordMap.put(columns[index - 1], matcher.group(index));
