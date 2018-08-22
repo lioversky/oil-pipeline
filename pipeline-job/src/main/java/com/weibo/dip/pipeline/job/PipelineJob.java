@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.job;
 
+import com.codahale.metrics.Timer.Context;
 import com.weibo.dip.pipeline.metrics.MetricsSystem;
 import com.weibo.dip.pipeline.stage.Stage;
 import java.util.List;
@@ -55,26 +56,32 @@ public class PipelineJob extends Job {
    * @throws Exception 处理异常
    */
   @Override
+  @SuppressWarnings({"unchecked"})
   public Map<String, Object> processJob(Map<String, Object> data) throws Exception {
-    MetricsSystem.getMeter(dataName).mark();
-    for (Stage stage : stageList) {
-      try {
-        data = (Map<String, Object>) stage.processStage(data);
-        if (data == null) {
-          MetricsSystem.getCounter(nullCounterName).inc();
+    Context context = MetricsSystem.getTimer(dataName).time();
+    try {
+      for (Stage stage : stageList) {
+        try {
+          data = (Map<String, Object>) stage.processStage(data);
+          if (data == null) {
+            MetricsSystem.getCounter(nullCounterName).inc();
+            break;
+          }
+        } catch (Exception e) {
+          MetricsSystem.getCounter(errorCounterName).inc();
+          sendErrorData(data.get("_value_"));
+          data = null;
           break;
         }
-      } catch (Exception e) {
-        MetricsSystem.getCounter(errorCounterName).inc();
-        LOGGER.error("process data error.", e);
-        sendErrorData(data.get("_value_"));
-        return null;
       }
+    } finally {
+      context.stop();
     }
+
     return data;
   }
 
   private void sendErrorData(Object line) {
-    LOGGER.error((String) line);
+    LOGGER.error("process data error: {}.", line);
   }
 }

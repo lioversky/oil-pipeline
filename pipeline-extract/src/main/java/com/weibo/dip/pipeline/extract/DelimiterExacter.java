@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.extract;
 
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class DelimiterExacter extends StructMapExtractor {
 
     if (record.length == columns.length) {
 
-      Map<String, Object> recordMap = new HashMap<>();
+      Map<String, Object> recordMap = Maps.newLinkedHashMapWithExpectedSize(3);
       recordMap.put("_value_", line);
       for (int index = 0; index < columns.length; index++) {
         recordMap.put(columns[index], record[index]);

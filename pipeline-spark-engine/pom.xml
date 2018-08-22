@@ -43,6 +43,11 @@
       <version>${parent.version}</version>
     </dependency>
     <dependency>
+      <groupId>oil-pipeline</groupId>
+      <artifactId>pipeline-metrics-prometheus</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>

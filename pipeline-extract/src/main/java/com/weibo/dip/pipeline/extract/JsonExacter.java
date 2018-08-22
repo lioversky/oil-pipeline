@@ -1,5 +1,6 @@
 package com.weibo.dip.pipeline.extract;
 
+import com.google.common.collect.Maps;
 import com.weibo.dip.util.GsonUtil;
 import com.weibo.dip.util.GsonUtil.GsonType;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class JsonExacter extends StructMapExtractor {
 
   private Map<String, Object> filterByColumn(Map<String, Object> json) {
 
-    Map<String, Object> mapRecord = new HashMap<String, Object>();
+    Map<String, Object> mapRecord = Maps.newLinkedHashMapWithExpectedSize(3);
 
     for (int index = 0; index < columns.length; index++) {
 

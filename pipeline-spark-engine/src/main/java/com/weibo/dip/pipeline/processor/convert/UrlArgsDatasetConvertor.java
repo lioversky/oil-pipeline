@@ -26,7 +26,7 @@ public class UrlArgsDatasetConvertor extends DatasetConvertProcessor {
 
   @Override
   public Dataset convert(String fieldName, Dataset dataset) {
-    Column args = callUDF("urlargs_split", col(fieldName));
+    Column args = callUDF("extendargs_split", col(fieldName));
 
     return dataset.withColumn(fieldName, callUDF("sub_element", args, lit(keepFields)));
 

@@ -25,7 +25,7 @@ public class MetricsSystem {
   /**
    * metrics配置文件名称
    */
-  private final static String PROPERTIES_NAME = "metrics.properties";
+  private final static String PROPERTIES_NAME = "pipeline-metrics.properties";
 
   /**
    * 各输出名和对应参数

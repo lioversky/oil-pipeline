@@ -1,4 +1,4 @@
-package com.weibo.dip.pipeline.parse;
+package com.weibo.dip.pipeline.formater;
 
 import java.util.Map;
 import org.apache.spark.sql.Row;
@@ -6,9 +6,9 @@ import org.apache.spark.sql.Row;
 /**
  * row转换成summon格式json字符串
  */
-public class SummonParser extends RowParser {
+public class SummonFormater extends RowFormater {
 
-  public SummonParser(Map<String, Object> params) {
+  public SummonFormater(Map<String, Object> params) {
     super(params);
   }
 

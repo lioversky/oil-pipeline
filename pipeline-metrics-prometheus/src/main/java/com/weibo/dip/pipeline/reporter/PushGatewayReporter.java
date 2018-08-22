@@ -80,7 +80,7 @@ public class PushGatewayReporter extends ScheduledReporter {
       //调用pushGateway
       pushGateway.pushAdd(PrometheusUtil.dropwizardToPrometheus(registry), jobName);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOGGER.error("Send PushGatewayReporter error.");
     }
   }
 

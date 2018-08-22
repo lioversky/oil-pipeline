@@ -29,9 +29,6 @@ public class Kafka010Producer extends PipelineKafkaProducer<String, String> {
         if (callback != null) {
           callback.onCompletion(true, null);
         }
-        LOGGER.info(
-            "offset: " + metadata.offset() + ", partition: " + metadata.partition()
-                + ", message: " + msg);
       } else {
         callback.onCompletion(false, exception);
         LOGGER.error(String.format("Send kafka to topic: %s error!", topic), exception);

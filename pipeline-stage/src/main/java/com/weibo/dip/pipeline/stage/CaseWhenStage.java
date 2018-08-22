@@ -1,8 +1,5 @@
 package com.weibo.dip.pipeline.stage;
 
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
-import com.codahale.metrics.Timer.Context;
 import com.google.common.collect.Maps;
 import com.weibo.dip.pipeline.condition.Condition;
 import com.weibo.dip.pipeline.metrics.MetricsSystem;
@@ -26,6 +23,8 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
    */
   private LinkedHashMap<Condition, List<Stage>> casewhenMap;
 
+  private String metricsMeterName;
+  private String metricsMeterResultName;
 
   /**
    * 构造函数，创建此stage内的条件可执行stage列表
@@ -37,6 +36,8 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
       throws Exception {
     super(stageId);
     casewhenMap = create(params);
+    metricsMeterName = String.format("%s_meter", stageId);
+    metricsMeterResultName = String.format("%s_result_counter", stageId);
   }
 
   /**
@@ -76,7 +77,7 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
     if (data == null) {
       return null;
     }
-    Context context = MetricsSystem.getTimer(String.format("%s_timer", stageId)).time();
+    MetricsSystem.getMeter(metricsMeterName).mark();
     try {
       //顺序执行condition和对应的pipelinestage，但只执行condition为true的stage，执行完跳出
       for (Map.Entry<Condition, List<Stage>> entry : casewhenMap.entrySet()) {
@@ -90,8 +91,9 @@ public class CaseWhenStage extends Stage<Map<String, Object>> {
       }
     } catch (Exception e) {
       throw e;
-    } finally {
-      context.stop();
+    }
+    if (data != null) {
+      MetricsSystem.getCounter(metricsMeterResultName).inc();
     }
     return data;
   }
