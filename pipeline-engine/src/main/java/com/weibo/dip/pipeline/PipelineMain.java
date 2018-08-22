@@ -2,7 +2,6 @@ package com.weibo.dip.pipeline;
 
 import com.weibo.dip.pipeline.runner.Runner;
 import com.weibo.dip.util.GsonUtil;
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 

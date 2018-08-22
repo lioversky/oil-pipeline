@@ -11,6 +11,9 @@ public class DelimiterFormater extends RowFormater {
 
   //    消息分隔符
   private String splitStr;
+  /**
+   * 输出列名，如果为空则使用原数据原顺序全部列
+   */
   private List<String> output;
 
   public DelimiterFormater(Map<String, Object> params) {

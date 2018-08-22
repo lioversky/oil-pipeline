@@ -25,23 +25,23 @@ import java.util.Set;
 public class GsonUtil {
 
   private static final Gson GSON = new GsonBuilder()
-      .registerTypeAdapter(OBJECT_MAP_TYPE, new MapJsonDeserializer()).serializeNulls()
+      .registerTypeAdapter(OBJECT_MAP_TYPE, new MapJsonDeserializer())
       .disableHtmlEscaping().create();
 
 
-  public static String toJson(Object object) throws Exception {
+  public static String toJson(Object object) {
     return GSON.toJson(object);
   }
 
-  public static String toJson(Object object, Type type) throws Exception {
+  public static String toJson(Object object, Type type) {
     return GSON.toJson(object, type);
   }
 
-  public static <T> T fromJson(String json, Class<T> classOfT) throws Exception {
+  public static <T> T fromJson(String json, Class<T> classOfT) {
     return GSON.fromJson(json, classOfT);
   }
 
-  public static <T> T fromJson(String json, Type type) throws Exception {
+  public static <T> T fromJson(String json, Type type) {
     return GSON.fromJson(json, type);
   }
 

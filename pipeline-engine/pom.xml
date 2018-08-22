@@ -32,12 +32,12 @@
     <!-- kafka source and sink-->
     <dependency>
       <groupId>oil-pipeline</groupId>
-      <artifactId>pipeline-spark-kafka-0-10</artifactId>
+      <artifactId>pipeline-spark-kafka-0-8</artifactId>
       <version>${parent.version}</version>
     </dependency>
     <dependency>
       <groupId>oil-pipeline</groupId>
-      <artifactId>pipeline-kafka-0-10</artifactId>
+      <artifactId>pipeline-kafka-0-8</artifactId>
       <version>${parent.version}</version>
     </dependency>
     <dependency>

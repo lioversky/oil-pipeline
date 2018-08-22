@@ -110,7 +110,7 @@ public class SparkStreamingRunner extends Runner {
    */
   public void start() throws Exception {
     sparkSession = SparkSession.builder().master("local[*]")
-        .config("spark.streaming.kafka.maxRatePerPartition", 100).getOrCreate();
+        .config("spark.streaming.kafka.maxRatePerPartition", 1).getOrCreate();
     String checkpointDirectory = (String) applicationConfig.get("checkpointDirectory");
     if (checkpointDirectory == null) {
       javaStreamingContext = createContext(applicationConfig);

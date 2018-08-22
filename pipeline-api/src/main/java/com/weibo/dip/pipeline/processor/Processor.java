@@ -82,10 +82,6 @@ public abstract class Processor<T> extends Configuration {
     return createProcessor(params, className);
   }
 
-
-  public Processor() {
-  }
-
   public Processor(Map<String, Object> params) {
     if (params != null) {
       addConfigs(params);

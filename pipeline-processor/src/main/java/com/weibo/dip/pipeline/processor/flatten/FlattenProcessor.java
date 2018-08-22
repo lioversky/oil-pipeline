@@ -13,13 +13,16 @@ import java.util.Map;
 public abstract class FlattenProcessor extends StructMapProcessor {
 
 
+  /**
+   * 默认true
+   */
   private boolean overwriteIfFieldExist;
   /**
    * 展开深度
    */
   private int flattenDepth = 0;
   /**
-   * 是否保留父字段名称
+   * 是否保留父字段名称，默认false
    */
   private boolean keepParentName;
   /**
@@ -33,7 +36,7 @@ public abstract class FlattenProcessor extends StructMapProcessor {
         !params.containsKey("overwriteIfFieldExist") || (boolean) params
             .get("overwriteIfFieldExist");
     keepParentName =
-        !params.containsKey("keepParentName") || (boolean) params.get("keepParentName");
+        params.containsKey("keepParentName") && (boolean) params.get("keepParentName");
     if (keepParentName && params.containsKey("joinStrIfKeepParen")) {
       joinStrIfKeepParen = (String) params.get("joinStrIfKeepParen");
 

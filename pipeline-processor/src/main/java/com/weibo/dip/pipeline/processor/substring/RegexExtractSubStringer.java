@@ -15,7 +15,7 @@ public class RegexExtractSubStringer extends SubStringProcessor {
   String substring(String value) throws Exception {
     Matcher m = pattern.matcher(value);
     if (m.find()) {
-      return m.group();
+      return m.group(1);
     }
     return defaultValue;
   }

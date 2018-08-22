@@ -11,14 +11,14 @@ import org.apache.spark.sql.Dataset;
 /**
  * url参数转换成对象，保留keepFields字段
  */
-public class UrlArgsDatasetConvertor extends DatasetConvertProcessor {
+public class ExtendArgsDatasetConvertor extends DatasetConvertProcessor {
 
   /**
    * 保留字段
    */
   private String[] keepFields;
 
-  public UrlArgsDatasetConvertor(Map<String, Object> params) {
+  public ExtendArgsDatasetConvertor(Map<String, Object> params) {
     super(params);
     String fields = (String) params.get("keepFields");
     keepFields = fields.split(",");
@@ -26,7 +26,7 @@ public class UrlArgsDatasetConvertor extends DatasetConvertProcessor {
 
   @Override
   public Dataset convert(String fieldName, Dataset dataset) {
-    Column args = callUDF("extendargs_split", col(fieldName));
+    Column args = callUDF("urlargs_split", col(fieldName));
 
     return dataset.withColumn(fieldName, callUDF("sub_element", args, lit(keepFields)));
 

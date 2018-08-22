@@ -32,8 +32,8 @@ public class ConsoleRddDataSink extends JavaRddDataSink {
       } catch (Exception e) {
         e.printStackTrace();
       }
-      MetricsSystem.getCounter(metricsName).inc(count);
     }
+    MetricsSystem.getCounter(metricsName).inc(count);
     /*rdd.foreachPartition(new VoidFunction<Iterator<Row>>() {
       public void call(Iterator<Row> rowIterator) throws Exception {
         while (rowIterator.hasNext()) {

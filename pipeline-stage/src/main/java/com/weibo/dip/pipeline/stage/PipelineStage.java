@@ -56,7 +56,7 @@ public class PipelineStage extends Stage<Map<String, Object>> {
     } catch (Exception e) {
       throw e;
     }
-    if(data!=null){
+    if (data != null) {
       MetricsSystem.getCounter(metricsMeterResultName).inc();
     }
     return data;
@@ -73,8 +73,10 @@ public class PipelineStage extends Stage<Map<String, Object>> {
 
     for (Map<String, Object> params : processorsCofnigList) {
       String processorType = (String) params.get("processorType");
-      LOGGER.info(String.format("%s create processor: %s", stageId, processorType));
       Map<String, Object> subParams = (Map<String, Object>) params.get("params");
+      LOGGER.info(String
+          .format("%s create processor: %s %s", stageId, processorType, subParams.toString()));
+
       Processor p = Processor.createProcessor(engine, processorType, subParams);
 
       if (p == null) {

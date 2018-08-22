@@ -47,7 +47,7 @@ public class StreamingKafkaReceiverDataSource extends StreamingDataSource {
 
     topics = (String) parameters.get("topic");
 
-    threadPerStream = ((Number) parameters.get("threadPerStream")).intValue();
+    threadPerStream = ((Number) map.get("threadPerStream")).intValue();
 
     numStreams = ((Number) map.get("numStreams")).intValue();
 
